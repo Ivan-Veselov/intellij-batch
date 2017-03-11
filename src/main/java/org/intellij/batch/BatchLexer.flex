@@ -22,8 +22,10 @@ WhiteSpace = {LineTerminator} | {LineWhiteSpace}
 VarIdentifierCharacter = [[^\r\n]--=] // {InputCharacter}--=
 FirstVarIdentifierCharacter = [[[^\r\n]--=]--[ \t\f]] // {VarIdentifierCharacter}--{LineWhiteSpace}
 
+EchoKeyword = [Ee][Cc][Hh][Oo]
+
 %state READING_STRING
-%state ECHO_CONSUME_WHITESPACE
+%state ECHO_CONSUME_LINEWHITESPACE
 %state SET_READING_VAR_NAME
 
 %%
@@ -32,7 +34,7 @@ FirstVarIdentifierCharacter = [[[^\r\n]--=]--[ \t\f]] // {VarIdentifierCharacter
     {InputCharacter}* { return STRING_LITERAL; }
 }
 
-<ECHO_CONSUME_WHITESPACE> {
+<ECHO_CONSUME_LINEWHITESPACE> {
     {LineWhiteSpace} { yybegin(READING_STRING); }
 }
 
@@ -44,12 +46,12 @@ FirstVarIdentifierCharacter = [[[^\r\n]--=]--[ \t\f]] // {VarIdentifierCharacter
     = { yybegin(READING_STRING); return OP_ASSIGN; }
 }
 
-<READING_STRING, ECHO_CONSUME_WHITESPACE, SET_READING_VAR_NAME> {LineTerminator} { yybegin(YYINITIAL); }
+<READING_STRING, SET_READING_VAR_NAME> {LineTerminator} { yybegin(YYINITIAL); }
 
 /* keywords */
 // TODO: need to put some lookahead to prevent echoblabla matching
-<YYINITIAL> [Ee][Cc][Hh][Oo] /{WhiteSpace} { yybegin(ECHO_CONSUME_WHITESPACE); return KEYWORD_ECHO; }
-<YYINITIAL> [Ee][Cc][Hh][Oo] { yybegin(READING_STRING); return KEYWORD_ECHO; }
+<YYINITIAL> {EchoKeyword} /{LineWhiteSpace} { yybegin(ECHO_CONSUME_LINEWHITESPACE); return KEYWORD_ECHO; }
+<YYINITIAL> {EchoKeyword} { yybegin(READING_STRING); return KEYWORD_ECHO; }
 <YYINITIAL> [Ss][Ee][Tt] { yybegin(SET_READING_VAR_NAME); return KEYWORD_SET; }
 
 <YYINITIAL> {

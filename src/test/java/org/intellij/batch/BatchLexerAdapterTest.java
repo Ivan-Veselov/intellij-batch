@@ -22,6 +22,10 @@ public class BatchLexerAdapterTest extends LexerTestCase {
         doTest("echo", new LexerOutputBuilder().token(KEYWORD_ECHO, "echo").toString());
     }
 
+    public void testEchoAtTheEndOfLine() throws Exception {
+        doTest("echo\n", new LexerOutputBuilder().token(KEYWORD_ECHO, "echo").toString());
+    }
+
     public void testEchoUpperCase() throws Exception {
         doTest("ECHO", new LexerOutputBuilder().token(KEYWORD_ECHO, "ECHO").toString());
     }
