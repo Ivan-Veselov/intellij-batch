@@ -15,8 +15,8 @@ import static org.intellij.batch.BatchTokens.*;
 
 LineTerminator = \r|\n|\r\n
 InputCharacter = [^\r\n]
-LineWhiteSpace = [ \t\f]
-WhiteSpace = {LineTerminator} | {LineWhiteSpace}
+LineWhitespace = [ \t\f]
+Whitespace = {LineTerminator} | {LineWhitespace}
 
 // TODO: Looks very ugly, might become an issue. Something must be done.
 VarIdentifierCharacter = [[^\r\n]--=] // {InputCharacter}--=
@@ -25,7 +25,7 @@ FirstVarIdentifierCharacter = [[[^\r\n]--=]--[ \t\f]] // {VarIdentifierCharacter
 EchoKeyword = [Ee][Cc][Hh][Oo]
 
 %state READING_STRING
-%state ECHO_CONSUME_LINEWHITESPACE
+%state ECHO_CONSUME_LINE_WHITESPACE
 %state SET_READING_VAR_NAME
 
 %%
@@ -34,12 +34,12 @@ EchoKeyword = [Ee][Cc][Hh][Oo]
     {InputCharacter}* { return STRING_LITERAL; }
 }
 
-<ECHO_CONSUME_LINEWHITESPACE> {
-    {LineWhiteSpace} { yybegin(READING_STRING); }
+<ECHO_CONSUME_LINE_WHITESPACE> {
+    {LineWhitespace} { yybegin(READING_STRING); }
 }
 
 <SET_READING_VAR_NAME> {
-    {LineWhiteSpace} { /* ignore */ }
+    {LineWhitespace} { /* ignore */ }
 
     {FirstVarIdentifierCharacter}{VarIdentifierCharacter}* { return VAR_IDENTIFIER; }
 
@@ -50,12 +50,12 @@ EchoKeyword = [Ee][Cc][Hh][Oo]
 
 /* keywords */
 // TODO: need to put some lookahead to prevent echoblabla matching
-<YYINITIAL> {EchoKeyword} /{LineWhiteSpace} { yybegin(ECHO_CONSUME_LINEWHITESPACE); return KEYWORD_ECHO; }
+<YYINITIAL> {EchoKeyword} /{LineWhitespace} { yybegin(ECHO_CONSUME_LINE_WHITESPACE); return KEYWORD_ECHO; }
 <YYINITIAL> {EchoKeyword} { yybegin(READING_STRING); return KEYWORD_ECHO; }
 <YYINITIAL> [Ss][Ee][Tt] { yybegin(SET_READING_VAR_NAME); return KEYWORD_SET; }
 
 <YYINITIAL> {
-    {WhiteSpace} { /* ignore */ }
+    {Whitespace} { /* ignore */ }
 }
 
 /* error fallback */

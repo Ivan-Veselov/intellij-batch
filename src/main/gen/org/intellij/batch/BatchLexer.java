@@ -24,7 +24,7 @@ class BatchLexer implements FlexLexer {
   /** lexical states */
   public static final int YYINITIAL = 0;
   public static final int READING_STRING = 2;
-  public static final int ECHO_CONSUME_LINEWHITESPACE = 4;
+  public static final int ECHO_CONSUME_LINE_WHITESPACE = 4;
   public static final int SET_READING_VAR_NAME = 6;
 
   /**
@@ -512,7 +512,7 @@ class BatchLexer implements FlexLexer {
             // lookahead expression with fixed base length
             zzMarkedPos = Character.offsetByCodePoints
                 (zzBufferL/*, zzStartRead, zzEndRead - zzStartRead*/, zzStartRead, 4);
-            { yybegin(ECHO_CONSUME_LINEWHITESPACE); return KEYWORD_ECHO;
+            { yybegin(ECHO_CONSUME_LINE_WHITESPACE); return KEYWORD_ECHO;
             }
           case 20: break;
           default:
