@@ -23,8 +23,9 @@ class BatchLexer implements FlexLexer {
 
   /** lexical states */
   public static final int YYINITIAL = 0;
-  public static final int SET_AWAITS_VAR_NAME = 2;
-  public static final int SET_AWAITS_STRING = 4;
+  public static final int READING_STRING = 2;
+  public static final int ECHO_CONSUME_WHITESPACE = 4;
+  public static final int SET_READING_VAR_NAME = 6;
 
   /**
    * ZZ_LEXSTATE[l] is the state in the DFA for the lexical state l
@@ -33,7 +34,7 @@ class BatchLexer implements FlexLexer {
    * l is of the form l = 2*k, k a non negative integer
    */
   private static final int ZZ_LEXSTATE[] = { 
-     0,  0,  1,  1,  2, 2
+     0,  0,  1,  1,  2,  2,  3, 3
   };
 
   /** 
@@ -64,11 +65,11 @@ class BatchLexer implements FlexLexer {
   private static final int [] ZZ_ACTION = zzUnpackAction();
 
   private static final String ZZ_ACTION_PACKED_0 =
-    "\2\0\1\1\1\2\2\3\2\2\1\4\2\5\1\6"+
-    "\1\1\3\0\1\7\1\10";
+    "\1\0\1\1\2\0\1\2\2\3\2\2\1\1\2\4"+
+    "\1\5\1\6\1\7\3\0\1\10\1\11";
 
   private static int [] zzUnpackAction() {
-    int [] result = new int[18];
+    int [] result = new int[20];
     int offset = 0;
     offset = zzUnpackAction(ZZ_ACTION_PACKED_0, offset, result);
     return result;
@@ -93,12 +94,12 @@ class BatchLexer implements FlexLexer {
   private static final int [] ZZ_ROWMAP = zzUnpackRowMap();
 
   private static final String ZZ_ROWMAP_PACKED_0 =
-    "\0\0\0\13\0\26\0\41\0\54\0\41\0\67\0\102"+
-    "\0\41\0\115\0\41\0\130\0\143\0\156\0\171\0\204"+
-    "\0\41\0\41";
+    "\0\0\0\13\0\26\0\41\0\54\0\67\0\54\0\102"+
+    "\0\115\0\130\0\143\0\54\0\54\0\54\0\156\0\171"+
+    "\0\204\0\217\0\54\0\54";
 
   private static int [] zzUnpackRowMap() {
-    int [] result = new int[18];
+    int [] result = new int[20];
     int offset = 0;
     offset = zzUnpackRowMap(ZZ_ROWMAP_PACKED_0, offset, result);
     return result;
@@ -121,14 +122,15 @@ class BatchLexer implements FlexLexer {
   private static final int [] ZZ_TRANS = zzUnpackTrans();
 
   private static final String ZZ_TRANS_PACKED_0 =
-    "\1\4\1\5\2\6\1\4\1\7\3\4\1\10\1\4"+
-    "\1\11\1\12\1\13\1\6\7\14\1\15\1\12\1\13"+
-    "\10\15\15\0\1\6\16\0\1\16\11\0\1\17\7\0"+
-    "\1\13\13\0\10\14\1\15\2\0\10\15\7\0\1\20"+
-    "\15\0\1\21\10\0\1\22\2\0";
+    "\1\5\1\6\2\7\1\5\1\10\3\5\1\11\1\5"+
+    "\1\12\1\13\1\14\10\12\1\5\1\13\1\14\1\15"+
+    "\7\5\1\16\1\13\1\14\1\7\7\17\15\0\1\7"+
+    "\16\0\1\20\11\0\1\21\5\0\1\12\2\0\10\12"+
+    "\2\0\1\14\13\0\10\17\7\0\1\22\15\0\1\23"+
+    "\10\0\1\24\2\0";
 
   private static int [] zzUnpackTrans() {
-    int [] result = new int[143];
+    int [] result = new int[154];
     int offset = 0;
     offset = zzUnpackTrans(ZZ_TRANS_PACKED_0, offset, result);
     return result;
@@ -166,11 +168,11 @@ class BatchLexer implements FlexLexer {
   private static final int [] ZZ_ATTRIBUTE = zzUnpackAttribute();
 
   private static final String ZZ_ATTRIBUTE_PACKED_0 =
-    "\2\0\1\1\1\11\1\1\1\11\2\1\1\11\1\1"+
-    "\1\11\2\1\3\0\2\11";
+    "\1\0\1\1\2\0\1\11\1\1\1\11\4\1\3\11"+
+    "\1\1\3\0\2\11";
 
   private static int [] zzUnpackAttribute() {
-    int [] result = new int[18];
+    int [] result = new int[20];
     int offset = 0;
     offset = zzUnpackAttribute(ZZ_ATTRIBUTE_PACKED_0, offset, result);
     return result;
@@ -473,35 +475,39 @@ class BatchLexer implements FlexLexer {
           case 1: 
             { return STRING_LITERAL;
             }
-          case 9: break;
+          case 10: break;
           case 2: 
             { throw new Error("Illegal character <"+ yytext() + ">");
             }
-          case 10: break;
+          case 11: break;
           case 3: 
             { /* ignore */
             }
-          case 11: break;
-          case 4: 
-            { yybegin(SET_AWAITS_STRING); return OP_ASSIGN;
-            }
           case 12: break;
-          case 5: 
+          case 4: 
             { yybegin(YYINITIAL);
             }
           case 13: break;
-          case 6: 
-            { return VAR_IDENTIFIER;
+          case 5: 
+            { yybegin(READING_STRING);
             }
           case 14: break;
-          case 7: 
-            { yybegin(SET_AWAITS_VAR_NAME); return KEYWORD_SET;
+          case 6: 
+            { yybegin(READING_STRING); return OP_ASSIGN;
             }
           case 15: break;
-          case 8: 
-            { return KEYWORD_ECHO;
+          case 7: 
+            { return VAR_IDENTIFIER;
             }
           case 16: break;
+          case 8: 
+            { yybegin(SET_READING_VAR_NAME); return KEYWORD_SET;
+            }
+          case 17: break;
+          case 9: 
+            { yybegin(ECHO_CONSUME_WHITESPACE); return KEYWORD_ECHO;
+            }
+          case 18: break;
           default:
             zzScanError(ZZ_NO_MATCH);
           }

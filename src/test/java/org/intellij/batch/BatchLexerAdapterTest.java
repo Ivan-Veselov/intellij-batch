@@ -34,6 +34,22 @@ public class BatchLexerAdapterTest extends LexerTestCase {
         doTest(" echo \n", new LexerOutputBuilder().token(KEYWORD_ECHO, "echo").toString());
     }
 
+    public void testEchoWithArgument() throws Exception {
+        doTest("echo arg",
+                new LexerOutputBuilder()
+                        .token(KEYWORD_ECHO, "echo")
+                        .token(STRING_LITERAL, "arg")
+                        .toString());
+    }
+
+    public void testEchoWithOddArgument() throws Exception {
+        doTest("  ECHO  arg =",
+                new LexerOutputBuilder()
+                        .token(KEYWORD_ECHO, "ECHO")
+                        .token(STRING_LITERAL, " arg =")
+                        .toString());
+    }
+
     public void testSetNormal() throws Exception {
         doTest("set name=str\necho",
                 new LexerOutputBuilder()
