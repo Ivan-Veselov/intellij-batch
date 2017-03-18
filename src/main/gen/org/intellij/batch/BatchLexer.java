@@ -25,6 +25,7 @@ class BatchLexer implements FlexLexer {
   /** lexical states */
   public static final int YYINITIAL = 0;
   public static final int READING_CMD_ARGS = 2;
+  public static final int READING_REDIRECTION_DESTINATION = 4;
 
   /**
    * ZZ_LEXSTATE[l] is the state in the DFA for the lexical state l
@@ -33,7 +34,7 @@ class BatchLexer implements FlexLexer {
    * l is of the form l = 2*k, k a non negative integer
    */
   private static final int ZZ_LEXSTATE[] = { 
-     0,  0,  1, 1
+     0,  0,  1,  1,  2, 2
   };
 
   /** 
@@ -64,11 +65,11 @@ class BatchLexer implements FlexLexer {
   private static final int [] ZZ_ACTION = zzUnpackAction();
 
   private static final String ZZ_ACTION_PACKED_0 =
-    "\2\0\1\1\2\2\1\3\1\4\1\1\2\5\2\6"+
-    "\1\0\1\5";
+    "\3\0\1\1\2\2\1\3\1\4\1\1\2\5\2\6"+
+    "\1\7\1\10\1\0\1\11";
 
   private static int [] zzUnpackAction() {
-    int [] result = new int[14];
+    int [] result = new int[17];
     int offset = 0;
     offset = zzUnpackAction(ZZ_ACTION_PACKED_0, offset, result);
     return result;
@@ -93,11 +94,12 @@ class BatchLexer implements FlexLexer {
   private static final int [] ZZ_ROWMAP = zzUnpackRowMap();
 
   private static final String ZZ_ROWMAP_PACKED_0 =
-    "\0\0\0\11\0\22\0\33\0\44\0\55\0\44\0\66"+
-    "\0\77\0\110\0\121\0\132\0\143\0\44";
+    "\0\0\0\11\0\22\0\33\0\44\0\55\0\66\0\55"+
+    "\0\77\0\110\0\121\0\132\0\143\0\154\0\55\0\165"+
+    "\0\55";
 
   private static int [] zzUnpackRowMap() {
-    int [] result = new int[14];
+    int [] result = new int[17];
     int offset = 0;
     offset = zzUnpackRowMap(ZZ_ROWMAP_PACKED_0, offset, result);
     return result;
@@ -120,16 +122,18 @@ class BatchLexer implements FlexLexer {
   private static final int [] ZZ_TRANS = zzUnpackTrans();
 
   private static final String ZZ_TRANS_PACKED_0 =
-    "\1\3\1\4\1\5\1\6\1\7\1\10\1\11\1\12"+
-    "\1\3\1\13\1\4\1\5\1\6\1\7\1\14\1\11"+
-    "\1\12\1\13\1\3\4\0\1\3\2\0\1\3\2\0"+
-    "\1\5\22\0\1\6\5\0\1\3\4\0\1\3\1\11"+
-    "\1\12\1\3\6\0\1\12\1\0\1\15\10\0\1\15"+
-    "\1\13\4\0\1\13\2\0\2\13\4\0\1\13\1\11"+
-    "\1\12\1\13\5\0\1\16\3\0";
+    "\1\4\1\5\1\6\1\7\1\10\1\11\1\12\1\13"+
+    "\1\4\1\14\1\5\1\6\1\7\1\10\1\15\1\12"+
+    "\1\13\1\14\1\16\1\5\1\6\1\7\1\17\1\16"+
+    "\2\17\1\16\1\4\4\0\1\4\2\0\1\4\2\0"+
+    "\1\6\22\0\1\7\5\0\1\4\4\0\1\4\1\12"+
+    "\1\13\1\4\6\0\1\13\1\0\1\20\10\0\1\20"+
+    "\1\14\4\0\1\14\2\0\2\14\4\0\1\14\1\12"+
+    "\1\13\1\14\1\16\4\0\1\16\2\0\1\16\5\0"+
+    "\1\21\3\0";
 
   private static int [] zzUnpackTrans() {
-    int [] result = new int[108];
+    int [] result = new int[126];
     int offset = 0;
     offset = zzUnpackTrans(ZZ_TRANS_PACKED_0, offset, result);
     return result;
@@ -167,10 +171,11 @@ class BatchLexer implements FlexLexer {
   private static final int [] ZZ_ATTRIBUTE = zzUnpackAttribute();
 
   private static final String ZZ_ATTRIBUTE_PACKED_0 =
-    "\2\0\2\1\1\11\1\1\1\11\5\1\1\0\1\11";
+    "\3\0\2\1\1\11\1\1\1\11\6\1\1\11\1\0"+
+    "\1\11";
 
   private static int [] zzUnpackAttribute() {
-    int [] result = new int[14];
+    int [] result = new int[17];
     int offset = 0;
     offset = zzUnpackAttribute(ZZ_ATTRIBUTE_PACKED_0, offset, result);
     return result;
@@ -224,6 +229,34 @@ class BatchLexer implements FlexLexer {
 
   /** denotes if the user-EOF-code has already been executed */
   private boolean zzEOFDone;
+
+  /* user code: */
+    /** Memorized lexical state */
+    private int memorizedState = YYINITIAL;
+
+    /**
+    * Enters a new lexical state and remebers the current one
+    *
+    * @param newState the new lexical state
+    */
+    public void memorizeAndBegin(int newState) {
+        memorizedState = yystate();
+        yybegin(newState);
+    }
+
+    /**
+    * Returns a memorized lexical state
+    */
+    public int getMemorizedState() {
+        return memorizedState;
+    }
+
+    /**
+    * Enters a memorized lexical state
+    */
+    public void beginMemorized() {
+        yybegin(getMemorizedState());
+    }
 
 
   /**
@@ -473,27 +506,39 @@ class BatchLexer implements FlexLexer {
           case 1: 
             { yybegin(READING_CMD_ARGS); return COMMAND_NAME;
             }
-          case 7: break;
+          case 10: break;
           case 2: 
             { yybegin(YYINITIAL); return EOL_OPERATOR;
             }
-          case 8: break;
+          case 11: break;
           case 3: 
             { return WHITE_SPACE;
             }
-          case 9: break;
+          case 12: break;
           case 4: 
             { yybegin(YYINITIAL); return PIPE_OPERATOR;
             }
-          case 10: break;
+          case 13: break;
           case 5: 
-            { return REDIRECT_OPERATOR;
+            { memorizeAndBegin(READING_REDIRECTION_DESTINATION); return REDIRECT_OPERATOR;
             }
-          case 11: break;
+          case 14: break;
           case 6: 
             { return CHAR_SEQUENCE;
             }
-          case 12: break;
+          case 15: break;
+          case 7: 
+            { beginMemorized(); return CHAR_SEQUENCE;
+            }
+          case 16: break;
+          case 8: 
+            { return BAD_CHARACTER;
+            }
+          case 17: break;
+          case 9: 
+            { return REDIRECT_OPERATOR;
+            }
+          case 18: break;
           default:
             zzScanError(ZZ_NO_MATCH);
           }

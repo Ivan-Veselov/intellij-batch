@@ -82,6 +82,14 @@ public class BatchLexerAdapterRedirectionTest extends BatchLexerAdapterTest {
                                    .token(REDIRECT_OPERATOR, ">&1"));
     }
 
+    public void testRedirectionToHandleWithArgumentAfterIt() throws Exception {
+        doTest("command >&1 arg", token(COMMAND_NAME, "command")
+                                      .token(WHITE_SPACE, " ")
+                                      .token(REDIRECT_OPERATOR, ">&1")
+                                      .token(WHITE_SPACE, " ")
+                                      .token(CHAR_SEQUENCE, "arg"));
+    }
+
     public void testRedirectionFromHandleToHandle() throws Exception {
         doTest("command 2>&1", token(COMMAND_NAME, "command")
                                    .token(WHITE_SPACE, " ")
