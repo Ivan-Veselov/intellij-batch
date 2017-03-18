@@ -64,10 +64,10 @@ class BatchLexer implements FlexLexer {
 
   private static final String ZZ_ACTION_PACKED_0 =
     "\1\1\1\2\1\1\2\3\1\4\1\5\1\1\1\5"+
-    "\2\2\3\0\1\6";
+    "\2\2\1\0\1\5";
 
   private static int [] zzUnpackAction() {
-    int [] result = new int[15];
+    int [] result = new int[13];
     int offset = 0;
     offset = zzUnpackAction(ZZ_ACTION_PACKED_0, offset, result);
     return result;
@@ -93,10 +93,10 @@ class BatchLexer implements FlexLexer {
 
   private static final String ZZ_ROWMAP_PACKED_0 =
     "\0\0\0\10\0\20\0\30\0\40\0\50\0\60\0\70"+
-    "\0\100\0\110\0\120\0\130\0\60\0\100\0\40";
+    "\0\100\0\110\0\120\0\130\0\40";
 
   private static int [] zzUnpackRowMap() {
-    int [] result = new int[15];
+    int [] result = new int[13];
     int offset = 0;
     offset = zzUnpackRowMap(ZZ_ROWMAP_PACKED_0, offset, result);
     return result;
@@ -122,9 +122,9 @@ class BatchLexer implements FlexLexer {
     "\1\3\1\4\1\5\1\6\1\7\1\10\1\11\1\3"+
     "\1\12\1\4\1\5\1\6\1\7\1\13\1\11\1\12"+
     "\1\3\4\0\1\3\1\0\1\3\2\0\1\5\20\0"+
-    "\1\6\13\0\1\14\1\3\3\0\1\15\1\3\1\16"+
-    "\1\3\6\0\1\15\1\14\1\12\4\0\1\12\1\0"+
-    "\2\12\3\0\1\15\1\12\1\16\1\12\5\0\1\17"+
+    "\1\6\13\0\1\14\1\3\3\0\1\7\1\3\1\11"+
+    "\1\3\6\0\1\7\1\14\1\12\4\0\1\12\1\0"+
+    "\2\12\3\0\1\7\1\12\1\11\1\12\5\0\1\15"+
     "\2\0";
 
   private static int [] zzUnpackTrans() {
@@ -166,10 +166,10 @@ class BatchLexer implements FlexLexer {
   private static final int [] ZZ_ATTRIBUTE = zzUnpackAttribute();
 
   private static final String ZZ_ATTRIBUTE_PACKED_0 =
-    "\4\1\1\11\6\1\3\0\1\11";
+    "\4\1\1\11\6\1\1\0\1\11";
 
   private static int [] zzUnpackAttribute() {
-    int [] result = new int[15];
+    int [] result = new int[13];
     int offset = 0;
     offset = zzUnpackAttribute(ZZ_ATTRIBUTE_PACKED_0, offset, result);
     return result;
@@ -472,27 +472,23 @@ class BatchLexer implements FlexLexer {
           case 1: 
             { yybegin(READING_CMD_ARGS); return COMMAND_NAME;
             }
-          case 7: break;
+          case 6: break;
           case 2: 
             { return COMMAND_ARGUMENT;
             }
-          case 8: break;
+          case 7: break;
           case 3: 
             { yybegin(YYINITIAL); return EOL_OPERATOR;
             }
-          case 9: break;
+          case 8: break;
           case 4: 
             { return WHITE_SPACE;
             }
-          case 10: break;
+          case 9: break;
           case 5: 
-            { return BAD_CHARACTER;
-            }
-          case 11: break;
-          case 6: 
             { return REDIRECT_OPERATOR;
             }
-          case 12: break;
+          case 10: break;
           default:
             zzScanError(ZZ_NO_MATCH);
           }

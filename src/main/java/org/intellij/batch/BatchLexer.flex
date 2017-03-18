@@ -18,10 +18,10 @@ LineTerminator = \r | \n | \r\n
 LineCharacter = [^\r\n]
 Whitespace = [ \t\f]
 
-SpecialCharacter = [<>]
+SpecialCharacter = [<>|]
 // TODO: Looks very ugly, might become an issue. Something must be done.
 // SequenceCharacter = [{LineCharacter}--[{SpecialCharacter}||{Whitespace}]]
-SequenceCharacter = [[^\r\n]--[[<>]||[ \t\f]]]
+SequenceCharacter = [[^\r\n]--[[<>|]||[ \t\f]]]
 
 Digit = [0-9]
 
@@ -38,6 +38,8 @@ RedirectOperator = {Digit}? {RedirectSymbol} (& {Digit})?
     {Whitespace}+ { return WHITE_SPACE; }
 
     {RedirectOperator} { return REDIRECT_OPERATOR; }
+
+    "|" { yybegin(YYINITIAL); return PIPE_OPERATOR; }
 }
 
 <YYINITIAL> {
