@@ -5,9 +5,10 @@ import com.intellij.psi.tree.IElementType;
 import com.intellij.testFramework.LexerTestCase;
 import org.jetbrains.annotations.NotNull;
 
+import static com.intellij.psi.TokenType.WHITE_SPACE;
 import static org.intellij.batch.BatchTokens.*;
 
-public class BatchLexerAdapterTest extends LexerTestCase {
+public final class BatchLexerAdapterTest extends LexerTestCase {
     @Override
     protected Lexer createLexer() {
         return new BatchLexerAdapter();
@@ -18,125 +19,88 @@ public class BatchLexerAdapterTest extends LexerTestCase {
         return null;
     }
 
-    public void testEchoLowerCase() throws Exception {
-        doTest("echo", new LexerOutputBuilder().token(KEYWORD_ECHO, "echo").toString());
+    private void doTest(final @NotNull String text, final @NotNull LexerOutputBuilder builder) throws Exception {
+        doTest(text, builder.toString());
     }
 
-    public void testEchoAtTheEndOfLine() throws Exception {
-        doTest("echo\n", new LexerOutputBuilder().token(KEYWORD_ECHO, "echo").toString());
+    private @NotNull LexerOutputBuilder token(final @NotNull IElementType elementType,
+                                              final @NotNull String charSequence) {
+        return new LexerOutputBuilder().token(elementType, charSequence);
     }
 
-    public void testEchoUpperCase() throws Exception {
-        doTest("ECHO", new LexerOutputBuilder().token(KEYWORD_ECHO, "ECHO").toString());
+    public void testSingleCommand() throws Exception {
+        doTest("command", token(COMMAND_NAME, "command"));
     }
 
-    public void testEchoMultiCase() throws Exception {
-        doTest("EcHo", new LexerOutputBuilder().token(KEYWORD_ECHO, "EcHo").toString());
+    public void testCommandSurroundedByWhitespaces() throws Exception {
+        doTest("\t  command\t ", token(WHITE_SPACE, "\t  ")
+                                     .token(COMMAND_NAME, "command")
+                                     .token(WHITE_SPACE, "\t "));
     }
 
-    public void testEchoWithWhiteSpaces() throws Exception {
-        doTest(" echo \n", new LexerOutputBuilder().token(KEYWORD_ECHO, "echo").toString());
+    public void testCommandSurroundedByLineTerminators() throws Exception {
+        doTest("\ncommand\r\n", token(EOL_OPERATOR, "\\n")
+                                    .token(COMMAND_NAME, "command")
+                                    .token(EOL_OPERATOR, "\r\\n"));
     }
 
-    public void testEchoWithArgument() throws Exception {
-        doTest("echo arg",
-                new LexerOutputBuilder()
-                        .token(KEYWORD_ECHO, "echo")
-                        .token(STRING_LITERAL, "arg")
-                        .toString());
+    public void testCommandWithArgument() throws Exception {
+        doTest("command arg", token(COMMAND_NAME, "command")
+                                  .token(WHITE_SPACE, " ")
+                                  .token(COMMAND_ARGUMENT, "arg"));
     }
 
-    public void testEchoWithOddArgument() throws Exception {
-        doTest("  ECHO  arg =",
-                new LexerOutputBuilder()
-                        .token(KEYWORD_ECHO, "ECHO")
-                        .token(STRING_LITERAL, " arg =")
-                        .toString());
+    public void testCommandArgumentSurroundedByWhitespaces() throws Exception {
+        doTest("command  \targ\t", token(COMMAND_NAME, "command")
+                                        .token(WHITE_SPACE, "  \t")
+                                        .token(COMMAND_ARGUMENT, "arg")
+                                        .token(WHITE_SPACE, "\t"));
     }
 
-    public void testSetNormal() throws Exception {
-        doTest("set name=str\necho",
-                new LexerOutputBuilder()
-                        .token(KEYWORD_SET, "set")
-                        .token(VAR_IDENTIFIER, "name")
-                        .token(OP_ASSIGN, "=")
-                        .token(STRING_LITERAL, "str")
-                        .token(KEYWORD_ECHO, "echo")
-                        .toString());
+    public void testCommandWithMultipleArguments() throws Exception {
+        doTest("command arg1 arg2", token(COMMAND_NAME, "command")
+                                        .token(WHITE_SPACE, " ")
+                                        .token(COMMAND_ARGUMENT, "arg1")
+                                        .token(WHITE_SPACE, " ")
+                                        .token(COMMAND_ARGUMENT, "arg2"));
     }
 
-    public void testSetOddString() throws Exception {
-        doTest("set name=  str = \necho",
-                new LexerOutputBuilder()
-                        .token(KEYWORD_SET, "set")
-                        .token(VAR_IDENTIFIER, "name")
-                        .token(OP_ASSIGN, "=")
-                        .token(STRING_LITERAL, "  str = ")
-                        .token(KEYWORD_ECHO, "echo")
-                        .toString());
+    public void testCommandWithMultipleArgumentsAndLineTerminator() throws Exception {
+        doTest("command arg1 arg2\n", token(COMMAND_NAME, "command")
+                                          .token(WHITE_SPACE, " ")
+                                          .token(COMMAND_ARGUMENT, "arg1")
+                                          .token(WHITE_SPACE, " ")
+                                          .token(COMMAND_ARGUMENT, "arg2")
+                                          .token(EOL_OPERATOR, "\\n"));
     }
 
-    public void testSetOddIdentifier() throws Exception {
-        doTest("set   na  me  =str\necho",
-                new LexerOutputBuilder()
-                        .token(KEYWORD_SET, "set")
-                        .token(VAR_IDENTIFIER, "na  me  ")
-                        .token(OP_ASSIGN, "=")
-                        .token(STRING_LITERAL, "str")
-                        .token(KEYWORD_ECHO, "echo")
-                        .toString());
+    public void testMultipleCommands() throws Exception {
+        doTest("command1 arg1 arg2\ncommand2 arg", token(COMMAND_NAME, "command1")
+                                                       .token(WHITE_SPACE, " ")
+                                                       .token(COMMAND_ARGUMENT, "arg1")
+                                                       .token(WHITE_SPACE, " ")
+                                                       .token(COMMAND_ARGUMENT, "arg2")
+                                                       .token(EOL_OPERATOR, "\\n")
+                                                       .token(COMMAND_NAME, "command2")
+                                                       .token(WHITE_SPACE, " ")
+                                                       .token(COMMAND_ARGUMENT, "arg"));
     }
 
-    public void testSetNoIdentifier() throws Exception {
-        doTest("SET   ===\necho",
-                new LexerOutputBuilder()
-                        .token(KEYWORD_SET, "SET")
-                        .token(OP_ASSIGN, "=")
-                        .token(STRING_LITERAL, "==")
-                        .token(KEYWORD_ECHO, "echo")
-                        .toString());
+    public void testMultipleCommandsSurroundedByLineTerminators() throws Exception {
+        doTest("\ncommand1 arg1 arg2\ncommand2 arg\n", token(EOL_OPERATOR, "\\n")
+                                                           .token(COMMAND_NAME, "command1")
+                                                           .token(WHITE_SPACE, " ")
+                                                           .token(COMMAND_ARGUMENT, "arg1")
+                                                           .token(WHITE_SPACE, " ")
+                                                           .token(COMMAND_ARGUMENT, "arg2")
+                                                           .token(EOL_OPERATOR, "\\n")
+                                                           .token(COMMAND_NAME, "command2")
+                                                           .token(WHITE_SPACE, " ")
+                                                           .token(COMMAND_ARGUMENT, "arg")
+                                                           .token(EOL_OPERATOR, "\\n"));
     }
 
-    public void testSetNoString() throws Exception {
-        doTest("SeT   name =\necho",
-                new LexerOutputBuilder()
-                        .token(KEYWORD_SET, "SeT")
-                        .token(VAR_IDENTIFIER, "name ")
-                        .token(OP_ASSIGN, "=")
-                        .token(KEYWORD_ECHO, "echo")
-                        .toString());
-    }
-
-    public void testSetIdentifierOnly() throws Exception {
-        doTest("set  \tname  \necho",
-                new LexerOutputBuilder()
-                        .token(KEYWORD_SET, "set")
-                        .token(VAR_IDENTIFIER, "name  ")
-                        .token(KEYWORD_ECHO, "echo")
-                        .toString());
-    }
-
-    public void testSetAssignOnly() throws Exception {
-        doTest("set    =\necho",
-                new LexerOutputBuilder()
-                        .token(KEYWORD_SET, "set")
-                        .token(OP_ASSIGN, "=")
-                        .token(KEYWORD_ECHO, "echo")
-                        .toString());
-    }
-
-    public void testSetKeywordsInside() throws Exception {
-        doTest("set echo=echo\necho",
-                new LexerOutputBuilder()
-                        .token(KEYWORD_SET, "set")
-                        .token(VAR_IDENTIFIER, "echo")
-                        .token(OP_ASSIGN, "=")
-                        .token(STRING_LITERAL, "echo")
-                        .token(KEYWORD_ECHO, "echo")
-                        .toString());
-    }
-
-    private final class LexerOutputBuilder {
+    private static final class LexerOutputBuilder {
         private final @NotNull StringBuilder stringBuilder = new StringBuilder();
 
         public @NotNull LexerOutputBuilder token(final @NotNull IElementType elementType,

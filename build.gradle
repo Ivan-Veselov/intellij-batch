@@ -20,6 +20,8 @@ intellij {
 
 sourceCompatibility = 1.6
 
+sourceSets.main.java.srcDirs += 'src/main/gen'
+
 repositories {
     mavenCentral()
 }

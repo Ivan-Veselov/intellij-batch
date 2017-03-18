@@ -5,6 +5,7 @@ package org.intellij.batch;
 import com.intellij.lexer.FlexLexer;
 import com.intellij.psi.tree.IElementType;
 
+import static com.intellij.psi.TokenType.*;
 import static org.intellij.batch.BatchTokens.*;
 
 
@@ -23,9 +24,7 @@ class BatchLexer implements FlexLexer {
 
   /** lexical states */
   public static final int YYINITIAL = 0;
-  public static final int READING_STRING = 2;
-  public static final int ECHO_CONSUME_LINE_WHITESPACE = 4;
-  public static final int SET_READING_VAR_NAME = 6;
+  public static final int READING_CMD_ARGS = 2;
 
   /**
    * ZZ_LEXSTATE[l] is the state in the DFA for the lexical state l
@@ -34,7 +33,7 @@ class BatchLexer implements FlexLexer {
    * l is of the form l = 2*k, k a non negative integer
    */
   private static final int ZZ_LEXSTATE[] = { 
-     0,  0,  1,  1,  2,  2,  3, 3
+     0,  0,  1, 1
   };
 
   /** 
@@ -56,8 +55,7 @@ class BatchLexer implements FlexLexer {
 
   /* The ZZ_CMAP_A table has 256 entries */
   static final char ZZ_CMAP_A[] = zzUnpackCMap(
-    "\11\4\1\3\1\2\1\4\1\3\1\1\22\4\1\3\34\4\1\0\5\4\1\6\1\4\1\5\2\4\1\7\6\4\1"+
-    "\10\3\4\1\11\1\12\16\4\1\6\1\4\1\5\2\4\1\7\6\4\1\10\3\4\1\11\1\12\213\4");
+    "\11\0\1\3\1\2\1\0\1\3\1\1\22\0\1\3\33\0\1\4\1\0\1\4\301\0");
 
   /** 
    * Translates DFA states to action switch labels.
@@ -65,11 +63,10 @@ class BatchLexer implements FlexLexer {
   private static final int [] ZZ_ACTION = zzUnpackAction();
 
   private static final String ZZ_ACTION_PACKED_0 =
-    "\1\0\1\1\2\0\1\2\2\3\2\2\1\1\2\4"+
-    "\1\5\1\6\1\7\3\0\1\10\1\11\1\12";
+    "\1\1\1\2\1\1\2\3\1\4\1\5\1\2";
 
   private static int [] zzUnpackAction() {
-    int [] result = new int[21];
+    int [] result = new int[8];
     int offset = 0;
     offset = zzUnpackAction(ZZ_ACTION_PACKED_0, offset, result);
     return result;
@@ -94,12 +91,10 @@ class BatchLexer implements FlexLexer {
   private static final int [] ZZ_ROWMAP = zzUnpackRowMap();
 
   private static final String ZZ_ROWMAP_PACKED_0 =
-    "\0\0\0\13\0\26\0\41\0\54\0\67\0\54\0\102"+
-    "\0\115\0\130\0\143\0\54\0\54\0\54\0\156\0\171"+
-    "\0\204\0\217\0\54\0\232\0\54";
+    "\0\0\0\5\0\12\0\17\0\24\0\31\0\24\0\36";
 
   private static int [] zzUnpackRowMap() {
-    int [] result = new int[21];
+    int [] result = new int[8];
     int offset = 0;
     offset = zzUnpackRowMap(ZZ_ROWMAP_PACKED_0, offset, result);
     return result;
@@ -122,15 +117,12 @@ class BatchLexer implements FlexLexer {
   private static final int [] ZZ_TRANS = zzUnpackTrans();
 
   private static final String ZZ_TRANS_PACKED_0 =
-    "\1\5\1\6\2\7\1\5\1\10\3\5\1\11\1\5"+
-    "\1\12\1\13\1\14\10\12\3\5\1\15\7\5\1\16"+
-    "\1\13\1\14\1\7\7\17\15\0\1\7\16\0\1\20"+
-    "\11\0\1\21\5\0\1\12\2\0\10\12\2\0\1\14"+
-    "\13\0\10\17\7\0\1\22\15\0\1\23\10\0\1\24"+
-    "\5\0\1\25\7\0";
+    "\1\3\1\4\1\5\1\6\1\7\1\10\1\4\1\5"+
+    "\1\6\1\7\1\3\6\0\1\5\12\0\1\6\1\0"+
+    "\1\10\4\0";
 
   private static int [] zzUnpackTrans() {
-    int [] result = new int[165];
+    int [] result = new int[35];
     int offset = 0;
     offset = zzUnpackTrans(ZZ_TRANS_PACKED_0, offset, result);
     return result;
@@ -168,11 +160,10 @@ class BatchLexer implements FlexLexer {
   private static final int [] ZZ_ATTRIBUTE = zzUnpackAttribute();
 
   private static final String ZZ_ATTRIBUTE_PACKED_0 =
-    "\1\0\1\1\2\0\1\11\1\1\1\11\4\1\3\11"+
-    "\1\1\3\0\1\11\1\1\1\11";
+    "\4\1\1\11\1\1\1\11\1\1";
 
   private static int [] zzUnpackAttribute() {
-    int [] result = new int[21];
+    int [] result = new int[8];
     int offset = 0;
     offset = zzUnpackAttribute(ZZ_ATTRIBUTE_PACKED_0, offset, result);
     return result;
@@ -473,48 +464,25 @@ class BatchLexer implements FlexLexer {
       else {
         switch (zzAction < 0 ? zzAction : ZZ_ACTION[zzAction]) {
           case 1: 
-            { return STRING_LITERAL;
+            { yybegin(READING_CMD_ARGS); return COMMAND_NAME;
             }
-          case 11: break;
+          case 6: break;
           case 2: 
-            { throw new Error("Illegal character <"+ yytext() + ">");
+            { return COMMAND_ARGUMENT;
             }
-          case 12: break;
+          case 7: break;
           case 3: 
-            { /* ignore */
+            { yybegin(YYINITIAL); return EOL_OPERATOR;
             }
-          case 13: break;
+          case 8: break;
           case 4: 
-            { yybegin(YYINITIAL);
+            { return WHITE_SPACE;
             }
-          case 14: break;
+          case 9: break;
           case 5: 
-            { yybegin(READING_STRING);
+            { return BAD_CHARACTER;
             }
-          case 15: break;
-          case 6: 
-            { yybegin(READING_STRING); return OP_ASSIGN;
-            }
-          case 16: break;
-          case 7: 
-            { return VAR_IDENTIFIER;
-            }
-          case 17: break;
-          case 8: 
-            { yybegin(SET_READING_VAR_NAME); return KEYWORD_SET;
-            }
-          case 18: break;
-          case 9: 
-            { yybegin(READING_STRING); return KEYWORD_ECHO;
-            }
-          case 19: break;
-          case 10: 
-            // lookahead expression with fixed base length
-            zzMarkedPos = Character.offsetByCodePoints
-                (zzBufferL/*, zzStartRead, zzEndRead - zzStartRead*/, zzStartRead, 4);
-            { yybegin(ECHO_CONSUME_LINE_WHITESPACE); return KEYWORD_ECHO;
-            }
-          case 20: break;
+          case 10: break;
           default:
             zzScanError(ZZ_NO_MATCH);
           }
