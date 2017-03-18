@@ -229,8 +229,11 @@ class BatchLexer implements FlexLexer {
   private boolean zzEOFDone;
 
   /* user code: */
+    /** An invalid lexical state */
+    private final static int invalidState = -1;
+
     /** Memorized lexical state */
-    private int memorizedState = YYINITIAL;
+    private int memorizedState = invalidState;
 
     /**
     * Enters a new lexical state and remebers the current one
@@ -250,10 +253,11 @@ class BatchLexer implements FlexLexer {
     }
 
     /**
-    * Enters a memorized lexical state
+    * Enters a memorized lexical state and set memorized state to invalid
     */
     public void beginMemorized() {
         yybegin(getMemorizedState());
+        memorizedState = invalidState;
     }
 
 

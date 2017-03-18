@@ -15,8 +15,11 @@ import static org.intellij.batch.BatchTokens.*;
 %type IElementType
 
 %{
+    /** An invalid lexical state */
+    private final static int invalidState = -1;
+
     /** Memorized lexical state */
-    private int memorizedState = YYINITIAL;
+    private int memorizedState = invalidState;
 
     /**
     * Enters a new lexical state and remebers the current one
@@ -36,10 +39,11 @@ import static org.intellij.batch.BatchTokens.*;
     }
 
     /**
-    * Enters a memorized lexical state
+    * Enters a memorized lexical state and set memorized state to invalid
     */
     public void beginMemorized() {
         yybegin(getMemorizedState());
+        memorizedState = invalidState;
     }
 %}
 
