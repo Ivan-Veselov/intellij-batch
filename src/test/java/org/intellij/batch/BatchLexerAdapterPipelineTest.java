@@ -46,6 +46,16 @@ public class BatchLexerAdapterPipelineTest extends BatchLexerAdapterTest {
                                              .token(COMMAND_NAME, "command2"));
     }
 
+    public void testRedirectionAfterPipe() throws Exception {
+        doTest("command1 |>out command2", token(COMMAND_NAME, "command1")
+                                              .token(WHITE_SPACE, " ")
+                                              .token(PIPE_OPERATOR, "|")
+                                              .token(REDIRECT_OPERATOR, ">")
+                                              .token(CHAR_SEQUENCE, "out")
+                                              .token(WHITE_SPACE, " ")
+                                              .token(COMMAND_NAME, "command2"));
+    }
+
     public void testPipeWithCommandsArguments() throws Exception {
         doTest("command1 arg1|command2 arg2", token(COMMAND_NAME, "command1")
                                                   .token(WHITE_SPACE, " ")

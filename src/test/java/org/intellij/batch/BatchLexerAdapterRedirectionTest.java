@@ -102,4 +102,9 @@ public class BatchLexerAdapterRedirectionTest extends BatchLexerAdapterTest {
                                      .token(REDIRECT_OPERATOR, "2>&1")
                                      .token(CHAR_SEQUENCE, "00"));
     }
+
+    public void testRedirectionFromHandleToHandleRightBeforeCommand() throws Exception {
+        doTest("2>&1command", token(REDIRECT_OPERATOR, "2>&1")
+                                  .token(COMMAND_NAME, "command"));
+    }
 }

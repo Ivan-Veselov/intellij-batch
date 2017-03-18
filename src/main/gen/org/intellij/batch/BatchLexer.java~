@@ -504,11 +504,11 @@ class BatchLexer implements FlexLexer {
       else {
         switch (zzAction < 0 ? zzAction : ZZ_ACTION[zzAction]) {
           case 1: 
-            { memorizeAndBegin(READING_CMD_ARGS); return COMMAND_NAME;
+            { yybegin(READING_CMD_ARGS); return COMMAND_NAME;
             }
           case 10: break;
           case 2: 
-            { memorizeAndBegin(YYINITIAL); return EOL_OPERATOR;
+            { yybegin(YYINITIAL); return EOL_OPERATOR;
             }
           case 11: break;
           case 3: 
@@ -516,7 +516,7 @@ class BatchLexer implements FlexLexer {
             }
           case 12: break;
           case 4: 
-            { memorizeAndBegin(YYINITIAL); return PIPE_OPERATOR;
+            { yybegin(YYINITIAL); return PIPE_OPERATOR;
             }
           case 13: break;
           case 5: 
