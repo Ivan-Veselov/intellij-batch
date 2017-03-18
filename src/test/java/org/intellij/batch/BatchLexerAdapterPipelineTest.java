@@ -49,10 +49,10 @@ public class BatchLexerAdapterPipelineTest extends BatchLexerAdapterTest {
     public void testPipeWithCommandsArguments() throws Exception {
         doTest("command1 arg1|command2 arg2", token(COMMAND_NAME, "command1")
                                                   .token(WHITE_SPACE, " ")
-                                                  .token(COMMAND_ARGUMENT, "arg1")
+                                                  .token(CHAR_SEQUENCE, "arg1")
                                                   .token(PIPE_OPERATOR, "|")
                                                   .token(COMMAND_NAME, "command2")
                                                   .token(WHITE_SPACE, " ")
-                                                  .token(COMMAND_ARGUMENT, "arg2"));
+                                                  .token(CHAR_SEQUENCE, "arg2"));
     }
 }

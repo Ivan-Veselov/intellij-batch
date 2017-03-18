@@ -64,8 +64,8 @@ class BatchLexer implements FlexLexer {
   private static final int [] ZZ_ACTION = zzUnpackAction();
 
   private static final String ZZ_ACTION_PACKED_0 =
-    "\1\1\1\2\1\1\2\3\1\4\1\5\1\1\2\6"+
-    "\2\2\1\0\1\6";
+    "\2\0\1\1\2\2\1\3\1\4\1\1\2\5\2\6"+
+    "\1\0\1\5";
 
   private static int [] zzUnpackAction() {
     int [] result = new int[14];
@@ -167,7 +167,7 @@ class BatchLexer implements FlexLexer {
   private static final int [] ZZ_ATTRIBUTE = zzUnpackAttribute();
 
   private static final String ZZ_ATTRIBUTE_PACKED_0 =
-    "\4\1\1\11\1\1\1\11\5\1\1\0\1\11";
+    "\2\0\2\1\1\11\1\1\1\11\5\1\1\0\1\11";
 
   private static int [] zzUnpackAttribute() {
     int [] result = new int[14];
@@ -475,23 +475,23 @@ class BatchLexer implements FlexLexer {
             }
           case 7: break;
           case 2: 
-            { return COMMAND_ARGUMENT;
+            { yybegin(YYINITIAL); return EOL_OPERATOR;
             }
           case 8: break;
           case 3: 
-            { yybegin(YYINITIAL); return EOL_OPERATOR;
+            { return WHITE_SPACE;
             }
           case 9: break;
           case 4: 
-            { return WHITE_SPACE;
+            { yybegin(YYINITIAL); return PIPE_OPERATOR;
             }
           case 10: break;
           case 5: 
-            { yybegin(YYINITIAL); return PIPE_OPERATOR;
+            { return REDIRECT_OPERATOR;
             }
           case 11: break;
           case 6: 
-            { return REDIRECT_OPERATOR;
+            { return CHAR_SEQUENCE;
             }
           case 12: break;
           default:

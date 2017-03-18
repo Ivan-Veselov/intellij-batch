@@ -35,56 +35,56 @@ public final class BatchLexerAdapterCommandBasicsTest extends BatchLexerAdapterT
     public void testCommandWithArgument() throws Exception {
         doTest("command arg", token(COMMAND_NAME, "command")
                                   .token(WHITE_SPACE, " ")
-                                  .token(COMMAND_ARGUMENT, "arg"));
+                                  .token(CHAR_SEQUENCE, "arg"));
     }
 
     public void testCommandArgumentSurroundedByWhitespaces() throws Exception {
         doTest("command  \targ\t", token(COMMAND_NAME, "command")
                                         .token(WHITE_SPACE, "  \t")
-                                        .token(COMMAND_ARGUMENT, "arg")
+                                        .token(CHAR_SEQUENCE, "arg")
                                         .token(WHITE_SPACE, "\t"));
     }
 
     public void testCommandWithMultipleArguments() throws Exception {
         doTest("command arg1 arg2", token(COMMAND_NAME, "command")
                                         .token(WHITE_SPACE, " ")
-                                        .token(COMMAND_ARGUMENT, "arg1")
+                                        .token(CHAR_SEQUENCE, "arg1")
                                         .token(WHITE_SPACE, " ")
-                                        .token(COMMAND_ARGUMENT, "arg2"));
+                                        .token(CHAR_SEQUENCE, "arg2"));
     }
 
     public void testCommandWithMultipleArgumentsAndLineTerminator() throws Exception {
         doTest("command arg1 arg2\n", token(COMMAND_NAME, "command")
                                           .token(WHITE_SPACE, " ")
-                                          .token(COMMAND_ARGUMENT, "arg1")
+                                          .token(CHAR_SEQUENCE, "arg1")
                                           .token(WHITE_SPACE, " ")
-                                          .token(COMMAND_ARGUMENT, "arg2")
+                                          .token(CHAR_SEQUENCE, "arg2")
                                           .token(EOL_OPERATOR, "\\n"));
     }
 
     public void testMultipleCommands() throws Exception {
         doTest("command1 arg1 arg2\ncommand2 arg", token(COMMAND_NAME, "command1")
                                                        .token(WHITE_SPACE, " ")
-                                                       .token(COMMAND_ARGUMENT, "arg1")
+                                                       .token(CHAR_SEQUENCE, "arg1")
                                                        .token(WHITE_SPACE, " ")
-                                                       .token(COMMAND_ARGUMENT, "arg2")
+                                                       .token(CHAR_SEQUENCE, "arg2")
                                                        .token(EOL_OPERATOR, "\\n")
                                                        .token(COMMAND_NAME, "command2")
                                                        .token(WHITE_SPACE, " ")
-                                                       .token(COMMAND_ARGUMENT, "arg"));
+                                                       .token(CHAR_SEQUENCE, "arg"));
     }
 
     public void testMultipleCommandsSurroundedByLineTerminators() throws Exception {
         doTest("\ncommand1 arg1 arg2\ncommand2 arg\n", token(EOL_OPERATOR, "\\n")
                                                            .token(COMMAND_NAME, "command1")
                                                            .token(WHITE_SPACE, " ")
-                                                           .token(COMMAND_ARGUMENT, "arg1")
+                                                           .token(CHAR_SEQUENCE, "arg1")
                                                            .token(WHITE_SPACE, " ")
-                                                           .token(COMMAND_ARGUMENT, "arg2")
+                                                           .token(CHAR_SEQUENCE, "arg2")
                                                            .token(EOL_OPERATOR, "\\n")
                                                            .token(COMMAND_NAME, "command2")
                                                            .token(WHITE_SPACE, " ")
-                                                           .token(COMMAND_ARGUMENT, "arg")
+                                                           .token(CHAR_SEQUENCE, "arg")
                                                            .token(EOL_OPERATOR, "\\n"));
     }
 }

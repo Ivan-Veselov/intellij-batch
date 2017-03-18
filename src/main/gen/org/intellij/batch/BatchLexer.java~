@@ -475,7 +475,7 @@ class BatchLexer implements FlexLexer {
             }
           case 7: break;
           case 2: 
-            { return COMMAND_ARGUMENT;
+            { return CHAR_SEQUENCE;
             }
           case 8: break;
           case 3: 

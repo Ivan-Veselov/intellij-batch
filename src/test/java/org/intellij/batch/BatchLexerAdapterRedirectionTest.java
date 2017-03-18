@@ -21,7 +21,7 @@ public class BatchLexerAdapterRedirectionTest extends BatchLexerAdapterTest {
                                     .token(WHITE_SPACE, " ")
                                     .token(REDIRECT_OPERATOR, ">")
                                     .token(WHITE_SPACE, " ")
-                                    .token(COMMAND_ARGUMENT, "out"));
+                                    .token(CHAR_SEQUENCE, "out"));
     }
 
     public void testRedirectionWithWhitespaces() throws Exception {
@@ -29,13 +29,13 @@ public class BatchLexerAdapterRedirectionTest extends BatchLexerAdapterTest {
                                         .token(WHITE_SPACE, "  ")
                                         .token(REDIRECT_OPERATOR, ">")
                                         .token(WHITE_SPACE, "  \t")
-                                        .token(COMMAND_ARGUMENT, "out"));
+                                        .token(CHAR_SEQUENCE, "out"));
     }
 
     public void testSimpleRedirectionWithoutWhitespaces() throws Exception {
         doTest("command>out", token(COMMAND_NAME, "command")
                                   .token(REDIRECT_OPERATOR, ">")
-                                  .token(COMMAND_ARGUMENT, "out"));
+                                  .token(CHAR_SEQUENCE, "out"));
     }
 
 
@@ -45,7 +45,7 @@ public class BatchLexerAdapterRedirectionTest extends BatchLexerAdapterTest {
     public void testSimpleRedirectionBeforeCommand() throws Exception {
         doTest("> out command", token(REDIRECT_OPERATOR, ">")
                                     .token(WHITE_SPACE, " ")
-                                    .token(COMMAND_ARGUMENT, "out")
+                                    .token(CHAR_SEQUENCE, "out")
                                     .token(WHITE_SPACE, " ")
                                     .token(COMMAND_NAME, "command"));
     }
@@ -55,25 +55,25 @@ public class BatchLexerAdapterRedirectionTest extends BatchLexerAdapterTest {
                                      .token(WHITE_SPACE, " ")
                                      .token(REDIRECT_OPERATOR, "2>")
                                      .token(WHITE_SPACE, " ")
-                                     .token(COMMAND_ARGUMENT, "out"));
+                                     .token(CHAR_SEQUENCE, "out"));
     }
 
     public void testRedirectionRightAfterArgumentWithDigit() throws Exception {
         doTest("command arg1> out", token(COMMAND_NAME, "command")
                                         .token(WHITE_SPACE, " ")
-                                        .token(COMMAND_ARGUMENT, "arg1")
+                                        .token(CHAR_SEQUENCE, "arg1")
                                         .token(REDIRECT_OPERATOR, ">")
                                         .token(WHITE_SPACE, " ")
-                                        .token(COMMAND_ARGUMENT, "out"));
+                                        .token(CHAR_SEQUENCE, "out"));
     }
 
     public void testRedirectionRightAfterDigits() throws Exception {
         doTest("command 11> out", token(COMMAND_NAME, "command")
                 .token(WHITE_SPACE, " ")
-                .token(COMMAND_ARGUMENT, "11")
+                .token(CHAR_SEQUENCE, "11")
                 .token(REDIRECT_OPERATOR, ">")
                 .token(WHITE_SPACE, " ")
-                .token(COMMAND_ARGUMENT, "out"));
+                .token(CHAR_SEQUENCE, "out"));
     }
 
     public void testRedirectionToHandle() throws Exception {
@@ -92,6 +92,6 @@ public class BatchLexerAdapterRedirectionTest extends BatchLexerAdapterTest {
         doTest("command 2>&100", token(COMMAND_NAME, "command")
                                      .token(WHITE_SPACE, " ")
                                      .token(REDIRECT_OPERATOR, "2>&1")
-                                     .token(COMMAND_ARGUMENT, "00"));
+                                     .token(CHAR_SEQUENCE, "00"));
     }
 }

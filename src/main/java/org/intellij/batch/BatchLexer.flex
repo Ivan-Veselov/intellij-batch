@@ -43,11 +43,11 @@ RedirectOperator = {Digit}? {RedirectSymbol} (& {Digit})?
 }
 
 <YYINITIAL> {
-    {SequenceCharacter}* { yybegin(READING_CMD_ARGS); return COMMAND_NAME; }
+    {SequenceCharacter}+ { yybegin(READING_CMD_ARGS); return COMMAND_NAME; }
 }
 
 <READING_CMD_ARGS> {
-    {SequenceCharacter}* { return COMMAND_ARGUMENT; }
+    {SequenceCharacter}+ { return CHAR_SEQUENCE; }
 }
 
 [^] { return BAD_CHARACTER; }
