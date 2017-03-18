@@ -47,7 +47,7 @@ LineTerminator = \r | \n | \r\n
 LineCharacter = [^\r\n]
 Whitespace = [ \t\f]
 
-SpecialCharacter = [<>|]
+SpecialCharacter = [<>|&]
 
 // Set difference {LineCharacter} \ ({SpecialCharacter} | {Whitespace})
 SequenceCharacter = !(!{LineCharacter} | {SpecialCharacter} | {Whitespace})
@@ -73,8 +73,12 @@ RedirectToHandleOperator = {Digit}? {RedirectSymbol} & {Digit}
     {RedirectToHandleOperator} { return REDIRECT_OPERATOR; }
 
     {RedirectToFileOperator} { memorizeAndBegin(READING_REDIRECTION_DESTINATION); return REDIRECT_OPERATOR; }
+}
 
+<READING_CMD_ARGS> {
     "|" { yybegin(YYINITIAL); return PIPE_OPERATOR; }
+
+    & | && | "||" { yybegin(YYINITIAL); return CONDITIONAL_OPERATOR; }
 }
 
 <YYINITIAL> {
