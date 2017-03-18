@@ -8,4 +8,6 @@ public final class BatchTokens {
     public static final IElementType COMMAND_ARGUMENT = new IElementType("COMMAND_ARGUMENT", null);
 
     public static final IElementType EOL_OPERATOR = new IElementType("EOL_OPERATOR", null);
+
+    public static final IElementType REDIRECT_OPERATOR = new IElementType("REDIRECT_OPERATOR", null);
 }

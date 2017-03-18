@@ -14,7 +14,7 @@ import static org.intellij.batch.BatchTokens.*;
 %function advance
 %type IElementType
 
-LineTerminator = \r|\n|\r\n
+LineTerminator = \r | \n | \r\n
 LineCharacter = [^\r\n]
 Whitespace = [ \t\f]
 
@@ -23,13 +23,22 @@ SpecialCharacter = [<>]
 // SequenceCharacter = [{LineCharacter}--[{SpecialCharacter}||{Whitespace}]]
 SequenceCharacter = [[^\r\n]--[[<>]||[ \t\f]]]
 
+Digit = [0-9]
+
+RedirectSymbol = > | < | >>
+RedirectOperator = {Digit}? {RedirectSymbol} (& {Digit})?
+
 %state READING_CMD_ARGS
 
 %%
 
 {LineTerminator} { yybegin(YYINITIAL); return EOL_OPERATOR; }
 
-<YYINITIAL, READING_CMD_ARGS> {Whitespace}+ { return WHITE_SPACE; }
+<YYINITIAL, READING_CMD_ARGS> {
+    {Whitespace}+ { return WHITE_SPACE; }
+
+    {RedirectOperator} { return REDIRECT_OPERATOR; }
+}
 
 <YYINITIAL> {
     {SequenceCharacter}* { yybegin(READING_CMD_ARGS); return COMMAND_NAME; }

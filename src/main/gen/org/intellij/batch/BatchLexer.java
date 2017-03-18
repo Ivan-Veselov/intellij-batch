@@ -55,7 +55,7 @@ class BatchLexer implements FlexLexer {
 
   /* The ZZ_CMAP_A table has 256 entries */
   static final char ZZ_CMAP_A[] = zzUnpackCMap(
-    "\11\0\1\3\1\2\1\0\1\3\1\1\22\0\1\3\33\0\1\4\1\0\1\4\301\0");
+    "\11\0\1\3\1\2\1\0\1\3\1\1\22\0\1\3\5\0\1\7\11\0\12\5\2\0\1\4\1\0\1\6\301\0");
 
   /** 
    * Translates DFA states to action switch labels.
@@ -63,10 +63,11 @@ class BatchLexer implements FlexLexer {
   private static final int [] ZZ_ACTION = zzUnpackAction();
 
   private static final String ZZ_ACTION_PACKED_0 =
-    "\1\1\1\2\1\1\2\3\1\4\1\5\1\2";
+    "\1\1\1\2\1\1\2\3\1\4\1\5\1\1\1\5"+
+    "\2\2\1\0\1\5";
 
   private static int [] zzUnpackAction() {
-    int [] result = new int[8];
+    int [] result = new int[13];
     int offset = 0;
     offset = zzUnpackAction(ZZ_ACTION_PACKED_0, offset, result);
     return result;
@@ -91,10 +92,11 @@ class BatchLexer implements FlexLexer {
   private static final int [] ZZ_ROWMAP = zzUnpackRowMap();
 
   private static final String ZZ_ROWMAP_PACKED_0 =
-    "\0\0\0\5\0\12\0\17\0\24\0\31\0\24\0\36";
+    "\0\0\0\10\0\20\0\30\0\40\0\50\0\60\0\70"+
+    "\0\100\0\110\0\120\0\130\0\40";
 
   private static int [] zzUnpackRowMap() {
-    int [] result = new int[8];
+    int [] result = new int[13];
     int offset = 0;
     offset = zzUnpackRowMap(ZZ_ROWMAP_PACKED_0, offset, result);
     return result;
@@ -117,12 +119,16 @@ class BatchLexer implements FlexLexer {
   private static final int [] ZZ_TRANS = zzUnpackTrans();
 
   private static final String ZZ_TRANS_PACKED_0 =
-    "\1\3\1\4\1\5\1\6\1\7\1\10\1\4\1\5"+
-    "\1\6\1\7\1\3\6\0\1\5\12\0\1\6\1\0"+
-    "\1\10\4\0";
+    "\1\3\1\4\1\5\1\6\1\7\1\10\1\11\1\3"+
+    "\1\12\1\4\1\5\1\6\1\7\1\13\1\11\1\12"+
+    "\1\3\4\0\1\3\1\0\1\3\2\0\1\5\20\0"+
+    "\1\6\13\0\1\14\1\3\3\0\1\7\1\3\1\11"+
+    "\1\3\6\0\1\7\1\14\1\12\4\0\1\12\1\0"+
+    "\2\12\3\0\1\7\1\12\1\11\1\12\5\0\1\15"+
+    "\2\0";
 
   private static int [] zzUnpackTrans() {
-    int [] result = new int[35];
+    int [] result = new int[96];
     int offset = 0;
     offset = zzUnpackTrans(ZZ_TRANS_PACKED_0, offset, result);
     return result;
@@ -160,10 +166,10 @@ class BatchLexer implements FlexLexer {
   private static final int [] ZZ_ATTRIBUTE = zzUnpackAttribute();
 
   private static final String ZZ_ATTRIBUTE_PACKED_0 =
-    "\4\1\1\11\1\1\1\11\1\1";
+    "\4\1\1\11\6\1\1\0\1\11";
 
   private static int [] zzUnpackAttribute() {
-    int [] result = new int[8];
+    int [] result = new int[13];
     int offset = 0;
     offset = zzUnpackAttribute(ZZ_ATTRIBUTE_PACKED_0, offset, result);
     return result;
@@ -480,7 +486,7 @@ class BatchLexer implements FlexLexer {
             }
           case 9: break;
           case 5: 
-            { return BAD_CHARACTER;
+            { return REDIRECT_OPERATOR;
             }
           case 10: break;
           default:
