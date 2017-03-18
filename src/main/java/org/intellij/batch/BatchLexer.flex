@@ -19,9 +19,9 @@ LineCharacter = [^\r\n]
 Whitespace = [ \t\f]
 
 SpecialCharacter = [<>|]
-// TODO: Looks very ugly, might become an issue. Something must be done.
-// SequenceCharacter = [{LineCharacter}--[{SpecialCharacter}||{Whitespace}]]
-SequenceCharacter = [[^\r\n]--[[<>|]||[ \t\f]]]
+
+// Set difference {LineCharacter} \ ({SpecialCharacter} | {Whitespace})
+SequenceCharacter = !(!{LineCharacter} | {SpecialCharacter} | {Whitespace})
 
 Digit = [0-9]
 

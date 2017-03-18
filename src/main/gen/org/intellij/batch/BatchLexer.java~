@@ -55,7 +55,8 @@ class BatchLexer implements FlexLexer {
 
   /* The ZZ_CMAP_A table has 256 entries */
   static final char ZZ_CMAP_A[] = zzUnpackCMap(
-    "\11\0\1\3\1\2\1\0\1\3\1\1\22\0\1\3\5\0\1\7\11\0\12\5\2\0\1\4\1\0\1\6\301\0");
+    "\11\0\1\3\1\2\1\0\1\3\1\1\22\0\1\3\5\0\1\10\11\0\12\5\2\0\1\7\1\0\1\6\75\0"+
+    "\1\4\203\0");
 
   /** 
    * Translates DFA states to action switch labels.
@@ -63,11 +64,11 @@ class BatchLexer implements FlexLexer {
   private static final int [] ZZ_ACTION = zzUnpackAction();
 
   private static final String ZZ_ACTION_PACKED_0 =
-    "\1\1\1\2\1\1\2\3\1\4\1\5\1\1\1\5"+
-    "\2\2\1\0\1\5";
+    "\1\1\1\2\1\1\2\3\1\4\1\5\1\1\2\6"+
+    "\2\2\1\0\1\6";
 
   private static int [] zzUnpackAction() {
-    int [] result = new int[13];
+    int [] result = new int[14];
     int offset = 0;
     offset = zzUnpackAction(ZZ_ACTION_PACKED_0, offset, result);
     return result;
@@ -92,11 +93,11 @@ class BatchLexer implements FlexLexer {
   private static final int [] ZZ_ROWMAP = zzUnpackRowMap();
 
   private static final String ZZ_ROWMAP_PACKED_0 =
-    "\0\0\0\10\0\20\0\30\0\40\0\50\0\60\0\70"+
-    "\0\100\0\110\0\120\0\130\0\40";
+    "\0\0\0\11\0\22\0\33\0\44\0\55\0\44\0\66"+
+    "\0\77\0\110\0\121\0\132\0\143\0\44";
 
   private static int [] zzUnpackRowMap() {
-    int [] result = new int[13];
+    int [] result = new int[14];
     int offset = 0;
     offset = zzUnpackRowMap(ZZ_ROWMAP_PACKED_0, offset, result);
     return result;
@@ -119,16 +120,16 @@ class BatchLexer implements FlexLexer {
   private static final int [] ZZ_TRANS = zzUnpackTrans();
 
   private static final String ZZ_TRANS_PACKED_0 =
-    "\1\3\1\4\1\5\1\6\1\7\1\10\1\11\1\3"+
-    "\1\12\1\4\1\5\1\6\1\7\1\13\1\11\1\12"+
-    "\1\3\4\0\1\3\1\0\1\3\2\0\1\5\20\0"+
-    "\1\6\13\0\1\14\1\3\3\0\1\7\1\3\1\11"+
-    "\1\3\6\0\1\7\1\14\1\12\4\0\1\12\1\0"+
-    "\2\12\3\0\1\7\1\12\1\11\1\12\5\0\1\15"+
-    "\2\0";
+    "\1\3\1\4\1\5\1\6\1\7\1\10\1\11\1\12"+
+    "\1\3\1\13\1\4\1\5\1\6\1\7\1\14\1\11"+
+    "\1\12\1\13\1\3\4\0\1\3\2\0\1\3\2\0"+
+    "\1\5\22\0\1\6\5\0\1\3\4\0\1\3\1\11"+
+    "\1\12\1\3\6\0\1\12\1\0\1\15\10\0\1\15"+
+    "\1\13\4\0\1\13\2\0\2\13\4\0\1\13\1\11"+
+    "\1\12\1\13\5\0\1\16\3\0";
 
   private static int [] zzUnpackTrans() {
-    int [] result = new int[96];
+    int [] result = new int[108];
     int offset = 0;
     offset = zzUnpackTrans(ZZ_TRANS_PACKED_0, offset, result);
     return result;
@@ -166,10 +167,10 @@ class BatchLexer implements FlexLexer {
   private static final int [] ZZ_ATTRIBUTE = zzUnpackAttribute();
 
   private static final String ZZ_ATTRIBUTE_PACKED_0 =
-    "\4\1\1\11\6\1\1\0\1\11";
+    "\4\1\1\11\1\1\1\11\5\1\1\0\1\11";
 
   private static int [] zzUnpackAttribute() {
-    int [] result = new int[13];
+    int [] result = new int[14];
     int offset = 0;
     offset = zzUnpackAttribute(ZZ_ATTRIBUTE_PACKED_0, offset, result);
     return result;
@@ -472,23 +473,27 @@ class BatchLexer implements FlexLexer {
           case 1: 
             { yybegin(READING_CMD_ARGS); return COMMAND_NAME;
             }
-          case 6: break;
+          case 7: break;
           case 2: 
             { return COMMAND_ARGUMENT;
             }
-          case 7: break;
+          case 8: break;
           case 3: 
             { yybegin(YYINITIAL); return EOL_OPERATOR;
             }
-          case 8: break;
+          case 9: break;
           case 4: 
             { return WHITE_SPACE;
             }
-          case 9: break;
+          case 10: break;
           case 5: 
+            { yybegin(YYINITIAL); return PIPE_OPERATOR;
+            }
+          case 11: break;
+          case 6: 
             { return REDIRECT_OPERATOR;
             }
-          case 10: break;
+          case 12: break;
           default:
             zzScanError(ZZ_NO_MATCH);
           }
