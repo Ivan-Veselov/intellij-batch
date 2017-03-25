@@ -144,7 +144,8 @@ existKeyword = exist
 /*
  * TODO: keywords are handled a little bit incorrect.
  * If there is a matched or opened parentheses right after a keyword then this keword is treated as an arbitrary command
- * and not as a keyword. Basically keyword rules just ignore parentheses.
+ * and not as a keyword. Basically keyword rules just ignore parentheses. Also it might be helpful to match special
+ * symbols.
  */
 
 <YYINITIAL> {
