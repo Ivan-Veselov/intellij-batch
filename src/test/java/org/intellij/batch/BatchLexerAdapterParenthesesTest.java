@@ -364,4 +364,17 @@ public class BatchLexerAdapterParenthesesTest extends BatchLexerAdapterTest {
                 .token(EOL_OPERATOR, "\\n")
                 .token(RIGHT_PARENTHESES, ")"));
     }
+
+    public void testRightParenthesesAsArgumentAfterParentheses() throws Exception {
+        doTest("(command) & command )",
+                token(LEFT_PARENTHESES, "(")
+                .token(COMMAND_NAME, "command")
+                .token(RIGHT_PARENTHESES, ")")
+                .token(WHITE_SPACE, " ")
+                .token(CONDITIONAL_OPERATOR, "&")
+                .token(WHITE_SPACE, " ")
+                .token(COMMAND_NAME, "command")
+                .token(WHITE_SPACE, " ")
+                .token(CHAR_SEQUENCE, ")"));
+    }
 }

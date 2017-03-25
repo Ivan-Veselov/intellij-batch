@@ -617,7 +617,7 @@ class BatchLexer implements FlexLexer {
             }
           case 25: break;
           case 12: 
-            { yybegin(AFTER_MATCHED_PARENTHESES); return RIGHT_PARENTHESES;
+            { openedParentheses--; yybegin(AFTER_MATCHED_PARENTHESES); return RIGHT_PARENTHESES;
             }
           case 26: break;
           case 13: 

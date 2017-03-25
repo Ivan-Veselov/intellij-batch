@@ -151,7 +151,7 @@ RedirectToHandleOperator = {Digit}? {RedirectSymbol} & {Digit}
 }
 
 <MATCH_PARENTHESES> {
-    ")" { yybegin(AFTER_MATCHED_PARENTHESES); return RIGHT_PARENTHESES; }
+    ")" { openedParentheses--; yybegin(AFTER_MATCHED_PARENTHESES); return RIGHT_PARENTHESES; }
 }
 
 <AFTER_MATCHED_PARENTHESES> {
