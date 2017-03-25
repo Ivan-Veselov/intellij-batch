@@ -32,17 +32,10 @@ import static org.intellij.batch.BatchTokens.*;
     }
 
     /**
-    * Returns a memorized lexical state
-    */
-    public int getMemorizedState() {
-        return memorizedState;
-    }
-
-    /**
-    * Enters a memorized lexical state and set memorized state to invalid
+    * Enters a memorized lexical state and invalidate memorized state
     */
     public void beginMemorized() {
-        yybegin(getMemorizedState());
+        yybegin(memorizedState);
         memorizedState = invalidState;
     }
 %}
@@ -51,7 +44,7 @@ LineTerminator = \r | \n | \r\n
 LineCharacter = [^\r\n]
 Whitespace = [ \t\f]
 
-SpecialCharacter = [<>|&]
+SpecialCharacter = [<>|&()]
 
 // Set difference {LineCharacter} \ ({SpecialCharacter} | {Whitespace})
 SequenceCharacter = !(!{LineCharacter} | {SpecialCharacter} | {Whitespace})
@@ -67,7 +60,13 @@ RedirectToHandleOperator = {Digit}? {RedirectSymbol} & {Digit}
 
 %%
 
-{LineTerminator} { yybegin(YYINITIAL); return EOL_OPERATOR; }
+<YYINITIAL> {
+    {LineTerminator} { return EOL_OPERATOR; }
+}
+
+<READING_CMD_ARGS> {
+    {LineTerminator} { yybegin(YYINITIAL); return EOL_OPERATOR; }
+}
 
 <YYINITIAL, READING_CMD_ARGS, READING_REDIRECTION_DESTINATION> {
     {Whitespace}+ { return WHITE_SPACE; }
@@ -82,7 +81,7 @@ RedirectToHandleOperator = {Digit}? {RedirectSymbol} & {Digit}
 <READING_CMD_ARGS> {
     "|" { yybegin(YYINITIAL); return PIPE_OPERATOR; }
 
-    & | && | "||" { yybegin(YYINITIAL); return CONDITIONAL_OPERATOR; }
+    "&" | "&&" | "||" { yybegin(YYINITIAL); return CONDITIONAL_OPERATOR; }
 }
 
 <YYINITIAL> {
