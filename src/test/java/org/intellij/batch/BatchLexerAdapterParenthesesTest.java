@@ -377,4 +377,10 @@ public class BatchLexerAdapterParenthesesTest extends BatchLexerAdapterTest {
                 .token(WHITE_SPACE, " ")
                 .token(CHAR_SEQUENCE, ")"));
     }
+
+    public void testCommandArgWithNoDelimiterViaParentheses() throws Exception {
+        doTest("command(arg",
+                token(COMMAND_NAME, "command")
+                .token(CHAR_SEQUENCE, "(arg"));
+    }
 }

@@ -147,9 +147,6 @@ existKeyword = exist
  * and not as a keyword. Basically keyword rules just ignore parentheses.
  */
 
-/*
- * TODO: not good enough handling of left parentheses, 'java(class' will be tokenized wrong.
- */
 <YYINITIAL> {
     {LineTerminator} { return EOL_OPERATOR; }
 
