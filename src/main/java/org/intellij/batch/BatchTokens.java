@@ -14,4 +14,8 @@ public final class BatchTokens {
     public static final IElementType PIPE_OPERATOR = new IElementType("PIPE_OPERATOR", null);
 
     public static final IElementType CONDITIONAL_OPERATOR = new IElementType("CONDITIONAL_OPERATOR", null);
+
+    public static final IElementType LEFT_PARENTHESES = new IElementType("LEFT_PARENTHESES", null);
+
+    public static final IElementType RIGHT_PARENTHESES = new IElementType("RIGHT_PARENTHESES", null);
 }

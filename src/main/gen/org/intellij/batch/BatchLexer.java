@@ -4,6 +4,8 @@ package org.intellij.batch;
 
 import com.intellij.lexer.FlexLexer;
 import com.intellij.psi.tree.IElementType;
+import org.intellij.batch.util.Action;
+import org.jetbrains.annotations.NotNull;
 
 import static com.intellij.psi.TokenType.*;
 import static org.intellij.batch.BatchTokens.*;
@@ -26,6 +28,8 @@ class BatchLexer implements FlexLexer {
   public static final int YYINITIAL = 0;
   public static final int READING_CMD_ARGS = 2;
   public static final int READING_REDIRECTION_DESTINATION = 4;
+  public static final int MATCH_PARENTHESES = 6;
+  public static final int AFTER_MATCHED_PARENTHESES = 8;
 
   /**
    * ZZ_LEXSTATE[l] is the state in the DFA for the lexical state l
@@ -34,7 +38,7 @@ class BatchLexer implements FlexLexer {
    * l is of the form l = 2*k, k a non negative integer
    */
   private static final int ZZ_LEXSTATE[] = { 
-     0,  0,  1,  1,  2, 2
+     0,  0,  1,  1,  2,  2,  3,  3,  4, 4
   };
 
   /** 
@@ -56,8 +60,8 @@ class BatchLexer implements FlexLexer {
 
   /* The ZZ_CMAP_A table has 256 entries */
   static final char ZZ_CMAP_A[] = zzUnpackCMap(
-    "\11\0\1\3\1\2\1\0\1\3\1\1\22\0\1\3\5\0\1\10\1\0\2\4\6\0\12\5\2\0\1\7\1\0\1"+
-    "\6\75\0\1\11\203\0");
+    "\11\0\1\3\1\2\1\0\1\3\1\1\22\0\1\3\5\0\1\12\1\0\1\5\1\6\6\0\12\7\2\0\1\11"+
+    "\1\0\1\10\75\0\1\4\203\0");
 
   /** 
    * Translates DFA states to action switch labels.
@@ -65,11 +69,12 @@ class BatchLexer implements FlexLexer {
   private static final int [] ZZ_ACTION = zzUnpackAction();
 
   private static final String ZZ_ACTION_PACKED_0 =
-    "\3\0\1\1\2\2\1\3\1\4\1\1\2\5\1\6"+
-    "\2\7\1\6\1\10\1\11\1\12\1\0\1\10\1\13";
+    "\5\0\1\1\2\2\1\3\1\4\1\5\1\1\2\6"+
+    "\1\7\2\10\1\11\1\7\1\12\1\13\1\14\1\15"+
+    "\1\4\1\0\1\12\1\16";
 
   private static int [] zzUnpackAction() {
-    int [] result = new int[21];
+    int [] result = new int[27];
     int offset = 0;
     offset = zzUnpackAction(ZZ_ACTION_PACKED_0, offset, result);
     return result;
@@ -94,12 +99,13 @@ class BatchLexer implements FlexLexer {
   private static final int [] ZZ_ROWMAP = zzUnpackRowMap();
 
   private static final String ZZ_ROWMAP_PACKED_0 =
-    "\0\0\0\12\0\24\0\36\0\50\0\62\0\74\0\62"+
-    "\0\106\0\120\0\132\0\144\0\156\0\62\0\170\0\202"+
-    "\0\214\0\226\0\240\0\62\0\62";
+    "\0\0\0\13\0\26\0\41\0\54\0\67\0\102\0\115"+
+    "\0\130\0\115\0\115\0\143\0\156\0\171\0\204\0\217"+
+    "\0\115\0\232\0\245\0\260\0\273\0\115\0\115\0\306"+
+    "\0\321\0\115\0\115";
 
   private static int [] zzUnpackRowMap() {
-    int [] result = new int[21];
+    int [] result = new int[27];
     int offset = 0;
     offset = zzUnpackRowMap(ZZ_ROWMAP_PACKED_0, offset, result);
     return result;
@@ -122,18 +128,20 @@ class BatchLexer implements FlexLexer {
   private static final int [] ZZ_TRANS = zzUnpackTrans();
 
   private static final String ZZ_TRANS_PACKED_0 =
-    "\1\4\1\5\1\6\1\7\1\10\1\11\1\12\1\13"+
-    "\2\10\1\14\1\15\1\16\1\7\1\10\1\17\1\12"+
-    "\1\13\1\20\1\21\1\22\2\10\1\7\1\10\1\22"+
-    "\4\10\1\4\4\0\1\4\6\0\1\6\24\0\1\7"+
-    "\6\0\1\4\4\0\1\4\1\12\1\13\10\0\1\13"+
-    "\1\0\1\23\11\0\1\23\1\0\1\14\4\0\1\14"+
-    "\6\0\1\16\7\0\1\14\4\0\1\14\1\12\1\13"+
-    "\12\0\1\24\12\0\1\24\1\22\4\0\1\22\11\0"+
-    "\1\25\4\0";
+    "\1\6\1\7\1\10\1\11\1\12\1\13\1\6\1\14"+
+    "\1\15\1\16\1\12\1\17\1\20\1\21\1\11\1\22"+
+    "\2\17\1\23\1\15\1\16\1\24\1\25\2\12\1\11"+
+    "\1\12\3\25\11\12\1\26\5\12\1\20\1\21\1\11"+
+    "\1\22\1\12\1\27\1\30\1\15\1\16\1\24\1\6"+
+    "\5\0\2\6\5\0\1\10\26\0\1\11\7\0\1\6"+
+    "\5\0\2\6\1\15\1\16\11\0\1\16\1\0\1\31"+
+    "\12\0\1\31\1\17\4\0\3\17\5\0\1\21\14\0"+
+    "\1\32\6\0\1\17\4\0\3\17\1\15\1\16\13\0"+
+    "\1\32\1\25\4\0\3\25\13\0\1\15\1\16\10\0"+
+    "\1\33\3\0";
 
   private static int [] zzUnpackTrans() {
-    int [] result = new int[170];
+    int [] result = new int[220];
     int offset = 0;
     offset = zzUnpackTrans(ZZ_TRANS_PACKED_0, offset, result);
     return result;
@@ -171,11 +179,11 @@ class BatchLexer implements FlexLexer {
   private static final int [] ZZ_ATTRIBUTE = zzUnpackAttribute();
 
   private static final String ZZ_ATTRIBUTE_PACKED_0 =
-    "\3\0\2\1\1\11\1\1\1\11\5\1\1\11\4\1"+
-    "\1\0\2\11";
+    "\5\0\2\1\1\11\1\1\2\11\5\1\1\11\4\1"+
+    "\2\11\1\1\1\0\2\11";
 
   private static int [] zzUnpackAttribute() {
-    int [] result = new int[21];
+    int [] result = new int[27];
     int offset = 0;
     offset = zzUnpackAttribute(ZZ_ATTRIBUTE_PACKED_0, offset, result);
     return result;
@@ -237,22 +245,80 @@ class BatchLexer implements FlexLexer {
     /** Memorized lexical state */
     private int memorizedState = invalidState;
 
-    /**
+    /** Number of opened parentheses */
+    private int openedParentheses = 0;
+
+    private final @NotNull Action beginMemorizedAction =
+        new Action() {
+            @Override
+            public void execute() {
+                beginMemorized();
+            }
+        };
+
+   /**
     * Enters a new lexical state and remebers the current one
     *
     * @param newState the new lexical state
     */
-    public void memorizeAndBegin(int newState) {
+    private void memorizeAndBegin(final int newState) {
         memorizedState = yystate();
         yybegin(newState);
     }
 
-    /**
+   /**
     * Enters a memorized lexical state and invalidate memorized state
     */
-    public void beginMemorized() {
+    private void beginMemorized() {
         yybegin(memorizedState);
         memorizedState = invalidState;
+    }
+
+   /**
+    * Pushes all characters which appeared after first matching parentheses back into the input stream and begins new
+    * lexical state MATCH_PARENTHESES. If no matching parentheses found given action is executed.
+    *
+    * @param nothingMatchedAction an action to execute if no matching parentheses is found.
+    */
+    private void backtrackUntilMatchingParenthesesOr(final @NotNull Action nothingMatchedAction) {
+        if (openedParentheses == 0) {
+            nothingMatchedAction.execute();
+            return;
+        }
+
+        String text = yytext().toString();
+        int parenthesesIndex = text.indexOf(')');
+
+        if (parenthesesIndex < 0) {
+            nothingMatchedAction.execute();
+            return;
+        }
+
+        yypushback(text.length() - parenthesesIndex);
+        yybegin(MATCH_PARENTHESES);
+    }
+
+   /**
+    * Calls backtrackUntilMatchingParenthesesOr. If no matching parentheses found lexer begins given state.
+    *
+    * @param nothingMatchedState a state to begin if no matching parentheses is found.
+    */
+    private void backtrackUntilMatchingParenthesesOrBegin(final int nothingMatchedState) {
+        backtrackUntilMatchingParenthesesOr(
+            new Action() {
+                @Override
+                public void execute() {
+                    yybegin(nothingMatchedState);
+                }
+            }
+        );
+    }
+
+   /**
+    * Calls backtrackUntilMatchingParenthesesOr with no action.
+    */
+    private void backtrackUntilMatchingParentheses() {
+        backtrackUntilMatchingParenthesesOr(Action.noAction);
     }
 
 
@@ -501,49 +567,67 @@ class BatchLexer implements FlexLexer {
       else {
         switch (zzAction < 0 ? zzAction : ZZ_ACTION[zzAction]) {
           case 1: 
-            { yybegin(READING_CMD_ARGS); return COMMAND_NAME;
+            { backtrackUntilMatchingParenthesesOrBegin(READING_CMD_ARGS);
+
+        if (yylength() != 0) {
+            return COMMAND_NAME;
+        }
             }
-          case 12: break;
+          case 15: break;
           case 2: 
             { return EOL_OPERATOR;
             }
-          case 13: break;
+          case 16: break;
           case 3: 
             { return WHITE_SPACE;
             }
-          case 14: break;
+          case 17: break;
           case 4: 
             { return BAD_CHARACTER;
             }
-          case 15: break;
-          case 5: 
-            { memorizeAndBegin(READING_REDIRECTION_DESTINATION); return REDIRECT_OPERATOR;
-            }
-          case 16: break;
-          case 6: 
-            { return CHAR_SEQUENCE;
-            }
-          case 17: break;
-          case 7: 
-            { yybegin(YYINITIAL); return EOL_OPERATOR;
-            }
           case 18: break;
-          case 8: 
-            { yybegin(YYINITIAL); return CONDITIONAL_OPERATOR;
+          case 5: 
+            { openedParentheses++; return LEFT_PARENTHESES;
             }
           case 19: break;
+          case 6: 
+            { memorizeAndBegin(READING_REDIRECTION_DESTINATION); return REDIRECT_OPERATOR;
+            }
+          case 20: break;
+          case 7: 
+            { backtrackUntilMatchingParentheses(); return CHAR_SEQUENCE;
+            }
+          case 21: break;
+          case 8: 
+            { yybegin(YYINITIAL); return EOL_OPERATOR;
+            }
+          case 22: break;
           case 9: 
             { yybegin(YYINITIAL); return PIPE_OPERATOR;
             }
-          case 20: break;
+          case 23: break;
           case 10: 
-            { beginMemorized(); return CHAR_SEQUENCE;
+            { yybegin(YYINITIAL); return CONDITIONAL_OPERATOR;
             }
-          case 21: break;
+          case 24: break;
           case 11: 
+            { backtrackUntilMatchingParenthesesOr(beginMemorizedAction);
+
+        return CHAR_SEQUENCE;
+            }
+          case 25: break;
+          case 12: 
+            { yybegin(AFTER_MATCHED_PARENTHESES); return RIGHT_PARENTHESES;
+            }
+          case 26: break;
+          case 13: 
+            { backtrackUntilMatchingParentheses(); if (yylength() != 0) { return BAD_CHARACTER; }
+            }
+          case 27: break;
+          case 14: 
             { return REDIRECT_OPERATOR;
             }
-          case 22: break;
+          case 28: break;
           default:
             zzScanError(ZZ_NO_MATCH);
           }

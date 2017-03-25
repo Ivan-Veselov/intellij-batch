@@ -2,6 +2,8 @@ package org.intellij.batch;
 
 import com.intellij.lexer.FlexLexer;
 import com.intellij.psi.tree.IElementType;
+import org.intellij.batch.util.Action;
+import org.jetbrains.annotations.NotNull;
 
 import static com.intellij.psi.TokenType.*;
 import static org.intellij.batch.BatchTokens.*;
@@ -21,22 +23,80 @@ import static org.intellij.batch.BatchTokens.*;
     /** Memorized lexical state */
     private int memorizedState = invalidState;
 
-    /**
+    /** Number of opened parentheses */
+    private int openedParentheses = 0;
+
+    private final @NotNull Action beginMemorizedAction =
+        new Action() {
+            @Override
+            public void execute() {
+                beginMemorized();
+            }
+        };
+
+   /**
     * Enters a new lexical state and remebers the current one
     *
     * @param newState the new lexical state
     */
-    public void memorizeAndBegin(int newState) {
+    private void memorizeAndBegin(final int newState) {
         memorizedState = yystate();
         yybegin(newState);
     }
 
-    /**
+   /**
     * Enters a memorized lexical state and invalidate memorized state
     */
-    public void beginMemorized() {
+    private void beginMemorized() {
         yybegin(memorizedState);
         memorizedState = invalidState;
+    }
+
+   /**
+    * Pushes all characters which appeared after first matching parentheses back into the input stream and begins new
+    * lexical state MATCH_PARENTHESES. If no matching parentheses found given action is executed.
+    *
+    * @param nothingMatchedAction an action to execute if no matching parentheses is found.
+    */
+    private void backtrackUntilMatchingParenthesesOr(final @NotNull Action nothingMatchedAction) {
+        if (openedParentheses == 0) {
+            nothingMatchedAction.execute();
+            return;
+        }
+
+        String text = yytext().toString();
+        int parenthesesIndex = text.indexOf(')');
+
+        if (parenthesesIndex < 0) {
+            nothingMatchedAction.execute();
+            return;
+        }
+
+        yypushback(text.length() - parenthesesIndex);
+        yybegin(MATCH_PARENTHESES);
+    }
+
+   /**
+    * Calls backtrackUntilMatchingParenthesesOr. If no matching parentheses found lexer begins given state.
+    *
+    * @param nothingMatchedState a state to begin if no matching parentheses is found.
+    */
+    private void backtrackUntilMatchingParenthesesOrBegin(final int nothingMatchedState) {
+        backtrackUntilMatchingParenthesesOr(
+            new Action() {
+                @Override
+                public void execute() {
+                    yybegin(nothingMatchedState);
+                }
+            }
+        );
+    }
+
+   /**
+    * Calls backtrackUntilMatchingParenthesesOr with no action.
+    */
+    private void backtrackUntilMatchingParentheses() {
+        backtrackUntilMatchingParenthesesOr(Action.noAction);
     }
 %}
 
@@ -49,6 +109,8 @@ SpecialCharacter = [<>|&()]
 // Set difference {LineCharacter} \ ({SpecialCharacter} | {Whitespace})
 SequenceCharacter = !(!{LineCharacter} | {SpecialCharacter} | {Whitespace})
 
+SequenceCharacterOrParentheses = {SequenceCharacter} | "(" | ")"
+
 Digit = [0-9]
 
 RedirectSymbol = > | < | >>
@@ -57,41 +119,65 @@ RedirectToHandleOperator = {Digit}? {RedirectSymbol} & {Digit}
 
 %state READING_CMD_ARGS
 %state READING_REDIRECTION_DESTINATION
+%state MATCH_PARENTHESES
+%state AFTER_MATCHED_PARENTHESES
 
 %%
 
 <YYINITIAL> {
     {LineTerminator} { return EOL_OPERATOR; }
+
+    "(" { openedParentheses++; return LEFT_PARENTHESES; }
+
+    ({SequenceCharacter} | ")")+ {
+        backtrackUntilMatchingParenthesesOrBegin(READING_CMD_ARGS);
+
+        if (yylength() != 0) {
+            return COMMAND_NAME;
+        }
+    }
 }
 
 <READING_CMD_ARGS> {
-    {LineTerminator} { yybegin(YYINITIAL); return EOL_OPERATOR; }
+    {SequenceCharacterOrParentheses}+ { backtrackUntilMatchingParentheses(); return CHAR_SEQUENCE; }
 }
 
-<YYINITIAL, READING_CMD_ARGS, READING_REDIRECTION_DESTINATION> {
-    {Whitespace}+ { return WHITE_SPACE; }
+<READING_REDIRECTION_DESTINATION> {
+    {SequenceCharacterOrParentheses}+ {
+        backtrackUntilMatchingParenthesesOr(beginMemorizedAction);
+
+        return CHAR_SEQUENCE;
+    }
 }
 
-<YYINITIAL, READING_CMD_ARGS> {
-    {RedirectToHandleOperator} { return REDIRECT_OPERATOR; }
-
-    {RedirectToFileOperator} { memorizeAndBegin(READING_REDIRECTION_DESTINATION); return REDIRECT_OPERATOR; }
+<MATCH_PARENTHESES> {
+    ")" { yybegin(AFTER_MATCHED_PARENTHESES); return RIGHT_PARENTHESES; }
 }
 
-<READING_CMD_ARGS> {
+<AFTER_MATCHED_PARENTHESES> {
+    ")" { backtrackUntilMatchingParentheses(); if (yylength() != 0) { return BAD_CHARACTER; } }
+}
+
+/* Common rules */
+
+<READING_CMD_ARGS, AFTER_MATCHED_PARENTHESES> {
     "|" { yybegin(YYINITIAL); return PIPE_OPERATOR; }
 
     "&" | "&&" | "||" { yybegin(YYINITIAL); return CONDITIONAL_OPERATOR; }
 }
 
-<YYINITIAL> {
-    {SequenceCharacter}+ { yybegin(READING_CMD_ARGS); return COMMAND_NAME; }
+<READING_CMD_ARGS, AFTER_MATCHED_PARENTHESES> {
+    {LineTerminator} { yybegin(YYINITIAL); return EOL_OPERATOR; }
 }
 
-<READING_CMD_ARGS> {
-    {SequenceCharacter}+ { return CHAR_SEQUENCE; }
+<YYINITIAL, READING_CMD_ARGS, READING_REDIRECTION_DESTINATION, AFTER_MATCHED_PARENTHESES> {
+    {Whitespace}+ { return WHITE_SPACE; }
 }
 
-<READING_REDIRECTION_DESTINATION> {SequenceCharacter}+ { beginMemorized(); return CHAR_SEQUENCE; }
+<YYINITIAL, READING_CMD_ARGS, AFTER_MATCHED_PARENTHESES> {
+    {RedirectToHandleOperator} { return REDIRECT_OPERATOR; }
+
+    {RedirectToFileOperator} { memorizeAndBegin(READING_REDIRECTION_DESTINATION); return REDIRECT_OPERATOR; }
+}
 
 [^] { return BAD_CHARACTER; }
