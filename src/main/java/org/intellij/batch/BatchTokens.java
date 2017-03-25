@@ -18,4 +18,8 @@ public final class BatchTokens {
     public static final IElementType LEFT_PARENTHESES = new IElementType("LEFT_PARENTHESES", null);
 
     public static final IElementType RIGHT_PARENTHESES = new IElementType("RIGHT_PARENTHESES", null);
+
+    public static final IElementType IF_KEYWORD = new IElementType("IF_KEYWORD", null);
+
+    public static final IElementType EXIST_KEYWORD = new IElementType("EXIST_KEYWORD", null);
 }

@@ -12,6 +12,7 @@ import static org.intellij.batch.BatchTokens.*;
 
 %class BatchLexer
 %unicode
+%ignorecase
 %implements FlexLexer
 %function advance
 %type IElementType
@@ -26,6 +27,7 @@ import static org.intellij.batch.BatchTokens.*;
     /** Number of opened parentheses */
     private int openedParentheses = 0;
 
+    /** An action which calls beginMemorized method */
     private final @NotNull Action beginMemorizedAction =
         new Action() {
             @Override
@@ -35,17 +37,27 @@ import static org.intellij.batch.BatchTokens.*;
         };
 
    /**
-    * Enters a new lexical state and remebers the current one
+    * Enters a new lexical state and remebers a given one.
     *
-    * @param newState the new lexical state
+    * @param stateToMemorize a lexical state to memorize.
+    * @param newState new lexical state.
     */
-    private void memorizeAndBegin(final int newState) {
-        memorizedState = yystate();
+    private void memorizeAndBegin(final int stateToMemorize, final int newState) {
+        memorizedState = stateToMemorize;
         yybegin(newState);
     }
 
    /**
-    * Enters a memorized lexical state and invalidate memorized state
+    * Enters a new lexical state and remebers the current one.
+    *
+    * @param newState new lexical state.
+    */
+    private void memorizeAndBegin(final int newState) {
+        memorizeAndBegin(yystate(), newState);
+    }
+
+   /**
+    * Enters a memorized lexical state and invalidate memorized state.
     */
     private void beginMemorized() {
         yybegin(memorizedState);
@@ -117,18 +129,31 @@ RedirectSymbol = > | < | >>
 RedirectToFileOperator = {Digit}? {RedirectSymbol}
 RedirectToHandleOperator = {Digit}? {RedirectSymbol} & {Digit}
 
+/* Keywords */
+ifKeyword = if
+existKeyword = exist
+
 %state READING_CMD_ARGS
-%state READING_REDIRECTION_DESTINATION
+%state READING_ONE_CHAR_SEQUENCE
 %state MATCH_PARENTHESES
 %state AFTER_MATCHED_PARENTHESES
+%state AFTER_IF_KEYWORD
 
 %%
+
+/*
+ * TODO: keywords are handled a little bit incorrect.
+ * If there is a matched or opened parentheses right after a keyword then this keword is treated as an arbitrary command
+ * and not as a keyword. Basically keyword rules just ignore parentheses.
+ */
 
 /*
  * TODO: not good enough handling of left parentheses, 'java(class' will be tokenized wrong.
  */
 <YYINITIAL> {
     {LineTerminator} { return EOL_OPERATOR; }
+
+    {ifKeyword} { yybegin(AFTER_IF_KEYWORD); return IF_KEYWORD; }
 
     "(" { openedParentheses++; return LEFT_PARENTHESES; }
 
@@ -145,7 +170,7 @@ RedirectToHandleOperator = {Digit}? {RedirectSymbol} & {Digit}
     {SequenceCharacterOrParentheses}+ { backtrackUntilMatchingParentheses(); return CHAR_SEQUENCE; }
 }
 
-<READING_REDIRECTION_DESTINATION> {
+<READING_ONE_CHAR_SEQUENCE> {
     {SequenceCharacterOrParentheses}+ {
         backtrackUntilMatchingParenthesesOr(beginMemorizedAction);
 
@@ -159,6 +184,10 @@ RedirectToHandleOperator = {Digit}? {RedirectSymbol} & {Digit}
 
 <AFTER_MATCHED_PARENTHESES> {
     ")" { backtrackUntilMatchingParentheses(); if (yylength() != 0) { return BAD_CHARACTER; } }
+}
+
+<AFTER_IF_KEYWORD> {
+    {existKeyword} { memorizeAndBegin(YYINITIAL, READING_ONE_CHAR_SEQUENCE); return EXIST_KEYWORD; }
 }
 
 /* Common rules */
@@ -176,7 +205,7 @@ RedirectToHandleOperator = {Digit}? {RedirectSymbol} & {Digit}
 }
 
 /* Rules for whitespaces */
-<YYINITIAL, READING_CMD_ARGS, READING_REDIRECTION_DESTINATION, AFTER_MATCHED_PARENTHESES> {
+<YYINITIAL, READING_CMD_ARGS, READING_ONE_CHAR_SEQUENCE, AFTER_MATCHED_PARENTHESES, AFTER_IF_KEYWORD> {
     {Whitespace}+ { return WHITE_SPACE; }
 }
 
@@ -184,7 +213,7 @@ RedirectToHandleOperator = {Digit}? {RedirectSymbol} & {Digit}
 <YYINITIAL, READING_CMD_ARGS, AFTER_MATCHED_PARENTHESES> {
     {RedirectToHandleOperator} { return REDIRECT_OPERATOR; }
 
-    {RedirectToFileOperator} { memorizeAndBegin(READING_REDIRECTION_DESTINATION); return REDIRECT_OPERATOR; }
+    {RedirectToFileOperator} { memorizeAndBegin(READING_ONE_CHAR_SEQUENCE); return REDIRECT_OPERATOR; }
 }
 
 [^] { return BAD_CHARACTER; }
