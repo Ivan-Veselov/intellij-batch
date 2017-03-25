@@ -160,20 +160,24 @@ RedirectToHandleOperator = {Digit}? {RedirectSymbol} & {Digit}
 
 /* Common rules */
 
+/* Rules for pipe and conditional execution operators */
 <READING_CMD_ARGS, AFTER_MATCHED_PARENTHESES> {
     "|" { yybegin(YYINITIAL); return PIPE_OPERATOR; }
 
     "&" | "&&" | "||" { yybegin(YYINITIAL); return CONDITIONAL_OPERATOR; }
 }
 
+/* Rules for line terminators */
 <READING_CMD_ARGS, AFTER_MATCHED_PARENTHESES> {
     {LineTerminator} { yybegin(YYINITIAL); return EOL_OPERATOR; }
 }
 
+/* Rules for whitespaces */
 <YYINITIAL, READING_CMD_ARGS, READING_REDIRECTION_DESTINATION, AFTER_MATCHED_PARENTHESES> {
     {Whitespace}+ { return WHITE_SPACE; }
 }
 
+/* Rules for redirect operators */
 <YYINITIAL, READING_CMD_ARGS, AFTER_MATCHED_PARENTHESES> {
     {RedirectToHandleOperator} { return REDIRECT_OPERATOR; }
 
