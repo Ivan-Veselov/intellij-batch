@@ -23,7 +23,10 @@ public class BatchParser implements PsiParser, LightPsiParser {
     boolean r;
     b = adapt_builder_(t, b, this, null);
     Marker m = enter_section_(b, 0, _COLLAPSE_, null);
-    if (t == SIMPLE_COMMAND) {
+    if (t == PIPELINE) {
+      r = pipeline(b, 0);
+    }
+    else if (t == SIMPLE_COMMAND) {
       r = simpleCommand(b, 0);
     }
     else if (t == TOKENS) {
@@ -40,30 +43,51 @@ public class BatchParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // (simpleCommand)*
+  // pipeline*
   static boolean batchFile(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "batchFile")) return false;
     int c = current_position_(b);
     while (true) {
-      if (!batchFile_0(b, l + 1)) break;
+      if (!pipeline(b, l + 1)) break;
       if (!empty_element_parsed_guard_(b, "batchFile", c)) break;
       c = current_position_(b);
     }
     return true;
   }
 
-  // (simpleCommand)
-  private static boolean batchFile_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "batchFile_0")) return false;
+  /* ********************************************************** */
+  // [pipeline PIPE_OPERATOR] simpleCommand
+  public static boolean pipeline(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "pipeline")) return false;
+    if (!nextTokenIs(b, COMMAND_NAME)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = simpleCommand(b, l + 1);
+    r = pipeline_0(b, l + 1);
+    r = r && simpleCommand(b, l + 1);
+    exit_section_(b, m, PIPELINE, r);
+    return r;
+  }
+
+  // [pipeline PIPE_OPERATOR]
+  private static boolean pipeline_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "pipeline_0")) return false;
+    pipeline_0_0(b, l + 1);
+    return true;
+  }
+
+  // pipeline PIPE_OPERATOR
+  private static boolean pipeline_0_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "pipeline_0_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = pipeline(b, l + 1);
+    r = r && consumeToken(b, PIPE_OPERATOR);
     exit_section_(b, m, null, r);
     return r;
   }
 
   /* ********************************************************** */
-  // COMMAND_NAME (CHAR_SEQUENCE)* EOL_OPERATOR
+  // COMMAND_NAME CHAR_SEQUENCE*
   public static boolean simpleCommand(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "simpleCommand")) return false;
     if (!nextTokenIs(b, COMMAND_NAME)) return false;
@@ -71,12 +95,11 @@ public class BatchParser implements PsiParser, LightPsiParser {
     Marker m = enter_section_(b);
     r = consumeToken(b, COMMAND_NAME);
     r = r && simpleCommand_1(b, l + 1);
-    r = r && consumeToken(b, EOL_OPERATOR);
     exit_section_(b, m, SIMPLE_COMMAND, r);
     return r;
   }
 
-  // (CHAR_SEQUENCE)*
+  // CHAR_SEQUENCE*
   private static boolean simpleCommand_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "simpleCommand_1")) return false;
     int c = current_position_(b);
@@ -89,11 +112,8 @@ public class BatchParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // COMMAND_NAME
-  // CHAR_SEQUENCE
   // EOL_OPERATOR
   // REDIRECT_OPERATOR
-  // PIPE_OPERATOR
   // CONDITIONAL_OPERATOR
   // LEFT_PARENTHESES
   // RIGHT_PARENTHESES
@@ -102,10 +122,10 @@ public class BatchParser implements PsiParser, LightPsiParser {
   // ELSE_KEYWORD
   public static boolean tokens(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "tokens")) return false;
-    if (!nextTokenIs(b, COMMAND_NAME)) return false;
+    if (!nextTokenIs(b, EOL_OPERATOR)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeTokens(b, 0, COMMAND_NAME, CHAR_SEQUENCE, EOL_OPERATOR, REDIRECT_OPERATOR, PIPE_OPERATOR, CONDITIONAL_OPERATOR, LEFT_PARENTHESES, RIGHT_PARENTHESES, IF_KEYWORD, EXIST_KEYWORD, ELSE_KEYWORD);
+    r = consumeTokens(b, 0, EOL_OPERATOR, REDIRECT_OPERATOR, CONDITIONAL_OPERATOR, LEFT_PARENTHESES, RIGHT_PARENTHESES, IF_KEYWORD, EXIST_KEYWORD, ELSE_KEYWORD);
     exit_section_(b, m, TOKENS, r);
     return r;
   }

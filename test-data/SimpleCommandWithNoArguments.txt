@@ -1,0 +1,4 @@
+Batch File
+  BatchPipelineImpl(PIPELINE)
+    BatchSimpleCommandImpl(SIMPLE_COMMAND)
+      PsiElement(BatchTokenType.COMMAND_NAME)('command')

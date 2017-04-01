@@ -5,6 +5,12 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface BatchTokens extends PsiElement {
+public interface BatchPipeline extends PsiElement {
+
+  @Nullable
+  BatchPipeline getPipeline();
+
+  @NotNull
+  BatchSimpleCommand getSimpleCommand();
 
 }

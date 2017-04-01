@@ -16,9 +16,10 @@ import org.intellij.batch.psi.BatchTypes;
 import org.jetbrains.annotations.NotNull;
 
 import static com.intellij.psi.TokenType.WHITE_SPACE;
+import static org.intellij.batch.psi.BatchTypes.EOL_OPERATOR;
 
 public class BatchParserDefinition implements ParserDefinition {
-    private static final @NotNull TokenSet WHITESPACES = TokenSet.create(WHITE_SPACE);
+    private static final @NotNull TokenSet WHITESPACES = TokenSet.create(WHITE_SPACE, EOL_OPERATOR);
 
     private static final @NotNull IFileElementType FILE = new IFileElementType(BatchLanguage.getInstance());
 

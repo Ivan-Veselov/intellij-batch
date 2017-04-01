@@ -8,6 +8,7 @@ import org.intellij.batch.psi.impl.*;
 
 public interface BatchTypes {
 
+  IElementType PIPELINE = new BatchElementType("PIPELINE");
   IElementType SIMPLE_COMMAND = new BatchElementType("SIMPLE_COMMAND");
   IElementType TOKENS = new BatchElementType("TOKENS");
 
@@ -26,7 +27,10 @@ public interface BatchTypes {
   class Factory {
     public static PsiElement createElement(ASTNode node) {
       IElementType type = node.getElementType();
-       if (type == SIMPLE_COMMAND) {
+       if (type == PIPELINE) {
+        return new BatchPipelineImpl(node);
+      }
+      else if (type == SIMPLE_COMMAND) {
         return new BatchSimpleCommandImpl(node);
       }
       else if (type == TOKENS) {

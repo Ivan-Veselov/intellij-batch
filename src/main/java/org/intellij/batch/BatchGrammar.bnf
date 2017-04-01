@@ -15,16 +15,15 @@
   // psiImplUtilClass="org.intellij.batch.psi.impl.BatchPsiImplUtil"
 }
 
-batchFile ::= (simpleCommand)*
+batchFile ::= pipeline*
 
-simpleCommand ::= COMMAND_NAME (CHAR_SEQUENCE)* EOL_OPERATOR
+simpleCommand ::= COMMAND_NAME CHAR_SEQUENCE*
+
+pipeline ::= [pipeline PIPE_OPERATOR] simpleCommand
 
 tokens ::=
-COMMAND_NAME
-CHAR_SEQUENCE
 EOL_OPERATOR
 REDIRECT_OPERATOR
-PIPE_OPERATOR
 CONDITIONAL_OPERATOR
 LEFT_PARENTHESES
 RIGHT_PARENTHESES
