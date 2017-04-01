@@ -6,8 +6,7 @@ import org.intellij.batch.util.Action;
 import org.jetbrains.annotations.NotNull;
 
 import static com.intellij.psi.TokenType.*;
-import static org.intellij.batch.BatchTokens.*;
-
+import static org.intellij.batch.psi.BatchTypes.*;
 %%
 
 %class BatchLexer

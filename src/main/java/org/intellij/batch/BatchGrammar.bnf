@@ -1,0 +1,33 @@
+{
+  parserClass="org.intellij.batch.parser.BatchParser"
+
+  // extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
+
+  psiClassPrefix="Batch"
+  psiImplClassSuffix="Impl"
+  psiPackage="org.intellij.batch.psi"
+  psiImplPackage="org.intellij.batch.psi.impl"
+
+  elementTypeHolderClass="org.intellij.batch.psi.BatchTypes"
+  elementTypeClass="org.intellij.batch.psi.BatchElementType"
+  tokenTypeClass="org.intellij.batch.psi.BatchTokenType"
+
+  // psiImplUtilClass="org.intellij.batch.psi.impl.BatchPsiImplUtil"
+}
+
+batchFile ::= (simpleCommand)*
+
+simpleCommand ::= COMMAND_NAME (CHAR_SEQUENCE)* EOL_OPERATOR
+
+tokens ::=
+COMMAND_NAME
+CHAR_SEQUENCE
+EOL_OPERATOR
+REDIRECT_OPERATOR
+PIPE_OPERATOR
+CONDITIONAL_OPERATOR
+LEFT_PARENTHESES
+RIGHT_PARENTHESES
+IF_KEYWORD
+EXIST_KEYWORD
+ELSE_KEYWORD

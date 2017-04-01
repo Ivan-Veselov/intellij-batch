@@ -37,5 +37,7 @@
     </actions>
 
     <extensions defaultExtensionNs="com.intellij">
+        <fileTypeFactory implementation="org.intellij.batch.BatchFileTypeFactory"/>
+        <lang.parserDefinition language="Batch" implementationClass="org.intellij.batch.BatchParserDefinition"/>
     </extensions>
 </idea-plugin>

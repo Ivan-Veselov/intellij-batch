@@ -3,7 +3,7 @@ package org.intellij.batch;
 import com.intellij.lexer.Lexer;
 
 import static com.intellij.psi.TokenType.WHITE_SPACE;
-import static org.intellij.batch.BatchTokens.*;
+import static org.intellij.batch.psi.BatchTypes.*;
 
 public class BatchLexerAdapterPipelineTest extends BatchLexerAdapterTest {
     @Override
