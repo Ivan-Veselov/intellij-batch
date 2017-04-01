@@ -132,6 +132,7 @@ RedirectToHandleOperator = {Digit}? {RedirectSymbol} & {Digit}
 /* Keywords */
 ifKeyword = if
 existKeyword = exist
+elseKeyword = else
 
 %state READING_CMD_ARGS
 %state READING_ONE_CHAR_SEQUENCE
@@ -182,6 +183,8 @@ existKeyword = exist
 
 <AFTER_MATCHED_PARENTHESES> {
     ")" { backtrackUntilMatchingParentheses(); if (yylength() != 0) { return BAD_CHARACTER; } }
+
+    {elseKeyword} / {Whitespace} { yybegin(YYINITIAL); return ELSE_KEYWORD; }
 }
 
 <AFTER_IF_KEYWORD> {

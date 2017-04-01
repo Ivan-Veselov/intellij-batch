@@ -22,4 +22,6 @@ public final class BatchTokens {
     public static final IElementType IF_KEYWORD = new IElementType("IF_KEYWORD", null);
 
     public static final IElementType EXIST_KEYWORD = new IElementType("EXIST_KEYWORD", null);
+
+    public static final IElementType ELSE_KEYWORD = new IElementType("ELSE_KEYWORD", null);
 }

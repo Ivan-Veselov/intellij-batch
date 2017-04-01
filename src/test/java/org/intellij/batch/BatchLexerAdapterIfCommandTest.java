@@ -72,5 +72,60 @@ public class BatchLexerAdapterIfCommandTest extends BatchLexerAdapterTest {
                 .token(COMMAND_NAME, "command")
                 .token(WHITE_SPACE, " ")
                 .token(CHAR_SEQUENCE, "arg"));
-        }
+    }
+
+    public void testIfExistElse() throws Exception {
+        doTest("if exist f (command) else command",
+                token(IF_KEYWORD, "if")
+                .token(WHITE_SPACE, " ")
+                .token(EXIST_KEYWORD, "exist")
+                .token(WHITE_SPACE, " ")
+                .token(CHAR_SEQUENCE, "f")
+                .token(WHITE_SPACE, " ")
+                .token(LEFT_PARENTHESES, "(")
+                .token(COMMAND_NAME, "command")
+                .token(RIGHT_PARENTHESES, ")")
+                .token(WHITE_SPACE, " ")
+                .token(ELSE_KEYWORD, "else")
+                .token(WHITE_SPACE, " ")
+                .token(COMMAND_NAME, "command"));
+    }
+
+    public void testIfExistElseWithConditionals() throws Exception {
+        doTest("if exist f command&(command) else command",
+                token(IF_KEYWORD, "if")
+                .token(WHITE_SPACE, " ")
+                .token(EXIST_KEYWORD, "exist")
+                .token(WHITE_SPACE, " ")
+                .token(CHAR_SEQUENCE, "f")
+                .token(WHITE_SPACE, " ")
+                .token(COMMAND_NAME, "command")
+                .token(CONDITIONAL_OPERATOR, "&")
+                .token(LEFT_PARENTHESES, "(")
+                .token(COMMAND_NAME, "command")
+                .token(RIGHT_PARENTHESES, ")")
+                .token(WHITE_SPACE, " ")
+                .token(ELSE_KEYWORD, "else")
+                .token(WHITE_SPACE, " ")
+                .token(COMMAND_NAME, "command"));
+    }
+
+    public void testIfExistElseOnMultipleLines() throws Exception {
+        doTest("if exist f (\ncommand\n) else command",
+                token(IF_KEYWORD, "if")
+                .token(WHITE_SPACE, " ")
+                .token(EXIST_KEYWORD, "exist")
+                .token(WHITE_SPACE, " ")
+                .token(CHAR_SEQUENCE, "f")
+                .token(WHITE_SPACE, " ")
+                .token(LEFT_PARENTHESES, "(")
+                .token(EOL_OPERATOR, "\\n")
+                .token(COMMAND_NAME, "command")
+                .token(EOL_OPERATOR, "\\n")
+                .token(RIGHT_PARENTHESES, ")")
+                .token(WHITE_SPACE, " ")
+                .token(ELSE_KEYWORD, "else")
+                .token(WHITE_SPACE, " ")
+                .token(COMMAND_NAME, "command"));
+    }
 }
