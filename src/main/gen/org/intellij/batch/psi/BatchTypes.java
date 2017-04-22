@@ -15,8 +15,10 @@ public interface BatchTypes {
   IElementType TOKENS = new BatchElementType("TOKENS");
 
   IElementType CHAR_SEQUENCE = new BatchTokenType("CHAR_SEQUENCE");
+  IElementType COMMAND_AND_OPERATOR = new BatchTokenType("COMMAND_AND_OPERATOR");
+  IElementType COMMAND_JOIN_OPERATOR = new BatchTokenType("COMMAND_JOIN_OPERATOR");
   IElementType COMMAND_NAME = new BatchTokenType("COMMAND_NAME");
-  IElementType CONDITIONAL_OPERATOR = new BatchTokenType("CONDITIONAL_OPERATOR");
+  IElementType COMMAND_OR_OPERATOR = new BatchTokenType("COMMAND_OR_OPERATOR");
   IElementType ELSE_KEYWORD = new BatchTokenType("ELSE_KEYWORD");
   IElementType EOL_OPERATOR = new BatchTokenType("EOL_OPERATOR");
   IElementType EXIST_KEYWORD = new BatchTokenType("EXIST_KEYWORD");

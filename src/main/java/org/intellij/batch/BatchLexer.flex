@@ -196,7 +196,11 @@ elseKeyword = else
 <READING_CMD_ARGS, AFTER_MATCHED_PARENTHESES> {
     "|" { yybegin(YYINITIAL); return PIPE_OPERATOR; }
 
-    "&" | "&&" | "||" { yybegin(YYINITIAL); return CONDITIONAL_OPERATOR; }
+    "&" { yybegin(YYINITIAL); return COMMAND_JOIN_OPERATOR; }
+
+    "&&" { yybegin(YYINITIAL); return COMMAND_AND_OPERATOR; }
+
+    "||" { yybegin(YYINITIAL); return COMMAND_OR_OPERATOR; }
 }
 
 /* Rules for line terminators */

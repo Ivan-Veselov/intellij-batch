@@ -102,7 +102,7 @@ public class BatchParser implements PsiParser, LightPsiParser {
         r = command(b, l, 0);
         exit_section_(b, l, m, PIPED_COMMAND, r, true, null);
       }
-      else if (g < 1 && consumeTokenSmart(b, CONDITIONAL_OPERATOR)) {
+      else if (g < 1 && booleanCommand_0(b, l + 1)) {
         r = command(b, l, 1);
         exit_section_(b, l, m, BOOLEAN_COMMAND, r, true, null);
       }
@@ -111,6 +111,18 @@ public class BatchParser implements PsiParser, LightPsiParser {
         break;
       }
     }
+    return r;
+  }
+
+  // COMMAND_JOIN_OPERATOR | COMMAND_AND_OPERATOR| COMMAND_OR_OPERATOR
+  private static boolean booleanCommand_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "booleanCommand_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeTokenSmart(b, COMMAND_JOIN_OPERATOR);
+    if (!r) r = consumeTokenSmart(b, COMMAND_AND_OPERATOR);
+    if (!r) r = consumeTokenSmart(b, COMMAND_OR_OPERATOR);
+    exit_section_(b, m, null, r);
     return r;
   }
 

@@ -3,7 +3,7 @@ Batch File
     BatchSimpleCommandImpl(SIMPLE_COMMAND)
       PsiElement(BatchTokenType.COMMAND_NAME)('cmd1')
     PsiWhiteSpace(' ')
-    PsiElement(BatchTokenType.CONDITIONAL_OPERATOR)('||')
+    PsiElement(BatchTokenType.COMMAND_OR_OPERATOR)('||')
     PsiWhiteSpace(' ')
     BatchSimpleCommandImpl(SIMPLE_COMMAND)
       PsiElement(BatchTokenType.COMMAND_NAME)('cmd2')
