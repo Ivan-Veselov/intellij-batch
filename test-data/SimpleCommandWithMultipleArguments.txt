@@ -1,0 +1,9 @@
+Batch File
+  BatchSimpleCommandImpl(SIMPLE_COMMAND)
+    PsiElement(BatchTokenType.COMMAND_NAME)('command')
+    PsiWhiteSpace(' ')
+    PsiElement(BatchTokenType.CHAR_SEQUENCE)('arg1')
+    PsiWhiteSpace(' ')
+    PsiElement(BatchTokenType.CHAR_SEQUENCE)('arg2')
+    PsiWhiteSpace(' ')
+    PsiElement(BatchTokenType.CHAR_SEQUENCE)('arg3')

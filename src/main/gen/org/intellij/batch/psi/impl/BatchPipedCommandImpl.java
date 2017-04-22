@@ -8,17 +8,16 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static org.intellij.batch.psi.BatchTypes.*;
-import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import org.intellij.batch.psi.*;
 
-public class BatchPipelineImpl extends ASTWrapperPsiElement implements BatchPipeline {
+public class BatchPipedCommandImpl extends BatchCommandImpl implements BatchPipedCommand {
 
-  public BatchPipelineImpl(ASTNode node) {
+  public BatchPipedCommandImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull BatchVisitor visitor) {
-    visitor.visitPipeline(this);
+    visitor.visitPipedCommand(this);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
@@ -27,15 +26,9 @@ public class BatchPipelineImpl extends ASTWrapperPsiElement implements BatchPipe
   }
 
   @Override
-  @Nullable
-  public BatchPipeline getPipeline() {
-    return findChildByClass(BatchPipeline.class);
-  }
-
-  @Override
   @NotNull
-  public BatchSimpleCommand getSimpleCommand() {
-    return findNotNullChildByClass(BatchSimpleCommand.class);
+  public List<BatchCommand> getCommandList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, BatchCommand.class);
   }
 
 }

@@ -15,11 +15,13 @@
   // psiImplUtilClass="org.intellij.batch.psi.impl.BatchPsiImplUtil"
 }
 
-batchFile ::= pipeline*
+batchFile ::= command*
 
-simpleCommand ::= COMMAND_NAME CHAR_SEQUENCE*
+command ::= pipedCommand | simpleCommand
 
-pipeline ::= [pipeline PIPE_OPERATOR] simpleCommand
+pipedCommand ::= command PIPE_OPERATOR command { extends = command }
+
+simpleCommand ::= COMMAND_NAME CHAR_SEQUENCE* { extends = command }
 
 tokens ::=
 EOL_OPERATOR

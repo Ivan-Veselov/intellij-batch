@@ -8,16 +8,17 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static org.intellij.batch.psi.BatchTypes.*;
+import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import org.intellij.batch.psi.*;
 
-public class BatchSimpleCommandImpl extends BatchCommandImpl implements BatchSimpleCommand {
+public abstract class BatchCommandImpl extends ASTWrapperPsiElement implements BatchCommand {
 
-  public BatchSimpleCommandImpl(ASTNode node) {
+  public BatchCommandImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull BatchVisitor visitor) {
-    visitor.visitSimpleCommand(this);
+    visitor.visitCommand(this);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {

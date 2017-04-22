@@ -5,6 +5,9 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface BatchSimpleCommand extends BatchCommand {
+public interface BatchPipedCommands extends BatchCommand {
+
+  @NotNull
+  List<BatchCommand> getCommandList();
 
 }

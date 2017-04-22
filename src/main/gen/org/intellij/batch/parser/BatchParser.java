@@ -21,13 +21,10 @@ public class BatchParser implements PsiParser, LightPsiParser {
 
   public void parseLight(IElementType t, PsiBuilder b) {
     boolean r;
-    b = adapt_builder_(t, b, this, null);
+    b = adapt_builder_(t, b, this, EXTENDS_SETS_);
     Marker m = enter_section_(b, 0, _COLLAPSE_, null);
-    if (t == PIPELINE) {
-      r = pipeline(b, 0);
-    }
-    else if (t == SIMPLE_COMMAND) {
-      r = simpleCommand(b, 0);
+    if (t == COMMAND) {
+      r = command(b, 0, -1);
     }
     else if (t == TOKENS) {
       r = tokens(b, 0);
@@ -42,70 +39,18 @@ public class BatchParser implements PsiParser, LightPsiParser {
     return batchFile(b, l + 1);
   }
 
+  public static final TokenSet[] EXTENDS_SETS_ = new TokenSet[] {
+    create_token_set_(COMMAND, PIPED_COMMAND, SIMPLE_COMMAND),
+  };
+
   /* ********************************************************** */
-  // pipeline*
+  // command*
   static boolean batchFile(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "batchFile")) return false;
     int c = current_position_(b);
     while (true) {
-      if (!pipeline(b, l + 1)) break;
+      if (!command(b, l + 1, -1)) break;
       if (!empty_element_parsed_guard_(b, "batchFile", c)) break;
-      c = current_position_(b);
-    }
-    return true;
-  }
-
-  /* ********************************************************** */
-  // [pipeline PIPE_OPERATOR] simpleCommand
-  public static boolean pipeline(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "pipeline")) return false;
-    if (!nextTokenIs(b, COMMAND_NAME)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = pipeline_0(b, l + 1);
-    r = r && simpleCommand(b, l + 1);
-    exit_section_(b, m, PIPELINE, r);
-    return r;
-  }
-
-  // [pipeline PIPE_OPERATOR]
-  private static boolean pipeline_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "pipeline_0")) return false;
-    pipeline_0_0(b, l + 1);
-    return true;
-  }
-
-  // pipeline PIPE_OPERATOR
-  private static boolean pipeline_0_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "pipeline_0_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = pipeline(b, l + 1);
-    r = r && consumeToken(b, PIPE_OPERATOR);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  /* ********************************************************** */
-  // COMMAND_NAME CHAR_SEQUENCE*
-  public static boolean simpleCommand(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "simpleCommand")) return false;
-    if (!nextTokenIs(b, COMMAND_NAME)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, COMMAND_NAME);
-    r = r && simpleCommand_1(b, l + 1);
-    exit_section_(b, m, SIMPLE_COMMAND, r);
-    return r;
-  }
-
-  // CHAR_SEQUENCE*
-  private static boolean simpleCommand_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "simpleCommand_1")) return false;
-    int c = current_position_(b);
-    while (true) {
-      if (!consumeToken(b, CHAR_SEQUENCE)) break;
-      if (!empty_element_parsed_guard_(b, "simpleCommand_1", c)) break;
       c = current_position_(b);
     }
     return true;
@@ -128,6 +73,65 @@ public class BatchParser implements PsiParser, LightPsiParser {
     r = consumeTokens(b, 0, EOL_OPERATOR, REDIRECT_OPERATOR, CONDITIONAL_OPERATOR, LEFT_PARENTHESES, RIGHT_PARENTHESES, IF_KEYWORD, EXIST_KEYWORD, ELSE_KEYWORD);
     exit_section_(b, m, TOKENS, r);
     return r;
+  }
+
+  /* ********************************************************** */
+  // Expression root: command
+  // Operator priority table:
+  // 0: BINARY(pipedCommand)
+  // 1: ATOM(simpleCommand)
+  public static boolean command(PsiBuilder b, int l, int g) {
+    if (!recursion_guard_(b, l, "command")) return false;
+    addVariant(b, "<command>");
+    if (!nextTokenIs(b, COMMAND_NAME)) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, "<command>");
+    r = simpleCommand(b, l + 1);
+    p = r;
+    r = r && command_0(b, l + 1, g);
+    exit_section_(b, l, m, null, r, p, null);
+    return r || p;
+  }
+
+  public static boolean command_0(PsiBuilder b, int l, int g) {
+    if (!recursion_guard_(b, l, "command_0")) return false;
+    boolean r = true;
+    while (true) {
+      Marker m = enter_section_(b, l, _LEFT_, null);
+      if (g < 0 && consumeTokenSmart(b, PIPE_OPERATOR)) {
+        r = command(b, l, 0);
+        exit_section_(b, l, m, PIPED_COMMAND, r, true, null);
+      }
+      else {
+        exit_section_(b, l, m, null, false, false, null);
+        break;
+      }
+    }
+    return r;
+  }
+
+  // COMMAND_NAME CHAR_SEQUENCE*
+  public static boolean simpleCommand(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "simpleCommand")) return false;
+    if (!nextTokenIsSmart(b, COMMAND_NAME)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeTokenSmart(b, COMMAND_NAME);
+    r = r && simpleCommand_1(b, l + 1);
+    exit_section_(b, m, SIMPLE_COMMAND, r);
+    return r;
+  }
+
+  // CHAR_SEQUENCE*
+  private static boolean simpleCommand_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "simpleCommand_1")) return false;
+    int c = current_position_(b);
+    while (true) {
+      if (!consumeTokenSmart(b, CHAR_SEQUENCE)) break;
+      if (!empty_element_parsed_guard_(b, "simpleCommand_1", c)) break;
+      c = current_position_(b);
+    }
+    return true;
   }
 
 }

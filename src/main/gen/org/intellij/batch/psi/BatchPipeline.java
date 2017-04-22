@@ -7,9 +7,6 @@ import com.intellij.psi.PsiElement;
 
 public interface BatchPipeline extends PsiElement {
 
-  @Nullable
-  BatchPipeline getPipeline();
-
   @NotNull
   BatchSimpleCommand getSimpleCommand();
 
