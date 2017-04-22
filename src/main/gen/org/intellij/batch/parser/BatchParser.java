@@ -40,7 +40,7 @@ public class BatchParser implements PsiParser, LightPsiParser {
   }
 
   public static final TokenSet[] EXTENDS_SETS_ = new TokenSet[] {
-    create_token_set_(COMMAND, PIPED_COMMAND, SIMPLE_COMMAND),
+    create_token_set_(BOOLEAN_COMMAND, COMMAND, PIPED_COMMAND, SIMPLE_COMMAND),
   };
 
   /* ********************************************************** */
@@ -59,7 +59,6 @@ public class BatchParser implements PsiParser, LightPsiParser {
   /* ********************************************************** */
   // EOL_OPERATOR
   // REDIRECT_OPERATOR
-  // CONDITIONAL_OPERATOR
   // LEFT_PARENTHESES
   // RIGHT_PARENTHESES
   // IF_KEYWORD
@@ -70,7 +69,7 @@ public class BatchParser implements PsiParser, LightPsiParser {
     if (!nextTokenIs(b, EOL_OPERATOR)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeTokens(b, 0, EOL_OPERATOR, REDIRECT_OPERATOR, CONDITIONAL_OPERATOR, LEFT_PARENTHESES, RIGHT_PARENTHESES, IF_KEYWORD, EXIST_KEYWORD, ELSE_KEYWORD);
+    r = consumeTokens(b, 0, EOL_OPERATOR, REDIRECT_OPERATOR, LEFT_PARENTHESES, RIGHT_PARENTHESES, IF_KEYWORD, EXIST_KEYWORD, ELSE_KEYWORD);
     exit_section_(b, m, TOKENS, r);
     return r;
   }
@@ -79,7 +78,8 @@ public class BatchParser implements PsiParser, LightPsiParser {
   // Expression root: command
   // Operator priority table:
   // 0: BINARY(pipedCommand)
-  // 1: ATOM(simpleCommand)
+  // 1: BINARY(booleanCommand)
+  // 2: ATOM(simpleCommand)
   public static boolean command(PsiBuilder b, int l, int g) {
     if (!recursion_guard_(b, l, "command")) return false;
     addVariant(b, "<command>");
@@ -101,6 +101,10 @@ public class BatchParser implements PsiParser, LightPsiParser {
       if (g < 0 && consumeTokenSmart(b, PIPE_OPERATOR)) {
         r = command(b, l, 0);
         exit_section_(b, l, m, PIPED_COMMAND, r, true, null);
+      }
+      else if (g < 1 && consumeTokenSmart(b, CONDITIONAL_OPERATOR)) {
+        r = command(b, l, 1);
+        exit_section_(b, l, m, BOOLEAN_COMMAND, r, true, null);
       }
       else {
         exit_section_(b, l, m, null, false, false, null);

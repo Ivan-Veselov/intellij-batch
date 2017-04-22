@@ -17,16 +17,17 @@
 
 batchFile ::= command*
 
-command ::= pipedCommand | simpleCommand
+command ::= pipedCommand | booleanCommand | simpleCommand
 
 pipedCommand ::= command PIPE_OPERATOR command { extends = command }
+
+booleanCommand ::= command CONDITIONAL_OPERATOR command { extends = command }
 
 simpleCommand ::= COMMAND_NAME CHAR_SEQUENCE* { extends = command }
 
 tokens ::=
 EOL_OPERATOR
 REDIRECT_OPERATOR
-CONDITIONAL_OPERATOR
 LEFT_PARENTHESES
 RIGHT_PARENTHESES
 IF_KEYWORD

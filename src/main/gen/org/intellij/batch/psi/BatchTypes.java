@@ -8,6 +8,7 @@ import org.intellij.batch.psi.impl.*;
 
 public interface BatchTypes {
 
+  IElementType BOOLEAN_COMMAND = new BatchElementType("BOOLEAN_COMMAND");
   IElementType COMMAND = new BatchElementType("COMMAND");
   IElementType PIPED_COMMAND = new BatchElementType("PIPED_COMMAND");
   IElementType SIMPLE_COMMAND = new BatchElementType("SIMPLE_COMMAND");
@@ -28,7 +29,10 @@ public interface BatchTypes {
   class Factory {
     public static PsiElement createElement(ASTNode node) {
       IElementType type = node.getElementType();
-       if (type == PIPED_COMMAND) {
+       if (type == BOOLEAN_COMMAND) {
+        return new BatchBooleanCommandImpl(node);
+      }
+      else if (type == PIPED_COMMAND) {
         return new BatchPipedCommandImpl(node);
       }
       else if (type == SIMPLE_COMMAND) {

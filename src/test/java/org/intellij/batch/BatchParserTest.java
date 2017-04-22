@@ -57,4 +57,60 @@ public class BatchParserTest extends ParsingTestCase {
     public void testTwoSequentialSimpleCommands() throws Exception {
         doTest();
     }
+
+    public void testTwoSequentialPipedCommands() throws Exception {
+        doTest();
+    }
+
+    public void testOrOfTwoCommandsWithNoArguments() throws Exception {
+        doTest();
+    }
+
+    public void testOrOfThreeCommandsWithNoArguments() throws Exception {
+        doTest();
+    }
+
+    public void testOrOfTwoCommandsWithArguments() throws Exception {
+        doTest();
+    }
+
+    public void testOrOfThreeCommandsWithArguments() throws Exception {
+        doTest();
+    }
+
+    public void testAndOfTwoCommandsWithNoArguments() throws Exception {
+        doTest();
+    }
+
+    public void testAndOfThreeCommandsWithNoArguments() throws Exception {
+        doTest();
+    }
+
+    public void testAndOfTwoCommandsWithArguments() throws Exception {
+        doTest();
+    }
+
+    public void testAndOfThreeCommandsWithArguments() throws Exception {
+        doTest();
+    }
+
+    public void testJoinOfTwoCommandsWithNoArguments() throws Exception {
+        doTest();
+    }
+
+    public void testJoinOfThreeCommandsWithNoArguments() throws Exception {
+        doTest();
+    }
+
+    public void testJoinOfTwoCommandsWithArguments() throws Exception {
+        doTest();
+    }
+
+    public void testJoinOfThreeCommandsWithArguments() throws Exception {
+        doTest();
+    }
+
+    public void testThreeSequentialBooleanCommands() throws Exception {
+        doTest();
+    }
 }
