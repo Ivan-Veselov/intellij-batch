@@ -17,7 +17,12 @@
 
 batchFile ::= command*
 
-command ::= joinedCommand | disjointCommand | conjointCommand | pipedCommand | simpleCommand
+command ::= joinedCommand
+          | disjointCommand
+          | conjointCommand
+          | pipedCommand
+          | parenthesisedCommand
+          | simpleCommand
 
 joinedCommand ::= command COMMAND_JOIN_OPERATOR command { extends = command }
 
@@ -27,14 +32,14 @@ conjointCommand ::= command COMMAND_CONJUNCTION_OPERATOR command { extends = com
 
 pipedCommand ::= command PIPE_OPERATOR command { extends = command }
 
+parenthesisedCommand ::= redirection* LEFT_PARENTHESES command+ RIGHT_PARENTHESES redirection* { extends = command }
+
 simpleCommand ::= redirection* COMMAND_NAME (CHAR_SEQUENCE | redirection)* { extends = command }
 
 redirection ::= REDIRECT_TO_HANDLE_OPERATOR | (REDIRECT_TO_FILE_OPERATOR CHAR_SEQUENCE)
 
 tokens ::=
 EOL_OPERATOR
-LEFT_PARENTHESES
-RIGHT_PARENTHESES
 IF_KEYWORD
 EXIST_KEYWORD
 ELSE_KEYWORD

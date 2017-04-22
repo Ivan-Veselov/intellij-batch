@@ -1,0 +1,13 @@
+Batch File
+  BatchParenthesisedCommandImpl(PARENTHESISED_COMMAND)
+    PsiElement(BatchTokenType.LEFT_PARENTHESES)('(')
+    BatchSimpleCommandImpl(SIMPLE_COMMAND)
+      PsiElement(BatchTokenType.COMMAND_NAME)('cmd')
+      PsiWhiteSpace(' ')
+      PsiElement(BatchTokenType.CHAR_SEQUENCE)('arg')
+    PsiElement(BatchTokenType.RIGHT_PARENTHESES)(')')
+    PsiWhiteSpace(' ')
+    BatchRedirectionImpl(REDIRECTION)
+      PsiElement(BatchTokenType.REDIRECT_TO_FILE_OPERATOR)('>')
+      PsiWhiteSpace(' ')
+      PsiElement(BatchTokenType.CHAR_SEQUENCE)('file')

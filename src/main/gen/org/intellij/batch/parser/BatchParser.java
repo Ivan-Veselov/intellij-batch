@@ -44,7 +44,7 @@ public class BatchParser implements PsiParser, LightPsiParser {
 
   public static final TokenSet[] EXTENDS_SETS_ = new TokenSet[] {
     create_token_set_(COMMAND, CONJOINT_COMMAND, DISJOINT_COMMAND, JOINED_COMMAND,
-      PIPED_COMMAND, SIMPLE_COMMAND),
+      PARENTHESISED_COMMAND, PIPED_COMMAND, SIMPLE_COMMAND),
   };
 
   /* ********************************************************** */
@@ -85,8 +85,6 @@ public class BatchParser implements PsiParser, LightPsiParser {
 
   /* ********************************************************** */
   // EOL_OPERATOR
-  // LEFT_PARENTHESES
-  // RIGHT_PARENTHESES
   // IF_KEYWORD
   // EXIST_KEYWORD
   // ELSE_KEYWORD
@@ -95,7 +93,7 @@ public class BatchParser implements PsiParser, LightPsiParser {
     if (!nextTokenIs(b, EOL_OPERATOR)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeTokens(b, 0, EOL_OPERATOR, LEFT_PARENTHESES, RIGHT_PARENTHESES, IF_KEYWORD, EXIST_KEYWORD, ELSE_KEYWORD);
+    r = consumeTokens(b, 0, EOL_OPERATOR, IF_KEYWORD, EXIST_KEYWORD, ELSE_KEYWORD);
     exit_section_(b, m, TOKENS, r);
     return r;
   }
@@ -107,13 +105,15 @@ public class BatchParser implements PsiParser, LightPsiParser {
   // 1: BINARY(disjointCommand)
   // 2: BINARY(conjointCommand)
   // 3: BINARY(pipedCommand)
-  // 4: ATOM(simpleCommand)
+  // 4: ATOM(parenthesisedCommand)
+  // 5: ATOM(simpleCommand)
   public static boolean command(PsiBuilder b, int l, int g) {
     if (!recursion_guard_(b, l, "command")) return false;
     addVariant(b, "<command>");
     boolean r, p;
     Marker m = enter_section_(b, l, _NONE_, "<command>");
-    r = simpleCommand(b, l + 1);
+    r = parenthesisedCommand(b, l + 1);
+    if (!r) r = simpleCommand(b, l + 1);
     p = r;
     r = r && command_0(b, l + 1, g);
     exit_section_(b, l, m, null, r, p, null);
@@ -147,6 +147,60 @@ public class BatchParser implements PsiParser, LightPsiParser {
       }
     }
     return r;
+  }
+
+  // redirection* LEFT_PARENTHESES command+ RIGHT_PARENTHESES redirection*
+  public static boolean parenthesisedCommand(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "parenthesisedCommand")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NONE_, PARENTHESISED_COMMAND, "<parenthesised command>");
+    r = parenthesisedCommand_0(b, l + 1);
+    r = r && consumeToken(b, LEFT_PARENTHESES);
+    r = r && parenthesisedCommand_2(b, l + 1);
+    r = r && consumeToken(b, RIGHT_PARENTHESES);
+    r = r && parenthesisedCommand_4(b, l + 1);
+    exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  // redirection*
+  private static boolean parenthesisedCommand_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "parenthesisedCommand_0")) return false;
+    int c = current_position_(b);
+    while (true) {
+      if (!redirection(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "parenthesisedCommand_0", c)) break;
+      c = current_position_(b);
+    }
+    return true;
+  }
+
+  // command+
+  private static boolean parenthesisedCommand_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "parenthesisedCommand_2")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = command(b, l + 1, -1);
+    int c = current_position_(b);
+    while (r) {
+      if (!command(b, l + 1, -1)) break;
+      if (!empty_element_parsed_guard_(b, "parenthesisedCommand_2", c)) break;
+      c = current_position_(b);
+    }
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // redirection*
+  private static boolean parenthesisedCommand_4(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "parenthesisedCommand_4")) return false;
+    int c = current_position_(b);
+    while (true) {
+      if (!redirection(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "parenthesisedCommand_4", c)) break;
+      c = current_position_(b);
+    }
+    return true;
   }
 
   // redirection* COMMAND_NAME (CHAR_SEQUENCE | redirection)*

@@ -23,6 +23,10 @@ public class BatchVisitor extends PsiElementVisitor {
     visitCommand(o);
   }
 
+  public void visitParenthesisedCommand(@NotNull BatchParenthesisedCommand o) {
+    visitCommand(o);
+  }
+
   public void visitPipedCommand(@NotNull BatchPipedCommand o) {
     visitCommand(o);
   }

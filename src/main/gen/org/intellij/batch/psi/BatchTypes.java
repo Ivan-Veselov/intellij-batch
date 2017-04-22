@@ -12,6 +12,7 @@ public interface BatchTypes {
   IElementType CONJOINT_COMMAND = new BatchElementType("CONJOINT_COMMAND");
   IElementType DISJOINT_COMMAND = new BatchElementType("DISJOINT_COMMAND");
   IElementType JOINED_COMMAND = new BatchElementType("JOINED_COMMAND");
+  IElementType PARENTHESISED_COMMAND = new BatchElementType("PARENTHESISED_COMMAND");
   IElementType PIPED_COMMAND = new BatchElementType("PIPED_COMMAND");
   IElementType REDIRECTION = new BatchElementType("REDIRECTION");
   IElementType SIMPLE_COMMAND = new BatchElementType("SIMPLE_COMMAND");
@@ -43,6 +44,9 @@ public interface BatchTypes {
       }
       else if (type == JOINED_COMMAND) {
         return new BatchJoinedCommandImpl(node);
+      }
+      else if (type == PARENTHESISED_COMMAND) {
+        return new BatchParenthesisedCommandImpl(node);
       }
       else if (type == PIPED_COMMAND) {
         return new BatchPipedCommandImpl(node);
