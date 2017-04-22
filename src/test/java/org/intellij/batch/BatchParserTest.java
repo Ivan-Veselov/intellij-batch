@@ -53,4 +53,8 @@ public class BatchParserTest extends ParsingTestCase {
     public void testThreePipedCommandsWithArguments() throws Exception {
         doTest();
     }
+
+    public void testTwoSequentialSimpleCommands() throws Exception {
+        doTest();
+    }
 }
