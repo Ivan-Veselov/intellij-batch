@@ -17,11 +17,15 @@
 
 batchFile ::= command*
 
-command ::= pipedCommand | booleanCommand | simpleCommand
+command ::= joinedCommand | disjointCommand | conjointCommand | pipedCommand | simpleCommand
+
+joinedCommand ::= command COMMAND_JOIN_OPERATOR command { extends = command }
+
+disjointCommand ::= command COMMAND_DISJUNCTION_OPERATOR command { extends = command }
+
+conjointCommand ::= command COMMAND_CONJUNCTION_OPERATOR command { extends = command }
 
 pipedCommand ::= command PIPE_OPERATOR command { extends = command }
-
-booleanCommand ::= command (COMMAND_JOIN_OPERATOR | COMMAND_AND_OPERATOR| COMMAND_OR_OPERATOR) command { extends = command }
 
 simpleCommand ::= COMMAND_NAME CHAR_SEQUENCE* { extends = command }
 

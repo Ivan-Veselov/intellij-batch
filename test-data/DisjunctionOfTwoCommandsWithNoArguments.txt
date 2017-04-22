@@ -1,9 +1,9 @@
 Batch File
-  BatchBooleanCommandImpl(BOOLEAN_COMMAND)
+  BatchDisjointCommandImpl(DISJOINT_COMMAND)
     BatchSimpleCommandImpl(SIMPLE_COMMAND)
       PsiElement(BatchTokenType.COMMAND_NAME)('cmd1')
     PsiWhiteSpace(' ')
-    PsiElement(BatchTokenType.COMMAND_OR_OPERATOR)('||')
+    PsiElement(BatchTokenType.COMMAND_DISJUNCTION_OPERATOR)('||')
     PsiWhiteSpace(' ')
     BatchSimpleCommandImpl(SIMPLE_COMMAND)
       PsiElement(BatchTokenType.COMMAND_NAME)('cmd2')

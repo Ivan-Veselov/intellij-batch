@@ -198,9 +198,9 @@ elseKeyword = else
 
     "&" { yybegin(YYINITIAL); return COMMAND_JOIN_OPERATOR; }
 
-    "&&" { yybegin(YYINITIAL); return COMMAND_AND_OPERATOR; }
+    "&&" { yybegin(YYINITIAL); return COMMAND_CONJUNCTION_OPERATOR; }
 
-    "||" { yybegin(YYINITIAL); return COMMAND_OR_OPERATOR; }
+    "||" { yybegin(YYINITIAL); return COMMAND_DISJUNCTION_OPERATOR; }
 }
 
 /* Rules for line terminators */

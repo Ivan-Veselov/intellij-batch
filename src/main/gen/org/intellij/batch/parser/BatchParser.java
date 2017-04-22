@@ -40,7 +40,8 @@ public class BatchParser implements PsiParser, LightPsiParser {
   }
 
   public static final TokenSet[] EXTENDS_SETS_ = new TokenSet[] {
-    create_token_set_(BOOLEAN_COMMAND, COMMAND, PIPED_COMMAND, SIMPLE_COMMAND),
+    create_token_set_(COMMAND, CONJOINT_COMMAND, DISJOINT_COMMAND, JOINED_COMMAND,
+      PIPED_COMMAND, SIMPLE_COMMAND),
   };
 
   /* ********************************************************** */
@@ -77,9 +78,11 @@ public class BatchParser implements PsiParser, LightPsiParser {
   /* ********************************************************** */
   // Expression root: command
   // Operator priority table:
-  // 0: BINARY(pipedCommand)
-  // 1: BINARY(booleanCommand)
-  // 2: ATOM(simpleCommand)
+  // 0: BINARY(joinedCommand)
+  // 1: BINARY(disjointCommand)
+  // 2: BINARY(conjointCommand)
+  // 3: BINARY(pipedCommand)
+  // 4: ATOM(simpleCommand)
   public static boolean command(PsiBuilder b, int l, int g) {
     if (!recursion_guard_(b, l, "command")) return false;
     addVariant(b, "<command>");
@@ -98,31 +101,27 @@ public class BatchParser implements PsiParser, LightPsiParser {
     boolean r = true;
     while (true) {
       Marker m = enter_section_(b, l, _LEFT_, null);
-      if (g < 0 && consumeTokenSmart(b, PIPE_OPERATOR)) {
+      if (g < 0 && consumeTokenSmart(b, COMMAND_JOIN_OPERATOR)) {
         r = command(b, l, 0);
-        exit_section_(b, l, m, PIPED_COMMAND, r, true, null);
+        exit_section_(b, l, m, JOINED_COMMAND, r, true, null);
       }
-      else if (g < 1 && booleanCommand_0(b, l + 1)) {
+      else if (g < 1 && consumeTokenSmart(b, COMMAND_DISJUNCTION_OPERATOR)) {
         r = command(b, l, 1);
-        exit_section_(b, l, m, BOOLEAN_COMMAND, r, true, null);
+        exit_section_(b, l, m, DISJOINT_COMMAND, r, true, null);
+      }
+      else if (g < 2 && consumeTokenSmart(b, COMMAND_CONJUNCTION_OPERATOR)) {
+        r = command(b, l, 2);
+        exit_section_(b, l, m, CONJOINT_COMMAND, r, true, null);
+      }
+      else if (g < 3 && consumeTokenSmart(b, PIPE_OPERATOR)) {
+        r = command(b, l, 3);
+        exit_section_(b, l, m, PIPED_COMMAND, r, true, null);
       }
       else {
         exit_section_(b, l, m, null, false, false, null);
         break;
       }
     }
-    return r;
-  }
-
-  // COMMAND_JOIN_OPERATOR | COMMAND_AND_OPERATOR| COMMAND_OR_OPERATOR
-  private static boolean booleanCommand_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "booleanCommand_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeTokenSmart(b, COMMAND_JOIN_OPERATOR);
-    if (!r) r = consumeTokenSmart(b, COMMAND_AND_OPERATOR);
-    if (!r) r = consumeTokenSmart(b, COMMAND_OR_OPERATOR);
-    exit_section_(b, m, null, r);
     return r;
   }
 

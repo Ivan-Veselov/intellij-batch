@@ -5,7 +5,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface BatchBooleanCommand extends BatchCommand {
+public interface BatchConjointCommand extends BatchCommand {
 
   @NotNull
   List<BatchCommand> getCommandList();

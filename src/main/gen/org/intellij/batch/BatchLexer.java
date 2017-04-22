@@ -652,11 +652,11 @@ class BatchLexer implements FlexLexer {
             }
           case 33: break;
           case 15: 
-            { yybegin(YYINITIAL); return COMMAND_OR_OPERATOR;
+            { yybegin(YYINITIAL); return COMMAND_DISJUNCTION_OPERATOR;
             }
           case 34: break;
           case 16: 
-            { yybegin(YYINITIAL); return COMMAND_AND_OPERATOR;
+            { yybegin(YYINITIAL); return COMMAND_CONJUNCTION_OPERATOR;
             }
           case 35: break;
           case 17: 

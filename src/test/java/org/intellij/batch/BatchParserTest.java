@@ -62,35 +62,35 @@ public class BatchParserTest extends ParsingTestCase {
         doTest();
     }
 
-    public void testOrOfTwoCommandsWithNoArguments() throws Exception {
+    public void testDisjunctionOfTwoCommandsWithNoArguments() throws Exception {
         doTest();
     }
 
-    public void testOrOfThreeCommandsWithNoArguments() throws Exception {
+    public void testDisjunctionOfThreeCommandsWithNoArguments() throws Exception {
         doTest();
     }
 
-    public void testOrOfTwoCommandsWithArguments() throws Exception {
+    public void testDisjunctionOfTwoCommandsWithArguments() throws Exception {
         doTest();
     }
 
-    public void testOrOfThreeCommandsWithArguments() throws Exception {
+    public void testDisjunctionOfThreeCommandsWithArguments() throws Exception {
         doTest();
     }
 
-    public void testAndOfTwoCommandsWithNoArguments() throws Exception {
+    public void testConjunctionOfTwoCommandsWithNoArguments() throws Exception {
         doTest();
     }
 
-    public void testAndOfThreeCommandsWithNoArguments() throws Exception {
+    public void testConjunctionOfThreeCommandsWithNoArguments() throws Exception {
         doTest();
     }
 
-    public void testAndOfTwoCommandsWithArguments() throws Exception {
+    public void testConjunctionOfTwoCommandsWithArguments() throws Exception {
         doTest();
     }
 
-    public void testAndOfThreeCommandsWithArguments() throws Exception {
+    public void testConjunctionOfThreeCommandsWithArguments() throws Exception {
         doTest();
     }
 
@@ -111,6 +111,26 @@ public class BatchParserTest extends ParsingTestCase {
     }
 
     public void testThreeSequentialBooleanCommands() throws Exception {
+        doTest();
+    }
+
+    public void testMixedConditionalsWithNoArguments() throws Exception {
+        doTest();
+    }
+
+    public void testMixedConditionalsWithArguments() throws Exception {
+        doTest();
+    }
+
+    public void testConjunctionWithPipe() throws Exception {
+        doTest();
+    }
+
+    public void testDisjunctionWithPipe() throws Exception {
+        doTest();
+    }
+
+    public void testJoiningWithPipe() throws Exception {
         doTest();
     }
 }

@@ -7,12 +7,20 @@ import com.intellij.psi.PsiElement;
 
 public class BatchVisitor extends PsiElementVisitor {
 
-  public void visitBooleanCommand(@NotNull BatchBooleanCommand o) {
+  public void visitCommand(@NotNull BatchCommand o) {
+    visitPsiElement(o);
+  }
+
+  public void visitConjointCommand(@NotNull BatchConjointCommand o) {
     visitCommand(o);
   }
 
-  public void visitCommand(@NotNull BatchCommand o) {
-    visitPsiElement(o);
+  public void visitDisjointCommand(@NotNull BatchDisjointCommand o) {
+    visitCommand(o);
+  }
+
+  public void visitJoinedCommand(@NotNull BatchJoinedCommand o) {
+    visitCommand(o);
   }
 
   public void visitPipedCommand(@NotNull BatchPipedCommand o) {

@@ -8,17 +8,19 @@ import org.intellij.batch.psi.impl.*;
 
 public interface BatchTypes {
 
-  IElementType BOOLEAN_COMMAND = new BatchElementType("BOOLEAN_COMMAND");
   IElementType COMMAND = new BatchElementType("COMMAND");
+  IElementType CONJOINT_COMMAND = new BatchElementType("CONJOINT_COMMAND");
+  IElementType DISJOINT_COMMAND = new BatchElementType("DISJOINT_COMMAND");
+  IElementType JOINED_COMMAND = new BatchElementType("JOINED_COMMAND");
   IElementType PIPED_COMMAND = new BatchElementType("PIPED_COMMAND");
   IElementType SIMPLE_COMMAND = new BatchElementType("SIMPLE_COMMAND");
   IElementType TOKENS = new BatchElementType("TOKENS");
 
   IElementType CHAR_SEQUENCE = new BatchTokenType("CHAR_SEQUENCE");
-  IElementType COMMAND_AND_OPERATOR = new BatchTokenType("COMMAND_AND_OPERATOR");
+  IElementType COMMAND_CONJUNCTION_OPERATOR = new BatchTokenType("COMMAND_CONJUNCTION_OPERATOR");
+  IElementType COMMAND_DISJUNCTION_OPERATOR = new BatchTokenType("COMMAND_DISJUNCTION_OPERATOR");
   IElementType COMMAND_JOIN_OPERATOR = new BatchTokenType("COMMAND_JOIN_OPERATOR");
   IElementType COMMAND_NAME = new BatchTokenType("COMMAND_NAME");
-  IElementType COMMAND_OR_OPERATOR = new BatchTokenType("COMMAND_OR_OPERATOR");
   IElementType ELSE_KEYWORD = new BatchTokenType("ELSE_KEYWORD");
   IElementType EOL_OPERATOR = new BatchTokenType("EOL_OPERATOR");
   IElementType EXIST_KEYWORD = new BatchTokenType("EXIST_KEYWORD");
@@ -31,8 +33,14 @@ public interface BatchTypes {
   class Factory {
     public static PsiElement createElement(ASTNode node) {
       IElementType type = node.getElementType();
-       if (type == BOOLEAN_COMMAND) {
-        return new BatchBooleanCommandImpl(node);
+       if (type == CONJOINT_COMMAND) {
+        return new BatchConjointCommandImpl(node);
+      }
+      else if (type == DISJOINT_COMMAND) {
+        return new BatchDisjointCommandImpl(node);
+      }
+      else if (type == JOINED_COMMAND) {
+        return new BatchJoinedCommandImpl(node);
       }
       else if (type == PIPED_COMMAND) {
         return new BatchPipedCommandImpl(node);

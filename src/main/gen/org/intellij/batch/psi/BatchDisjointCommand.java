@@ -5,7 +5,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface BatchPipedCommands extends BatchCommand {
+public interface BatchDisjointCommand extends BatchCommand {
 
   @NotNull
   List<BatchCommand> getCommandList();

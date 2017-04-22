@@ -10,14 +10,14 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.intellij.batch.psi.BatchTypes.*;
 import org.intellij.batch.psi.*;
 
-public class BatchBooleanCommandImpl extends BatchCommandImpl implements BatchBooleanCommand {
+public class BatchJoinedCommandImpl extends BatchCommandImpl implements BatchJoinedCommand {
 
-  public BatchBooleanCommandImpl(ASTNode node) {
+  public BatchJoinedCommandImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull BatchVisitor visitor) {
-    visitor.visitBooleanCommand(this);
+    visitor.visitJoinedCommand(this);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
