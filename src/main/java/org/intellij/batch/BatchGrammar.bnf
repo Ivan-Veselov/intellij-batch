@@ -27,11 +27,12 @@ conjointCommand ::= command COMMAND_CONJUNCTION_OPERATOR command { extends = com
 
 pipedCommand ::= command PIPE_OPERATOR command { extends = command }
 
-simpleCommand ::= COMMAND_NAME CHAR_SEQUENCE* { extends = command }
+simpleCommand ::= redirection* COMMAND_NAME (CHAR_SEQUENCE | redirection)* { extends = command }
+
+redirection ::= REDIRECT_TO_HANDLE_OPERATOR | (REDIRECT_TO_FILE_OPERATOR CHAR_SEQUENCE)
 
 tokens ::=
 EOL_OPERATOR
-REDIRECT_OPERATOR
 LEFT_PARENTHESES
 RIGHT_PARENTHESES
 IF_KEYWORD

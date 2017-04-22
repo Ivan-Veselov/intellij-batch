@@ -1,0 +1,1 @@
+2> file1 > file2 cmd 2> file3 > file4 arg 2> file5 > file6

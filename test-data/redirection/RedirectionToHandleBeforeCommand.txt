@@ -1,0 +1,6 @@
+Batch File
+  BatchSimpleCommandImpl(SIMPLE_COMMAND)
+    BatchRedirectionImpl(REDIRECTION)
+      PsiElement(BatchTokenType.REDIRECT_TO_HANDLE_OPERATOR)('2>&1')
+    PsiWhiteSpace(' ')
+    PsiElement(BatchTokenType.COMMAND_NAME)('cmd')

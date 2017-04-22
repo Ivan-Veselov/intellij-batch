@@ -1,4 +1,4 @@
-package org.intellij.batch;
+package org.intellij.batch.lexer;
 
 import com.intellij.psi.tree.IElementType;
 import org.jetbrains.annotations.NotNull;

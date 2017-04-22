@@ -27,6 +27,10 @@ public class BatchVisitor extends PsiElementVisitor {
     visitCommand(o);
   }
 
+  public void visitRedirection(@NotNull BatchRedirection o) {
+    visitPsiElement(o);
+  }
+
   public void visitSimpleCommand(@NotNull BatchSimpleCommand o) {
     visitCommand(o);
   }

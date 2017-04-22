@@ -1,0 +1,1 @@
+cmd 2>&1 arg1 arg2

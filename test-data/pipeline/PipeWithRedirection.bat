@@ -1,0 +1,1 @@
+cmd1 2> file | cmd2

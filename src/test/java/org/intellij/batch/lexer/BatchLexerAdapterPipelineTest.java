@@ -1,6 +1,7 @@
-package org.intellij.batch;
+package org.intellij.batch.lexer;
 
 import com.intellij.lexer.Lexer;
+import org.intellij.batch.BatchLexerAdapter;
 
 import static com.intellij.psi.TokenType.WHITE_SPACE;
 import static org.intellij.batch.psi.BatchTypes.*;
@@ -41,7 +42,7 @@ public class BatchLexerAdapterPipelineTest extends BatchLexerAdapterTest {
     public void testRedirectionBeforePipe() throws Exception {
         doTest("command1 2>&1|command2", token(COMMAND_NAME, "command1")
                                              .token(WHITE_SPACE, " ")
-                                             .token(REDIRECT_OPERATOR, "2>&1")
+                                             .token(REDIRECT_TO_HANDLE_OPERATOR, "2>&1")
                                              .token(PIPE_OPERATOR, "|")
                                              .token(COMMAND_NAME, "command2"));
     }
@@ -50,7 +51,7 @@ public class BatchLexerAdapterPipelineTest extends BatchLexerAdapterTest {
         doTest("command1 |>out command2", token(COMMAND_NAME, "command1")
                                               .token(WHITE_SPACE, " ")
                                               .token(PIPE_OPERATOR, "|")
-                                              .token(REDIRECT_OPERATOR, ">")
+                                              .token(REDIRECT_TO_FILE_OPERATOR, ">")
                                               .token(CHAR_SEQUENCE, "out")
                                               .token(WHITE_SPACE, " ")
                                               .token(COMMAND_NAME, "command2"));

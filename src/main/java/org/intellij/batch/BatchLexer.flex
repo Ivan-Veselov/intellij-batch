@@ -215,9 +215,9 @@ elseKeyword = else
 
 /* Rules for redirect operators */
 <YYINITIAL, READING_CMD_ARGS, AFTER_MATCHED_PARENTHESES> {
-    {RedirectToHandleOperator} { return REDIRECT_OPERATOR; }
+    {RedirectToHandleOperator} { return REDIRECT_TO_HANDLE_OPERATOR; }
 
-    {RedirectToFileOperator} { memorizeAndBegin(READING_ONE_CHAR_SEQUENCE); return REDIRECT_OPERATOR; }
+    {RedirectToFileOperator} { memorizeAndBegin(READING_ONE_CHAR_SEQUENCE); return REDIRECT_TO_FILE_OPERATOR; }
 }
 
 [^] { return BAD_CHARACTER; }

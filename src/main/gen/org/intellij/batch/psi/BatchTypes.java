@@ -13,6 +13,7 @@ public interface BatchTypes {
   IElementType DISJOINT_COMMAND = new BatchElementType("DISJOINT_COMMAND");
   IElementType JOINED_COMMAND = new BatchElementType("JOINED_COMMAND");
   IElementType PIPED_COMMAND = new BatchElementType("PIPED_COMMAND");
+  IElementType REDIRECTION = new BatchElementType("REDIRECTION");
   IElementType SIMPLE_COMMAND = new BatchElementType("SIMPLE_COMMAND");
   IElementType TOKENS = new BatchElementType("TOKENS");
 
@@ -27,7 +28,8 @@ public interface BatchTypes {
   IElementType IF_KEYWORD = new BatchTokenType("IF_KEYWORD");
   IElementType LEFT_PARENTHESES = new BatchTokenType("LEFT_PARENTHESES");
   IElementType PIPE_OPERATOR = new BatchTokenType("PIPE_OPERATOR");
-  IElementType REDIRECT_OPERATOR = new BatchTokenType("REDIRECT_OPERATOR");
+  IElementType REDIRECT_TO_FILE_OPERATOR = new BatchTokenType("REDIRECT_TO_FILE_OPERATOR");
+  IElementType REDIRECT_TO_HANDLE_OPERATOR = new BatchTokenType("REDIRECT_TO_HANDLE_OPERATOR");
   IElementType RIGHT_PARENTHESES = new BatchTokenType("RIGHT_PARENTHESES");
 
   class Factory {
@@ -44,6 +46,9 @@ public interface BatchTypes {
       }
       else if (type == PIPED_COMMAND) {
         return new BatchPipedCommandImpl(node);
+      }
+      else if (type == REDIRECTION) {
+        return new BatchRedirectionImpl(node);
       }
       else if (type == SIMPLE_COMMAND) {
         return new BatchSimpleCommandImpl(node);

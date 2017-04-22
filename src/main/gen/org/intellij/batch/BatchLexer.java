@@ -614,7 +614,7 @@ class BatchLexer implements FlexLexer {
             }
           case 24: break;
           case 6: 
-            { memorizeAndBegin(READING_ONE_CHAR_SEQUENCE); return REDIRECT_OPERATOR;
+            { memorizeAndBegin(READING_ONE_CHAR_SEQUENCE); return REDIRECT_TO_FILE_OPERATOR;
             }
           case 25: break;
           case 7: 
@@ -660,7 +660,7 @@ class BatchLexer implements FlexLexer {
             }
           case 35: break;
           case 17: 
-            { return REDIRECT_OPERATOR;
+            { return REDIRECT_TO_HANDLE_OPERATOR;
             }
           case 36: break;
           case 18: 

@@ -1,6 +1,7 @@
-package org.intellij.batch;
+package org.intellij.batch.lexer;
 
 import com.intellij.lexer.Lexer;
+import org.intellij.batch.BatchLexerAdapter;
 
 import static com.intellij.psi.TokenType.WHITE_SPACE;
 import static org.intellij.batch.psi.BatchTypes.*;
@@ -121,7 +122,7 @@ public class BatchLexerAdapterParenthesesTest extends BatchLexerAdapterTest {
                 .token(COMMAND_NAME, "command")
                 .token(WHITE_SPACE, " ")
                 .token(CHAR_SEQUENCE, "t")
-                .token(REDIRECT_OPERATOR, ">")
+                .token(REDIRECT_TO_FILE_OPERATOR, ">")
                 .token(CHAR_SEQUENCE, "a")
                 .token(RIGHT_PARENTHESES, ")")
                 .token(RIGHT_PARENTHESES, ")"));
@@ -133,7 +134,7 @@ public class BatchLexerAdapterParenthesesTest extends BatchLexerAdapterTest {
                 .token(WHITE_SPACE, " ")
                 .token(CHAR_SEQUENCE, "t")
                 .token(RIGHT_PARENTHESES, ")")
-                .token(REDIRECT_OPERATOR, ">")
+                .token(REDIRECT_TO_FILE_OPERATOR, ">")
                 .token(CHAR_SEQUENCE, "a")
                 .token(RIGHT_PARENTHESES, ")"));
 
@@ -145,7 +146,7 @@ public class BatchLexerAdapterParenthesesTest extends BatchLexerAdapterTest {
                 .token(CHAR_SEQUENCE, "t")
                 .token(RIGHT_PARENTHESES, ")")
                 .token(RIGHT_PARENTHESES, ")")
-                .token(REDIRECT_OPERATOR, ">")
+                .token(REDIRECT_TO_FILE_OPERATOR, ">")
                 .token(CHAR_SEQUENCE, "a"));
 
         doTest("((command t>a)>b)",
@@ -154,10 +155,10 @@ public class BatchLexerAdapterParenthesesTest extends BatchLexerAdapterTest {
                 .token(COMMAND_NAME, "command")
                 .token(WHITE_SPACE, " ")
                 .token(CHAR_SEQUENCE, "t")
-                .token(REDIRECT_OPERATOR, ">")
+                .token(REDIRECT_TO_FILE_OPERATOR, ">")
                 .token(CHAR_SEQUENCE, "a")
                 .token(RIGHT_PARENTHESES, ")")
-                .token(REDIRECT_OPERATOR, ">")
+                .token(REDIRECT_TO_FILE_OPERATOR, ">")
                 .token(CHAR_SEQUENCE, "b")
                 .token(RIGHT_PARENTHESES, ")"));
 
@@ -167,11 +168,11 @@ public class BatchLexerAdapterParenthesesTest extends BatchLexerAdapterTest {
                 .token(COMMAND_NAME, "command")
                 .token(WHITE_SPACE, " ")
                 .token(CHAR_SEQUENCE, "t")
-                .token(REDIRECT_OPERATOR, ">")
+                .token(REDIRECT_TO_FILE_OPERATOR, ">")
                 .token(CHAR_SEQUENCE, "a")
                 .token(RIGHT_PARENTHESES, ")")
                 .token(RIGHT_PARENTHESES, ")")
-                .token(REDIRECT_OPERATOR, ">")
+                .token(REDIRECT_TO_FILE_OPERATOR, ">")
                 .token(CHAR_SEQUENCE, "b"));
 
         doTest("((command t)>a)>b",
@@ -181,10 +182,10 @@ public class BatchLexerAdapterParenthesesTest extends BatchLexerAdapterTest {
                 .token(WHITE_SPACE, " ")
                 .token(CHAR_SEQUENCE, "t")
                 .token(RIGHT_PARENTHESES, ")")
-                .token(REDIRECT_OPERATOR, ">")
+                .token(REDIRECT_TO_FILE_OPERATOR, ">")
                 .token(CHAR_SEQUENCE, "a")
                 .token(RIGHT_PARENTHESES, ")")
-                .token(REDIRECT_OPERATOR, ">")
+                .token(REDIRECT_TO_FILE_OPERATOR, ">")
                 .token(CHAR_SEQUENCE, "b"));
 
         doTest("((command t>a)>b)>c",
@@ -193,34 +194,34 @@ public class BatchLexerAdapterParenthesesTest extends BatchLexerAdapterTest {
                 .token(COMMAND_NAME, "command")
                 .token(WHITE_SPACE, " ")
                 .token(CHAR_SEQUENCE, "t")
-                .token(REDIRECT_OPERATOR, ">")
+                .token(REDIRECT_TO_FILE_OPERATOR, ">")
                 .token(CHAR_SEQUENCE, "a")
                 .token(RIGHT_PARENTHESES, ")")
-                .token(REDIRECT_OPERATOR, ">")
+                .token(REDIRECT_TO_FILE_OPERATOR, ">")
                 .token(CHAR_SEQUENCE, "b")
                 .token(RIGHT_PARENTHESES, ")")
-                .token(REDIRECT_OPERATOR, ">")
+                .token(REDIRECT_TO_FILE_OPERATOR, ">")
                 .token(CHAR_SEQUENCE, "c"));
 
         doTest("command t>(",
                 token(COMMAND_NAME, "command")
                 .token(WHITE_SPACE, " ")
                 .token(CHAR_SEQUENCE, "t")
-                .token(REDIRECT_OPERATOR, ">")
+                .token(REDIRECT_TO_FILE_OPERATOR, ">")
                 .token(CHAR_SEQUENCE, "("));
 
         doTest("command t>)",
                 token(COMMAND_NAME, "command")
                 .token(WHITE_SPACE, " ")
                 .token(CHAR_SEQUENCE, "t")
-                .token(REDIRECT_OPERATOR, ">")
+                .token(REDIRECT_TO_FILE_OPERATOR, ">")
                 .token(CHAR_SEQUENCE, ")"));
 
         doTest("command t>()",
                 token(COMMAND_NAME, "command")
                 .token(WHITE_SPACE, " ")
                 .token(CHAR_SEQUENCE, "t")
-                .token(REDIRECT_OPERATOR, ">")
+                .token(REDIRECT_TO_FILE_OPERATOR, ">")
                 .token(CHAR_SEQUENCE, "()"));
     }
 

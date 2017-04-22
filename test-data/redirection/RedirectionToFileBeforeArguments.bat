@@ -1,0 +1,1 @@
+cmd > file arg1 arg2

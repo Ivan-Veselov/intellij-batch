@@ -1,6 +1,7 @@
-package org.intellij.batch;
+package org.intellij.batch.lexer;
 
 import com.intellij.lexer.Lexer;
+import org.intellij.batch.BatchLexerAdapter;
 
 import static com.intellij.psi.TokenType.WHITE_SPACE;
 import static org.intellij.batch.psi.BatchTypes.*;
