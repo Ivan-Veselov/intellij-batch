@@ -11,6 +11,10 @@ public interface BatchTypes {
   IElementType COMMAND = new BatchElementType("COMMAND");
   IElementType CONJOINT_COMMAND = new BatchElementType("CONJOINT_COMMAND");
   IElementType DISJOINT_COMMAND = new BatchElementType("DISJOINT_COMMAND");
+  IElementType EQUALITY_CONDITION = new BatchElementType("EQUALITY_CONDITION");
+  IElementType EXIST_CONDITION = new BatchElementType("EXIST_CONDITION");
+  IElementType IF_COMMAND = new BatchElementType("IF_COMMAND");
+  IElementType IF_CONDITION = new BatchElementType("IF_CONDITION");
   IElementType JOINED_COMMAND = new BatchElementType("JOINED_COMMAND");
   IElementType PARENTHESISED_COMMAND = new BatchElementType("PARENTHESISED_COMMAND");
   IElementType PIPED_COMMAND = new BatchElementType("PIPED_COMMAND");
@@ -25,6 +29,7 @@ public interface BatchTypes {
   IElementType COMMAND_NAME = new BatchTokenType("COMMAND_NAME");
   IElementType ELSE_KEYWORD = new BatchTokenType("ELSE_KEYWORD");
   IElementType EOL_OPERATOR = new BatchTokenType("EOL_OPERATOR");
+  IElementType EQUALITY_OPERATOR = new BatchTokenType("EQUALITY_OPERATOR");
   IElementType EXIST_KEYWORD = new BatchTokenType("EXIST_KEYWORD");
   IElementType IF_KEYWORD = new BatchTokenType("IF_KEYWORD");
   IElementType LEFT_PARENTHESES = new BatchTokenType("LEFT_PARENTHESES");
@@ -41,6 +46,18 @@ public interface BatchTypes {
       }
       else if (type == DISJOINT_COMMAND) {
         return new BatchDisjointCommandImpl(node);
+      }
+      else if (type == EQUALITY_CONDITION) {
+        return new BatchEqualityConditionImpl(node);
+      }
+      else if (type == EXIST_CONDITION) {
+        return new BatchExistConditionImpl(node);
+      }
+      else if (type == IF_COMMAND) {
+        return new BatchIfCommandImpl(node);
+      }
+      else if (type == IF_CONDITION) {
+        return new BatchIfConditionImpl(node);
       }
       else if (type == JOINED_COMMAND) {
         return new BatchJoinedCommandImpl(node);

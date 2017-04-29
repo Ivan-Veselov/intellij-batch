@@ -19,6 +19,22 @@ public class BatchVisitor extends PsiElementVisitor {
     visitCommand(o);
   }
 
+  public void visitEqualityCondition(@NotNull BatchEqualityCondition o) {
+    visitPsiElement(o);
+  }
+
+  public void visitExistCondition(@NotNull BatchExistCondition o) {
+    visitPsiElement(o);
+  }
+
+  public void visitIfCommand(@NotNull BatchIfCommand o) {
+    visitCommand(o);
+  }
+
+  public void visitIfCondition(@NotNull BatchIfCondition o) {
+    visitPsiElement(o);
+  }
+
   public void visitJoinedCommand(@NotNull BatchJoinedCommand o) {
     visitCommand(o);
   }

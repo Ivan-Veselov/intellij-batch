@@ -128,6 +128,8 @@ RedirectSymbol = > | < | >>
 RedirectToFileOperator = {Digit}? {RedirectSymbol}
 RedirectToHandleOperator = {Digit}? {RedirectSymbol} & {Digit}
 
+EqualityOperator = ==
+
 /* Keywords */
 ifKeyword = if
 existKeyword = exist
@@ -138,6 +140,7 @@ elseKeyword = else
 %state MATCH_PARENTHESES
 %state AFTER_MATCHED_PARENTHESES
 %state AFTER_IF_KEYWORD
+%state READING_EQUALITY_OPERATOR
 
 %%
 
@@ -146,6 +149,11 @@ elseKeyword = else
  * If there is a matched or opened parentheses right after a keyword then this keword is treated as an arbitrary command
  * and not as a keyword. Basically keyword rules just ignore parentheses. Also it might be helpful to match special
  * symbols.
+ *
+ * TODO: if str1 == str2 is parsed not good enough.
+ * Rules are simple as much as possible, but it must work for simple case when both arguments are split from equality
+ * operator with whitespaces and are strings which consist of letters. Proper treatment of special characters is not
+ * guaranteed. Arguments are tokenized as strings.
  */
 
 <YYINITIAL> {
@@ -188,6 +196,15 @@ elseKeyword = else
 
 <AFTER_IF_KEYWORD> {
     {existKeyword} { memorizeAndBegin(YYINITIAL, READING_ONE_CHAR_SEQUENCE); return EXIST_KEYWORD; }
+
+    {SequenceCharacterOrParentheses}+ {
+        yybegin(READING_EQUALITY_OPERATOR);
+        return CHAR_SEQUENCE;
+    }
+}
+
+<READING_EQUALITY_OPERATOR> {
+    {EqualityOperator} { memorizeAndBegin(YYINITIAL, READING_ONE_CHAR_SEQUENCE); return EQUALITY_OPERATOR; }
 }
 
 /* Common rules */
@@ -209,7 +226,12 @@ elseKeyword = else
 }
 
 /* Rules for whitespaces */
-<YYINITIAL, READING_CMD_ARGS, READING_ONE_CHAR_SEQUENCE, AFTER_MATCHED_PARENTHESES, AFTER_IF_KEYWORD> {
+<YYINITIAL,
+ READING_CMD_ARGS,
+ READING_ONE_CHAR_SEQUENCE,
+ READING_EQUALITY_OPERATOR,
+ AFTER_MATCHED_PARENTHESES,
+ AFTER_IF_KEYWORD> {
     {Whitespace}+ { return WHITE_SPACE; }
 }
 

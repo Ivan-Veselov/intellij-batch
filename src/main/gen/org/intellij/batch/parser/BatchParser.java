@@ -26,6 +26,15 @@ public class BatchParser implements PsiParser, LightPsiParser {
     if (t == COMMAND) {
       r = command(b, 0, -1);
     }
+    else if (t == EQUALITY_CONDITION) {
+      r = equalityCondition(b, 0);
+    }
+    else if (t == EXIST_CONDITION) {
+      r = existCondition(b, 0);
+    }
+    else if (t == IF_CONDITION) {
+      r = ifCondition(b, 0);
+    }
     else if (t == REDIRECTION) {
       r = redirection(b, 0);
     }
@@ -43,8 +52,8 @@ public class BatchParser implements PsiParser, LightPsiParser {
   }
 
   public static final TokenSet[] EXTENDS_SETS_ = new TokenSet[] {
-    create_token_set_(COMMAND, CONJOINT_COMMAND, DISJOINT_COMMAND, JOINED_COMMAND,
-      PARENTHESISED_COMMAND, PIPED_COMMAND, SIMPLE_COMMAND),
+    create_token_set_(COMMAND, CONJOINT_COMMAND, DISJOINT_COMMAND, IF_COMMAND,
+      JOINED_COMMAND, PARENTHESISED_COMMAND, PIPED_COMMAND, SIMPLE_COMMAND),
   };
 
   /* ********************************************************** */
@@ -58,6 +67,43 @@ public class BatchParser implements PsiParser, LightPsiParser {
       c = current_position_(b);
     }
     return true;
+  }
+
+  /* ********************************************************** */
+  // CHAR_SEQUENCE EQUALITY_OPERATOR CHAR_SEQUENCE
+  public static boolean equalityCondition(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "equalityCondition")) return false;
+    if (!nextTokenIs(b, CHAR_SEQUENCE)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeTokens(b, 0, CHAR_SEQUENCE, EQUALITY_OPERATOR, CHAR_SEQUENCE);
+    exit_section_(b, m, EQUALITY_CONDITION, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // EXIST_KEYWORD CHAR_SEQUENCE
+  public static boolean existCondition(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "existCondition")) return false;
+    if (!nextTokenIs(b, EXIST_KEYWORD)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeTokens(b, 0, EXIST_KEYWORD, CHAR_SEQUENCE);
+    exit_section_(b, m, EXIST_CONDITION, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // existCondition | equalityCondition
+  public static boolean ifCondition(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ifCondition")) return false;
+    if (!nextTokenIs(b, "<if condition>", CHAR_SEQUENCE, EXIST_KEYWORD)) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NONE_, IF_CONDITION, "<if condition>");
+    r = existCondition(b, l + 1);
+    if (!r) r = equalityCondition(b, l + 1);
+    exit_section_(b, l, m, r, false, null);
+    return r;
   }
 
   /* ********************************************************** */
@@ -85,15 +131,12 @@ public class BatchParser implements PsiParser, LightPsiParser {
 
   /* ********************************************************** */
   // EOL_OPERATOR
-  // IF_KEYWORD
-  // EXIST_KEYWORD
-  // ELSE_KEYWORD
   public static boolean tokens(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "tokens")) return false;
     if (!nextTokenIs(b, EOL_OPERATOR)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeTokens(b, 0, EOL_OPERATOR, IF_KEYWORD, EXIST_KEYWORD, ELSE_KEYWORD);
+    r = consumeToken(b, EOL_OPERATOR);
     exit_section_(b, m, TOKENS, r);
     return r;
   }
@@ -106,7 +149,7 @@ public class BatchParser implements PsiParser, LightPsiParser {
   // 2: BINARY(conjointCommand)
   // 3: BINARY(pipedCommand)
   // 4: ATOM(parenthesisedCommand)
-  // 5: ATOM(simpleCommand)
+  // 5: ATOM(simpleCommand) ATOM(ifCommand)
   public static boolean command(PsiBuilder b, int l, int g) {
     if (!recursion_guard_(b, l, "command")) return false;
     addVariant(b, "<command>");
@@ -114,6 +157,7 @@ public class BatchParser implements PsiParser, LightPsiParser {
     Marker m = enter_section_(b, l, _NONE_, "<command>");
     r = parenthesisedCommand(b, l + 1);
     if (!r) r = simpleCommand(b, l + 1);
+    if (!r) r = ifCommand(b, l + 1);
     p = r;
     r = r && command_0(b, l + 1, g);
     exit_section_(b, l, m, null, r, p, null);
@@ -246,6 +290,38 @@ public class BatchParser implements PsiParser, LightPsiParser {
     Marker m = enter_section_(b);
     r = consumeTokenSmart(b, CHAR_SEQUENCE);
     if (!r) r = redirection(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // IF_KEYWORD ifCondition command [ELSE_KEYWORD command]
+  public static boolean ifCommand(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ifCommand")) return false;
+    if (!nextTokenIsSmart(b, IF_KEYWORD)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeTokenSmart(b, IF_KEYWORD);
+    r = r && ifCondition(b, l + 1);
+    r = r && command(b, l + 1, -1);
+    r = r && ifCommand_3(b, l + 1);
+    exit_section_(b, m, IF_COMMAND, r);
+    return r;
+  }
+
+  // [ELSE_KEYWORD command]
+  private static boolean ifCommand_3(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ifCommand_3")) return false;
+    ifCommand_3_0(b, l + 1);
+    return true;
+  }
+
+  // ELSE_KEYWORD command
+  private static boolean ifCommand_3_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ifCommand_3_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeTokenSmart(b, ELSE_KEYWORD);
+    r = r && command(b, l + 1, -1);
     exit_section_(b, m, null, r);
     return r;
   }

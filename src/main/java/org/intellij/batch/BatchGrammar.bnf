@@ -22,24 +22,23 @@ command ::= joinedCommand
           | conjointCommand
           | pipedCommand
           | parenthesisedCommand
-          | simpleCommand
+          | atomicCommand
+
+private atomicCommand ::= simpleCommand | ifCommand
 
 joinedCommand ::= command COMMAND_JOIN_OPERATOR command { extends = command }
-
 disjointCommand ::= command COMMAND_DISJUNCTION_OPERATOR command { extends = command }
-
 conjointCommand ::= command COMMAND_CONJUNCTION_OPERATOR command { extends = command }
-
 pipedCommand ::= command PIPE_OPERATOR command { extends = command }
 
 parenthesisedCommand ::= redirection* LEFT_PARENTHESES command+ RIGHT_PARENTHESES redirection* { extends = command }
 
 simpleCommand ::= redirection* COMMAND_NAME (CHAR_SEQUENCE | redirection)* { extends = command }
-
 redirection ::= REDIRECT_TO_HANDLE_OPERATOR | (REDIRECT_TO_FILE_OPERATOR CHAR_SEQUENCE)
 
-tokens ::=
-EOL_OPERATOR
-IF_KEYWORD
-EXIST_KEYWORD
-ELSE_KEYWORD
+ifCommand ::= IF_KEYWORD ifCondition command [ELSE_KEYWORD command] { extends = command }
+ifCondition ::= existCondition | equalityCondition
+existCondition ::= EXIST_KEYWORD CHAR_SEQUENCE
+equalityCondition ::= CHAR_SEQUENCE EQUALITY_OPERATOR CHAR_SEQUENCE
+
+tokens ::= EOL_OPERATOR // possibly there is no need in this token
