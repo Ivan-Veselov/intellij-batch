@@ -182,4 +182,26 @@ public class BatchLexerAdapterIfCommandTest extends BatchLexerAdapterTest {
                 .token(WHITE_SPACE, " ")
                 .token(COMMAND_NAME, "command"));
     }
+
+    public void testIfExistWithFakeElse() throws Exception {
+        doTest("if exist f command else command",
+                token(IF_KEYWORD, "if")
+                .token(WHITE_SPACE, " ")
+                .token(EXIST_KEYWORD, "exist")
+                .token(WHITE_SPACE, " ")
+                .token(CHAR_SEQUENCE, "f")
+                .token(WHITE_SPACE, " ")
+                .token(COMMAND_NAME, "command")
+                .token(WHITE_SPACE, " ")
+                .token(CHAR_SEQUENCE, "else")
+                .token(WHITE_SPACE, " ")
+                .token(CHAR_SEQUENCE, "command"));
+    }
+
+    public void testCommandNamePrefixedWithIf() throws Exception {
+        doTest("ifA arg",
+                token(COMMAND_NAME, "ifA")
+                .token(WHITE_SPACE, " ")
+                .token(CHAR_SEQUENCE, "arg"));
+    }
 }
