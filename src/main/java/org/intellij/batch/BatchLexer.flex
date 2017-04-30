@@ -113,7 +113,7 @@ import static org.intellij.batch.psi.BatchTypes.*;
 
 LineTerminator = \r | \n | \r\n
 LineCharacter = [^\r\n]
-Whitespace = [ \t\f]
+Whitespace = [ \t]
 
 SpecialCharacter = [<>|&]
 Parentheses = [()]
