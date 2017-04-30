@@ -160,8 +160,6 @@ elseKeyword = else
  */
 
 <YYINITIAL> {
-    {LineTerminator} { return EOL_OPERATOR; }
-
     {ifKeyword} { yybegin(AFTER_IF_KEYWORD); return IF_KEYWORD; }
 
     "(" { openedParentheses++; return LEFT_PARENTHESES; }
@@ -224,7 +222,7 @@ elseKeyword = else
 }
 
 /* Rules for line terminators */
-<READING_CMD_ARGS, AFTER_MATCHED_PARENTHESES> {
+<YYINITIAL, READING_CMD_ARGS, AFTER_MATCHED_PARENTHESES> {
     {LineTerminator} { yybegin(YYINITIAL); return EOL_OPERATOR; }
 }
 
