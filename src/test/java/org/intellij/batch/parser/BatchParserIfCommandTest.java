@@ -22,6 +22,27 @@ public class BatchParserIfCommandTest extends BatchParserTest {
         doTest();
     }
 
-    // TODO: add more tests.
-    // TODO: Test with nested ifs.
+    public void testIfExistElseOnMultipleLines() throws Exception {
+        doTest();
+    }
+
+    public void testIfEqualsElseOnMultipleLines() throws Exception {
+        doTest();
+    }
+
+    public void testNestedIfs() throws Exception {
+        doTest();
+    }
+
+    public void testNestedIfsInnerWithElse() throws Exception {
+        doTest();
+    }
+
+    public void testNestedIfsOuterWithElse() throws Exception {
+        doTest();
+    }
+
+    public void testNestedIfsBothWithElse() throws Exception {
+        doTest();
+    }
 }

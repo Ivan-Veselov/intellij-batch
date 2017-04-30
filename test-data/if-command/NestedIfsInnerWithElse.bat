@@ -1,0 +1,1 @@
+if exist file if str1 == str2 (command arg1 arg2) else command2 arg
