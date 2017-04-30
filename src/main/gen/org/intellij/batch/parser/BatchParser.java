@@ -130,13 +130,16 @@ public class BatchParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // EOL_OPERATOR
+  // EOL_OPERATOR // possibly there is no need in this token
+  // LABEL_DEFINITION_OPERATOR
+  // LABEL_NAME
+  // COMMENT_CONTENT
   public static boolean tokens(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "tokens")) return false;
     if (!nextTokenIs(b, EOL_OPERATOR)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeToken(b, EOL_OPERATOR);
+    r = consumeTokens(b, 0, EOL_OPERATOR, LABEL_DEFINITION_OPERATOR, LABEL_NAME, COMMENT_CONTENT);
     exit_section_(b, m, TOKENS, r);
     return r;
   }

@@ -27,11 +27,14 @@ public interface BatchTypes {
   IElementType COMMAND_DISJUNCTION_OPERATOR = new BatchTokenType("COMMAND_DISJUNCTION_OPERATOR");
   IElementType COMMAND_JOIN_OPERATOR = new BatchTokenType("COMMAND_JOIN_OPERATOR");
   IElementType COMMAND_NAME = new BatchTokenType("COMMAND_NAME");
+  IElementType COMMENT_CONTENT = new BatchTokenType("COMMENT_CONTENT");
   IElementType ELSE_KEYWORD = new BatchTokenType("ELSE_KEYWORD");
   IElementType EOL_OPERATOR = new BatchTokenType("EOL_OPERATOR");
   IElementType EQUALITY_OPERATOR = new BatchTokenType("EQUALITY_OPERATOR");
   IElementType EXIST_KEYWORD = new BatchTokenType("EXIST_KEYWORD");
   IElementType IF_KEYWORD = new BatchTokenType("IF_KEYWORD");
+  IElementType LABEL_DEFINITION_OPERATOR = new BatchTokenType("LABEL_DEFINITION_OPERATOR");
+  IElementType LABEL_NAME = new BatchTokenType("LABEL_NAME");
   IElementType LEFT_PARENTHESES = new BatchTokenType("LEFT_PARENTHESES");
   IElementType PIPE_OPERATOR = new BatchTokenType("PIPE_OPERATOR");
   IElementType REDIRECT_TO_FILE_OPERATOR = new BatchTokenType("REDIRECT_TO_FILE_OPERATOR");

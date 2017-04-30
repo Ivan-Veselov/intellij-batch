@@ -41,4 +41,8 @@ ifCondition ::= existCondition | equalityCondition
 existCondition ::= EXIST_KEYWORD CHAR_SEQUENCE
 equalityCondition ::= CHAR_SEQUENCE EQUALITY_OPERATOR CHAR_SEQUENCE
 
-tokens ::= EOL_OPERATOR // possibly there is no need in this token
+tokens ::=
+EOL_OPERATOR // possibly there is no need in this token
+LABEL_DEFINITION_OPERATOR
+LABEL_NAME
+COMMENT_CONTENT

@@ -126,7 +126,9 @@ Digit = [0-9]
 // Actually this set should also contain a ')' character
 CommandNameCharacter = !(!{LineCharacter} | {SpecialCharacter} | {Parentheses} | {Colon} | {Delimiter})
 
-SequenceCharacter = {CommandNameCharacter} | {Parentheses} | {Colon} | {SymbolicDelimiter}
+LabelNameFirstCharacter = {CommandNameCharacter} | {Parentheses}
+LabelNameCharacter = {LabelNameFirstCharacter} | {SymbolicDelimiter}
+SequenceCharacter = {LabelNameCharacter} | {Colon}
 
 RedirectSymbol = > | < | >>
 RedirectToFileOperator = {Digit}? {RedirectSymbol}
@@ -143,9 +145,12 @@ elseKeyword = else
 
 %state READING_CMD_ARGS
 %state READING_ONE_CHAR_SEQUENCE
+%state READING_LABEL
+%state READING_COMMENT
 %state MATCH_PARENTHESES
 %state AFTER_MATCHED_PARENTHESES
 %state AFTER_IF_KEYWORD
+%state SKIP_WHITESPACES
 %state READING_EQUALITY_OPERATOR
 
 %%
@@ -174,6 +179,8 @@ elseKeyword = else
             return COMMAND_NAME;
         }
     }
+
+    {LabelDefinitionOperator} { yybegin(READING_LABEL); return LABEL_DEFINITION_OPERATOR; }
 }
 
 <READING_CMD_ARGS> {
@@ -186,6 +193,17 @@ elseKeyword = else
 
         return CHAR_SEQUENCE;
     }
+}
+
+<READING_LABEL> {
+    {LabelNameFirstCharacter} {LabelNameCharacter}* {
+        memorizeAndBegin(READING_COMMENT, SKIP_WHITESPACES);
+        return LABEL_NAME;
+    }
+}
+
+<READING_COMMENT> {
+    {LineCharacter}* { return COMMENT_CONTENT; }
 }
 
 <MATCH_PARENTHESES> {
@@ -207,6 +225,12 @@ elseKeyword = else
     }
 }
 
+<SKIP_WHITESPACES> {
+    {Whitespace}+ { beginMemorized(); return WHITE_SPACE; }
+
+    [^] { yypushback(1); beginMemorized(); }
+}
+
 <READING_EQUALITY_OPERATOR> {
     {EqualityOperator} { memorizeAndBegin(YYINITIAL, READING_ONE_CHAR_SEQUENCE); return EQUALITY_OPERATOR; }
 }
@@ -225,7 +249,7 @@ elseKeyword = else
 }
 
 /* Rules for line terminators */
-<YYINITIAL, READING_CMD_ARGS, AFTER_MATCHED_PARENTHESES> {
+<YYINITIAL, READING_CMD_ARGS, READING_LABEL, READING_COMMENT, AFTER_MATCHED_PARENTHESES> {
     {LineTerminator} { yybegin(YYINITIAL); return EOL_OPERATOR; }
 }
 
@@ -233,6 +257,7 @@ elseKeyword = else
 <YYINITIAL,
  READING_CMD_ARGS,
  READING_ONE_CHAR_SEQUENCE,
+ READING_LABEL,
  READING_EQUALITY_OPERATOR,
  AFTER_MATCHED_PARENTHESES,
  AFTER_IF_KEYWORD> {
@@ -244,6 +269,12 @@ elseKeyword = else
     {RedirectToHandleOperator} { return REDIRECT_TO_HANDLE_OPERATOR; }
 
     {RedirectToFileOperator} { memorizeAndBegin(READING_ONE_CHAR_SEQUENCE); return REDIRECT_TO_FILE_OPERATOR; }
+}
+
+/* Low priority rules */
+
+<READING_LABEL> {
+    [^] { yypushback(1); yybegin(READING_COMMENT); }
 }
 
 [^] { return BAD_CHARACTER; }
