@@ -115,21 +115,23 @@ LineTerminator = \r | \n | \r\n
 LineCharacter = [^\r\n]
 Whitespace = [ \t]
 
-SpecialCharacter = [<>|&]
+SymbolicDelimiter = [,;=]
+Delimiter = {Whitespace} | {SymbolicDelimiter}
+SpecialCharacter = [<>|&\^]
 Parentheses = [()]
+Digit = [0-9]
 
 // Set difference {LineCharacter} \ ({SpecialCharacter} | {Parentheses} | {Whitespace})
 SequenceCharacter = !(!{LineCharacter} | {SpecialCharacter} | {Parentheses} | {Whitespace})
-
 SequenceCharacterOrParentheses = {SequenceCharacter} | {Parentheses}
-
-Digit = [0-9]
 
 RedirectSymbol = > | < | >>
 RedirectToFileOperator = {Digit}? {RedirectSymbol}
 RedirectToHandleOperator = {Digit}? {RedirectSymbol} & {Digit}
 
 EqualityOperator = ==
+
+LabelDefinitionOperator = :
 
 /* Keywords */
 ifKeyword = if
