@@ -115,12 +115,13 @@ LineTerminator = \r | \n | \r\n
 LineCharacter = [^\r\n]
 Whitespace = [ \t\f]
 
-SpecialCharacter = [<>|&()]
+SpecialCharacter = [<>|&]
+Parentheses = [()]
 
-// Set difference {LineCharacter} \ ({SpecialCharacter} | {Whitespace})
-SequenceCharacter = !(!{LineCharacter} | {SpecialCharacter} | {Whitespace})
+// Set difference {LineCharacter} \ ({SpecialCharacter} | {Parentheses} | {Whitespace})
+SequenceCharacter = !(!{LineCharacter} | {SpecialCharacter} | {Parentheses} | {Whitespace})
 
-SequenceCharacterOrParentheses = {SequenceCharacter} | "(" | ")"
+SequenceCharacterOrParentheses = {SequenceCharacter} | {Parentheses}
 
 Digit = [0-9]
 
