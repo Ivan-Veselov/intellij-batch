@@ -119,11 +119,14 @@ SymbolicDelimiter = [,;=]
 Delimiter = {Whitespace} | {SymbolicDelimiter}
 SpecialCharacter = [<>|&\^]
 Parentheses = [()]
+Colon = :
 Digit = [0-9]
 
-// Set difference {LineCharacter} \ ({SpecialCharacter} | {Parentheses} | {Whitespace})
-SequenceCharacter = !(!{LineCharacter} | {SpecialCharacter} | {Parentheses} | {Whitespace})
-SequenceCharacterOrParentheses = {SequenceCharacter} | {Parentheses}
+// Set difference {LineCharacter} \ ({SpecialCharacter} | {Parentheses} | {Colon} | {Whitespace})
+// Actually this set should also contain a ')' character
+CommandNameCharacter = !(!{LineCharacter} | {SpecialCharacter} | {Parentheses} | {Colon} | {Delimiter})
+
+SequenceCharacter = {CommandNameCharacter} | {Parentheses} | {Colon} | {SymbolicDelimiter}
 
 RedirectSymbol = > | < | >>
 RedirectToFileOperator = {Digit}? {RedirectSymbol}
@@ -131,7 +134,7 @@ RedirectToHandleOperator = {Digit}? {RedirectSymbol} & {Digit}
 
 EqualityOperator = ==
 
-LabelDefinitionOperator = :
+LabelDefinitionOperator = {Colon}
 
 /* Keywords */
 ifKeyword = if
@@ -164,7 +167,7 @@ elseKeyword = else
 
     "(" { openedParentheses++; return LEFT_PARENTHESES; }
 
-    ({SequenceCharacter} | ")")+ {
+    ({CommandNameCharacter} | ")")+ {
         backtrackUntilMatchingParenthesesOrBegin(READING_CMD_ARGS);
 
         if (yylength() != 0) {
@@ -174,11 +177,11 @@ elseKeyword = else
 }
 
 <READING_CMD_ARGS> {
-    {SequenceCharacterOrParentheses}+ { backtrackUntilMatchingParentheses(); return CHAR_SEQUENCE; }
+    {SequenceCharacter}+ { backtrackUntilMatchingParentheses(); return CHAR_SEQUENCE; }
 }
 
 <READING_ONE_CHAR_SEQUENCE> {
-    {SequenceCharacterOrParentheses}+ {
+    {SequenceCharacter}+ {
         backtrackUntilMatchingParenthesesOr(beginMemorizedAction);
 
         return CHAR_SEQUENCE;
@@ -198,7 +201,7 @@ elseKeyword = else
 <AFTER_IF_KEYWORD> {
     {existKeyword} { memorizeAndBegin(YYINITIAL, READING_ONE_CHAR_SEQUENCE); return EXIST_KEYWORD; }
 
-    {SequenceCharacterOrParentheses}+ {
+    {SequenceCharacter}+ {
         yybegin(READING_EQUALITY_OPERATOR);
         return CHAR_SEQUENCE;
     }
