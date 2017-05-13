@@ -114,6 +114,7 @@ import static org.intellij.batch.psi.BatchTypes.*;
 LineTerminator = \r | \n | \r\n
 LineCharacter = [^\r\n]
 Whitespace = [ \t]
+NonWhitespaceLineCharacter = [^\r\n \t]
 
 SymbolicDelimiter = [,;=]
 Delimiter = {Whitespace} | {SymbolicDelimiter}
@@ -126,10 +127,11 @@ Digit = [0-9]
 // Actually this set should also contain a ')' character
 CommandNameCharacter = !(!{LineCharacter} | {SpecialCharacter} | {Parentheses} | {Colon} | {Delimiter})
 
+// Set difference {NonWhitespaceLineCharacter} \ {SpecialCharacter}
+SequenceCharacter = !(!{NonWhitespaceLineCharacter} | {SpecialCharacter})
+
 LabelNameFirstCharacter = {CommandNameCharacter} | {Parentheses}
 LabelNameCharacter = {LabelNameFirstCharacter} | {SymbolicDelimiter}
-SequenceCharacter = {LabelNameCharacter} | {Colon}
-NonWhitespaceLineCharacter = {SequenceCharacter} | {SpecialCharacter}
 
 // Set difference {NonWhitespaceLineCharacter} \ {LabelNameFirstCharacter}
 NorWhitespaceNorLabelNameFirstCharacter = {Colon} | {SpecialCharacter} | {SymbolicDelimiter}
