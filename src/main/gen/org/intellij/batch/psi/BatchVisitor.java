@@ -39,6 +39,10 @@ public class BatchVisitor extends PsiElementVisitor {
     visitCommand(o);
   }
 
+  public void visitLabelDefinition(@NotNull BatchLabelDefinition o) {
+    visitPsiElement(o);
+  }
+
   public void visitParenthesisedCommand(@NotNull BatchParenthesisedCommand o) {
     visitCommand(o);
   }
@@ -53,6 +57,10 @@ public class BatchVisitor extends PsiElementVisitor {
 
   public void visitSimpleCommand(@NotNull BatchSimpleCommand o) {
     visitCommand(o);
+  }
+
+  public void visitSingleLineComment(@NotNull BatchSingleLineComment o) {
+    visitPsiElement(o);
   }
 
   public void visitTokens(@NotNull BatchTokens o) {

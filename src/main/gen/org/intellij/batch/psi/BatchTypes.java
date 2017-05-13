@@ -16,10 +16,12 @@ public interface BatchTypes {
   IElementType IF_COMMAND = new BatchElementType("IF_COMMAND");
   IElementType IF_CONDITION = new BatchElementType("IF_CONDITION");
   IElementType JOINED_COMMAND = new BatchElementType("JOINED_COMMAND");
+  IElementType LABEL_DEFINITION = new BatchElementType("LABEL_DEFINITION");
   IElementType PARENTHESISED_COMMAND = new BatchElementType("PARENTHESISED_COMMAND");
   IElementType PIPED_COMMAND = new BatchElementType("PIPED_COMMAND");
   IElementType REDIRECTION = new BatchElementType("REDIRECTION");
   IElementType SIMPLE_COMMAND = new BatchElementType("SIMPLE_COMMAND");
+  IElementType SINGLE_LINE_COMMENT = new BatchElementType("SINGLE_LINE_COMMENT");
   IElementType TOKENS = new BatchElementType("TOKENS");
 
   IElementType CHAR_SEQUENCE = new BatchTokenType("CHAR_SEQUENCE");
@@ -65,6 +67,9 @@ public interface BatchTypes {
       else if (type == JOINED_COMMAND) {
         return new BatchJoinedCommandImpl(node);
       }
+      else if (type == LABEL_DEFINITION) {
+        return new BatchLabelDefinitionImpl(node);
+      }
       else if (type == PARENTHESISED_COMMAND) {
         return new BatchParenthesisedCommandImpl(node);
       }
@@ -76,6 +81,9 @@ public interface BatchTypes {
       }
       else if (type == SIMPLE_COMMAND) {
         return new BatchSimpleCommandImpl(node);
+      }
+      else if (type == SINGLE_LINE_COMMENT) {
+        return new BatchSingleLineCommentImpl(node);
       }
       else if (type == TOKENS) {
         return new BatchTokensImpl(node);

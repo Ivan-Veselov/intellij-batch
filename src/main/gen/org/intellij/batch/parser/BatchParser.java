@@ -35,8 +35,14 @@ public class BatchParser implements PsiParser, LightPsiParser {
     else if (t == IF_CONDITION) {
       r = ifCondition(b, 0);
     }
+    else if (t == LABEL_DEFINITION) {
+      r = labelDefinition(b, 0);
+    }
     else if (t == REDIRECTION) {
       r = redirection(b, 0);
+    }
+    else if (t == SINGLE_LINE_COMMENT) {
+      r = singleLineComment(b, 0);
     }
     else if (t == TOKENS) {
       r = tokens(b, 0);
@@ -57,16 +63,28 @@ public class BatchParser implements PsiParser, LightPsiParser {
   };
 
   /* ********************************************************** */
-  // command*
+  // (command | labelDefinition | singleLineComment)*
   static boolean batchFile(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "batchFile")) return false;
     int c = current_position_(b);
     while (true) {
-      if (!command(b, l + 1, -1)) break;
+      if (!batchFile_0(b, l + 1)) break;
       if (!empty_element_parsed_guard_(b, "batchFile", c)) break;
       c = current_position_(b);
     }
     return true;
+  }
+
+  // command | labelDefinition | singleLineComment
+  private static boolean batchFile_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "batchFile_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = command(b, l + 1, -1);
+    if (!r) r = labelDefinition(b, l + 1);
+    if (!r) r = singleLineComment(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
   }
 
   /* ********************************************************** */
@@ -107,6 +125,26 @@ public class BatchParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // LABEL_DEFINITION_OPERATOR LABEL_NAME [COMMENT_CONTENT]
+  public static boolean labelDefinition(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "labelDefinition")) return false;
+    if (!nextTokenIs(b, LABEL_DEFINITION_OPERATOR)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeTokens(b, 0, LABEL_DEFINITION_OPERATOR, LABEL_NAME);
+    r = r && labelDefinition_2(b, l + 1);
+    exit_section_(b, m, LABEL_DEFINITION, r);
+    return r;
+  }
+
+  // [COMMENT_CONTENT]
+  private static boolean labelDefinition_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "labelDefinition_2")) return false;
+    consumeToken(b, COMMENT_CONTENT);
+    return true;
+  }
+
+  /* ********************************************************** */
   // REDIRECT_TO_HANDLE_OPERATOR | (REDIRECT_TO_FILE_OPERATOR CHAR_SEQUENCE)
   public static boolean redirection(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "redirection")) return false;
@@ -130,16 +168,33 @@ public class BatchParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // EOL_OPERATOR // possibly there is no need in this token
-  // LABEL_DEFINITION_OPERATOR
-  // LABEL_NAME
-  // COMMENT_CONTENT
+  // LABEL_DEFINITION_OPERATOR [COMMENT_CONTENT]
+  public static boolean singleLineComment(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "singleLineComment")) return false;
+    if (!nextTokenIs(b, LABEL_DEFINITION_OPERATOR)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, LABEL_DEFINITION_OPERATOR);
+    r = r && singleLineComment_1(b, l + 1);
+    exit_section_(b, m, SINGLE_LINE_COMMENT, r);
+    return r;
+  }
+
+  // [COMMENT_CONTENT]
+  private static boolean singleLineComment_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "singleLineComment_1")) return false;
+    consumeToken(b, COMMENT_CONTENT);
+    return true;
+  }
+
+  /* ********************************************************** */
+  // EOL_OPERATOR
   public static boolean tokens(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "tokens")) return false;
     if (!nextTokenIs(b, EOL_OPERATOR)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeTokens(b, 0, EOL_OPERATOR, LABEL_DEFINITION_OPERATOR, LABEL_NAME, COMMENT_CONTENT);
+    r = consumeToken(b, EOL_OPERATOR);
     exit_section_(b, m, TOKENS, r);
     return r;
   }
