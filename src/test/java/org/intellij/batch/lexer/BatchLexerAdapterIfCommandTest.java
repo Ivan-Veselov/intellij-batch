@@ -146,6 +146,70 @@ public class BatchLexerAdapterIfCommandTest extends BatchLexerAdapterTest {
                 .token(COMMAND_NAME, "command"));
     }
 
+    public void testIfNot() throws Exception {
+        doTest("if not exist f command",
+                token(IF_KEYWORD, "if")
+                .token(WHITE_SPACE, " ")
+                .token(NOT_KEYWORD, "not")
+                .token(WHITE_SPACE, " ")
+                .token(EXIST_KEYWORD, "exist")
+                .token(WHITE_SPACE, " ")
+                .token(CHAR_SEQUENCE, "f")
+                .token(WHITE_SPACE, " ")
+                .token(COMMAND_NAME, "command"));
+
+        doTest("if not str1 == str2 command",
+                token(IF_KEYWORD, "if")
+                .token(WHITE_SPACE, " ")
+                .token(NOT_KEYWORD, "not")
+                .token(WHITE_SPACE, " ")
+                .token(CHAR_SEQUENCE, "str1")
+                .token(WHITE_SPACE, " ")
+                .token(EQUALITY_OPERATOR, "==")
+                .token(WHITE_SPACE, " ")
+                .token(CHAR_SEQUENCE, "str2")
+                .token(WHITE_SPACE, " ")
+                .token(COMMAND_NAME, "command"));
+    }
+
+    public void testIfNotElse() throws Exception {
+        doTest("if not exist f (command) else command",
+                token(IF_KEYWORD, "if")
+                .token(WHITE_SPACE, " ")
+                .token(NOT_KEYWORD, "not")
+                .token(WHITE_SPACE, " ")
+                .token(EXIST_KEYWORD, "exist")
+                .token(WHITE_SPACE, " ")
+                .token(CHAR_SEQUENCE, "f")
+                .token(WHITE_SPACE, " ")
+                .token(LEFT_PARENTHESES, "(")
+                .token(COMMAND_NAME, "command")
+                .token(RIGHT_PARENTHESES, ")")
+                .token(WHITE_SPACE, " ")
+                .token(ELSE_KEYWORD, "else")
+                .token(WHITE_SPACE, " ")
+                .token(COMMAND_NAME, "command"));
+
+        doTest("if not str1 == str2 (command) else command",
+                token(IF_KEYWORD, "if")
+                .token(WHITE_SPACE, " ")
+                .token(NOT_KEYWORD, "not")
+                .token(WHITE_SPACE, " ")
+                .token(CHAR_SEQUENCE, "str1")
+                .token(WHITE_SPACE, " ")
+                .token(EQUALITY_OPERATOR, "==")
+                .token(WHITE_SPACE, " ")
+                .token(CHAR_SEQUENCE, "str2")
+                .token(WHITE_SPACE, " ")
+                .token(LEFT_PARENTHESES, "(")
+                .token(COMMAND_NAME, "command")
+                .token(RIGHT_PARENTHESES, ")")
+                .token(WHITE_SPACE, " ")
+                .token(ELSE_KEYWORD, "else")
+                .token(WHITE_SPACE, " ")
+                .token(COMMAND_NAME, "command"));
+    }
+
     public void testElseRightAfterParentheses() throws Exception {
         doTest("if exist f (command)else command",
                 token(IF_KEYWORD, "if")

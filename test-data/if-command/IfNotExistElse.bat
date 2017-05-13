@@ -1,0 +1,1 @@
+if not exist file (cmd1 arg) else cmd2 arg

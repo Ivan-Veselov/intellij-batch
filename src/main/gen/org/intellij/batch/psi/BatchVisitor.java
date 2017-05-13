@@ -35,6 +35,10 @@ public class BatchVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitIfNegatedCondition(@NotNull BatchIfNegatedCondition o) {
+    visitPsiElement(o);
+  }
+
   public void visitJoinedCommand(@NotNull BatchJoinedCommand o) {
     visitCommand(o);
   }

@@ -5,15 +5,9 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface BatchIfCommand extends BatchCommand {
+public interface BatchIfNegatedCondition extends PsiElement {
 
   @NotNull
-  List<BatchCommand> getCommandList();
-
-  @Nullable
   BatchIfCondition getIfCondition();
-
-  @Nullable
-  BatchIfNegatedCondition getIfNegatedCondition();
 
 }

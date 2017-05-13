@@ -14,11 +14,27 @@ public class BatchParserIfCommandTest extends BatchParserTest {
         doTest();
     }
 
+    public void testIfNotExist() throws Exception {
+        doTest();
+    }
+
+    public void testIfNotEquals() throws Exception {
+        doTest();
+    }
+
     public void testIfExistElse() throws Exception {
         doTest();
     }
 
     public void testIfEqualsElse() throws Exception {
+        doTest();
+    }
+
+    public void testIfNotExistElse() throws Exception {
+        doTest();
+    }
+
+    public void testIfNotEqualsElse() throws Exception {
         doTest();
     }
 

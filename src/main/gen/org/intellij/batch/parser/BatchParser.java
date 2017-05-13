@@ -35,6 +35,9 @@ public class BatchParser implements PsiParser, LightPsiParser {
     else if (t == IF_CONDITION) {
       r = ifCondition(b, 0);
     }
+    else if (t == IF_NEGATED_CONDITION) {
+      r = ifNegatedCondition(b, 0);
+    }
     else if (t == LABEL_DEFINITION) {
       r = labelDefinition(b, 0);
     }
@@ -118,6 +121,19 @@ public class BatchParser implements PsiParser, LightPsiParser {
     r = existCondition(b, l + 1);
     if (!r) r = equalityCondition(b, l + 1);
     exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // NOT_KEYWORD ifCondition
+  public static boolean ifNegatedCondition(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ifNegatedCondition")) return false;
+    if (!nextTokenIs(b, NOT_KEYWORD)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, NOT_KEYWORD);
+    r = r && ifCondition(b, l + 1);
+    exit_section_(b, m, IF_NEGATED_CONDITION, r);
     return r;
   }
 
@@ -329,17 +345,28 @@ public class BatchParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // IF_KEYWORD ifCondition command [ELSE_KEYWORD command]
+  // IF_KEYWORD (ifCondition | ifNegatedCondition) command [ELSE_KEYWORD command]
   public static boolean ifCommand(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ifCommand")) return false;
     if (!nextTokenIsSmart(b, IF_KEYWORD)) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeTokenSmart(b, IF_KEYWORD);
-    r = r && ifCondition(b, l + 1);
+    r = r && ifCommand_1(b, l + 1);
     r = r && command(b, l + 1, -1);
     r = r && ifCommand_3(b, l + 1);
     exit_section_(b, m, IF_COMMAND, r);
+    return r;
+  }
+
+  // ifCondition | ifNegatedCondition
+  private static boolean ifCommand_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ifCommand_1")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = ifCondition(b, l + 1);
+    if (!r) r = ifNegatedCondition(b, l + 1);
+    exit_section_(b, m, null, r);
     return r;
   }
 

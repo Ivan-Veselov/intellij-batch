@@ -144,6 +144,7 @@ LabelDefinitionOperator = {Colon}
 
 /* Keywords */
 ifKeyword = if
+notKeyword = not
 existKeyword = exist
 elseKeyword = else
 
@@ -225,6 +226,8 @@ elseKeyword = else
 
 <AFTER_IF_KEYWORD> {
     {existKeyword} { memorizeAndBegin(YYINITIAL, READING_ONE_CHAR_SEQUENCE); return EXIST_KEYWORD; }
+
+    {notKeyword} { return NOT_KEYWORD; }
 
     {SequenceCharacter}+ {
         yybegin(READING_EQUALITY_OPERATOR);

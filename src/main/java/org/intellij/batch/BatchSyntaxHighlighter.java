@@ -29,7 +29,8 @@ public class BatchSyntaxHighlighter extends SyntaxHighlighterBase {
     public @NotNull TextAttributesKey[] getTokenHighlights(final @NotNull IElementType tokenType) {
         if (tokenType.equals(BatchTypes.ELSE_KEYWORD) ||
             tokenType.equals(BatchTypes.EXIST_KEYWORD) ||
-            tokenType.equals(BatchTypes.IF_KEYWORD)) {
+            tokenType.equals(BatchTypes.IF_KEYWORD) ||
+            tokenType.equals(BatchTypes.NOT_KEYWORD)) {
             return KEYWORD_KEYS;
         } else if (tokenType.equals(BatchTypes.LABEL_BASED_COMMENT)) {
             return COMMENT_KEYS;

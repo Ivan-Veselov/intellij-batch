@@ -64,10 +64,10 @@ class BatchLexer implements FlexLexer {
 
   /* The ZZ_CMAP_A table has 384 entries */
   static final char ZZ_CMAP_A[] = zzUnpackCMap(
-    "\11\0\1\3\1\2\2\0\1\1\22\0\1\3\5\0\1\13\1\0\1\24\1\6\2\0\1\4\3\0\12\10\1\7"+
-    "\1\4\1\12\1\14\1\11\6\0\1\17\1\16\2\0\1\15\2\0\1\23\6\0\1\21\1\22\3\0\1\20"+
-    "\5\0\1\5\6\0\1\17\1\16\2\0\1\15\2\0\1\23\6\0\1\21\1\22\3\0\1\20\3\0\1\25\263"+
-    "\0\2\15\115\0\1\21");
+    "\11\0\1\3\1\2\2\0\1\1\22\0\1\3\5\0\1\13\1\0\1\26\1\6\2\0\1\4\3\0\12\10\1\7"+
+    "\1\4\1\12\1\14\1\11\6\0\1\22\1\16\2\0\1\15\2\0\1\25\1\0\1\17\1\20\3\0\1\24"+
+    "\1\21\3\0\1\23\5\0\1\5\6\0\1\22\1\16\2\0\1\15\2\0\1\25\1\0\1\17\1\20\3\0\1"+
+    "\24\1\21\3\0\1\23\3\0\1\27\263\0\2\15\115\0\1\24");
 
   /** 
    * Translates DFA states to action switch labels.
@@ -77,12 +77,12 @@ class BatchLexer implements FlexLexer {
   private static final String ZZ_ACTION_PACKED_0 =
     "\11\0\1\1\2\2\1\3\1\4\1\5\1\1\2\6"+
     "\1\1\1\7\2\10\1\11\1\12\1\13\1\14\1\15"+
-    "\1\16\1\17\1\20\2\4\2\21\1\4\1\0\1\22"+
-    "\1\0\1\23\1\24\1\25\1\0\1\21\1\26\1\27"+
-    "\1\0\1\21\1\0\1\21\1\30\1\31";
+    "\1\16\1\17\1\20\2\4\3\21\1\4\1\0\1\22"+
+    "\1\0\1\23\1\24\1\25\1\0\2\21\1\26\1\27"+
+    "\1\0\1\30\1\21\1\0\1\21\1\31\1\32";
 
   private static int [] zzUnpackAction() {
-    int [] result = new int[51];
+    int [] result = new int[54];
     int offset = 0;
     offset = zzUnpackAction(ZZ_ACTION_PACKED_0, offset, result);
     return result;
@@ -107,16 +107,16 @@ class BatchLexer implements FlexLexer {
   private static final int [] ZZ_ROWMAP = zzUnpackRowMap();
 
   private static final String ZZ_ROWMAP_PACKED_0 =
-    "\0\0\0\26\0\54\0\102\0\130\0\156\0\204\0\232"+
-    "\0\260\0\306\0\334\0\362\0\u0108\0\362\0\u011e\0\u0134"+
-    "\0\u014a\0\u0160\0\u0176\0\362\0\u018c\0\u01a2\0\u01b8\0\u01ce"+
-    "\0\u01e4\0\u01fa\0\362\0\u0210\0\362\0\362\0\u0226\0\u023c"+
-    "\0\u0252\0\u0268\0\u027e\0\u011e\0\u0294\0\u02aa\0\306\0\362"+
-    "\0\362\0\u02c0\0\u02d6\0\362\0\362\0\u02ec\0\u0302\0\u0318"+
-    "\0\u032e\0\362\0\u0252";
+    "\0\0\0\30\0\60\0\110\0\140\0\170\0\220\0\250"+
+    "\0\300\0\330\0\360\0\u0108\0\u0120\0\u0108\0\u0138\0\u0150"+
+    "\0\u0168\0\u0180\0\u0198\0\u0108\0\u01b0\0\u01c8\0\u01e0\0\u01f8"+
+    "\0\u0210\0\u0228\0\u0108\0\u0240\0\u0108\0\u0108\0\u0258\0\u0270"+
+    "\0\u0288\0\u02a0\0\u02b8\0\u02d0\0\u0138\0\u02e8\0\u0300\0\330"+
+    "\0\u0108\0\u0108\0\u0318\0\u0330\0\u0348\0\u0108\0\u0108\0\u0360"+
+    "\0\u0288\0\u0378\0\u0390\0\u03a8\0\u0108\0\u0288";
 
   private static int [] zzUnpackRowMap() {
-    int [] result = new int[51];
+    int [] result = new int[54];
     int offset = 0;
     offset = zzUnpackRowMap(ZZ_ROWMAP_PACKED_0, offset, result);
     return result;
@@ -140,39 +140,41 @@ class BatchLexer implements FlexLexer {
 
   private static final String ZZ_TRANS_PACKED_0 =
     "\1\12\1\13\1\14\1\15\2\16\1\12\1\17\1\20"+
-    "\1\21\1\22\2\16\1\23\6\12\1\24\1\16\1\25"+
+    "\1\21\1\22\2\16\1\23\10\12\1\24\1\16\1\25"+
     "\1\13\1\14\1\15\1\25\1\16\2\25\1\26\1\21"+
-    "\1\22\1\27\11\25\1\30\1\31\2\16\1\15\1\31"+
-    "\1\16\3\31\3\16\11\31\1\16\1\32\1\13\1\14"+
-    "\1\15\2\33\1\32\1\33\1\32\4\33\10\32\1\33"+
-    "\1\34\1\13\1\14\1\15\22\34\6\16\1\35\20\16"+
+    "\1\22\1\27\13\25\1\30\1\31\2\16\1\15\1\31"+
+    "\1\16\3\31\3\16\13\31\1\16\1\32\1\13\1\14"+
+    "\1\15\2\33\1\32\1\33\1\32\4\33\12\32\1\33"+
+    "\1\34\1\13\1\14\1\15\24\34\6\16\1\35\22\16"+
     "\1\13\1\14\1\15\2\16\1\36\1\16\1\37\1\21"+
-    "\1\22\1\27\3\16\1\40\5\16\1\30\1\41\2\16"+
-    "\1\15\1\41\1\16\3\41\3\16\3\41\1\42\5\41"+
-    "\4\16\1\15\10\16\1\43\11\16\1\12\5\0\1\12"+
-    "\1\0\1\12\4\0\7\12\4\0\1\14\54\0\1\15"+
-    "\25\0\1\44\2\45\1\0\1\45\1\0\4\45\10\0"+
-    "\1\45\1\12\5\0\1\12\1\0\1\12\1\21\1\22"+
-    "\2\0\7\12\13\0\1\22\1\0\1\46\25\0\1\46"+
-    "\12\0\1\12\5\0\1\12\1\0\1\12\4\0\1\12"+
-    "\1\47\5\12\2\0\1\25\3\0\1\25\1\0\3\25"+
-    "\3\0\11\25\1\0\1\25\3\0\1\25\1\0\3\25"+
-    "\1\21\1\22\1\0\11\25\14\0\1\50\37\0\1\51"+
-    "\1\31\3\0\1\31\1\0\3\31\3\0\11\31\1\0"+
-    "\1\32\3\0\1\32\1\0\1\32\1\0\1\32\3\0"+
-    "\11\32\1\0\1\34\2\0\23\34\11\0\1\21\1\22"+
-    "\36\0\1\52\2\0\1\41\3\0\1\41\1\0\3\41"+
-    "\3\0\11\41\1\0\1\41\3\0\1\41\1\0\3\41"+
-    "\3\0\4\41\1\53\4\41\15\0\1\54\11\0\1\45"+
-    "\2\0\23\45\10\0\1\55\36\0\1\56\4\0\1\41"+
-    "\3\0\1\41\1\0\3\41\3\0\1\41\1\57\7\41"+
-    "\20\0\1\60\6\0\1\41\3\0\1\41\1\0\3\41"+
-    "\3\0\5\41\1\61\3\41\4\0\1\62\22\0\1\41"+
-    "\3\0\1\41\1\0\3\41\3\0\6\41\1\63\2\41"+
-    "\1\0";
+    "\1\22\1\27\6\16\1\40\4\16\1\30\1\41\2\16"+
+    "\1\15\1\41\1\16\3\41\3\16\3\41\1\42\2\41"+
+    "\1\43\4\41\4\16\1\15\10\16\1\44\13\16\1\12"+
+    "\5\0\1\12\1\0\1\12\4\0\11\12\4\0\1\14"+
+    "\60\0\1\15\27\0\1\45\2\46\1\0\1\46\1\0"+
+    "\4\46\12\0\1\46\1\12\5\0\1\12\1\0\1\12"+
+    "\1\21\1\22\2\0\11\12\13\0\1\22\1\0\1\47"+
+    "\27\0\1\47\14\0\1\12\5\0\1\12\1\0\1\12"+
+    "\4\0\1\12\1\50\7\12\2\0\1\25\3\0\1\25"+
+    "\1\0\3\25\3\0\13\25\1\0\1\25\3\0\1\25"+
+    "\1\0\3\25\1\21\1\22\1\0\13\25\14\0\1\51"+
+    "\43\0\1\52\1\31\3\0\1\31\1\0\3\31\3\0"+
+    "\13\31\1\0\1\32\3\0\1\32\1\0\1\32\1\0"+
+    "\1\32\3\0\13\32\1\0\1\34\2\0\25\34\11\0"+
+    "\1\21\1\22\42\0\1\53\2\0\1\41\3\0\1\41"+
+    "\1\0\3\41\3\0\13\41\1\0\1\41\3\0\1\41"+
+    "\1\0\3\41\3\0\4\41\1\54\6\41\1\0\1\41"+
+    "\3\0\1\41\1\0\3\41\3\0\7\41\1\55\3\41"+
+    "\15\0\1\56\13\0\1\46\2\0\25\46\10\0\1\57"+
+    "\43\0\1\60\3\0\1\41\3\0\1\41\1\0\3\41"+
+    "\3\0\5\41\1\61\5\41\1\0\1\41\3\0\1\41"+
+    "\1\0\3\41\3\0\1\41\1\62\11\41\23\0\1\63"+
+    "\5\0\1\41\3\0\1\41\1\0\3\41\3\0\10\41"+
+    "\1\64\2\41\4\0\1\65\24\0\1\41\3\0\1\41"+
+    "\1\0\3\41\3\0\5\41\1\66\5\41\1\0";
 
   private static int [] zzUnpackTrans() {
-    int [] result = new int[836];
+    int [] result = new int[960];
     int offset = 0;
     offset = zzUnpackTrans(ZZ_TRANS_PACKED_0, offset, result);
     return result;
@@ -211,12 +213,12 @@ class BatchLexer implements FlexLexer {
 
   private static final String ZZ_ATTRIBUTE_PACKED_0 =
     "\11\0\2\1\1\11\1\1\1\11\5\1\1\11\6\1"+
-    "\1\11\1\1\2\11\5\1\1\0\1\1\1\0\1\1"+
-    "\2\11\1\0\1\1\2\11\1\0\1\1\1\0\1\1"+
+    "\1\11\1\1\2\11\6\1\1\0\1\1\1\0\1\1"+
+    "\2\11\1\0\2\1\2\11\1\0\2\1\1\0\1\1"+
     "\1\11\1\1";
 
   private static int [] zzUnpackAttribute() {
-    int [] result = new int[51];
+    int [] result = new int[54];
     int offset = 0;
     offset = zzUnpackAttribute(ZZ_ATTRIBUTE_PACKED_0, offset, result);
     return result;
@@ -617,110 +619,114 @@ class BatchLexer implements FlexLexer {
             return COMMAND_NAME;
         }
             }
-          case 26: break;
+          case 27: break;
           case 2: 
             { yybegin(YYINITIAL); return EOL_OPERATOR;
             }
-          case 27: break;
+          case 28: break;
           case 3: 
             { return WHITE_SPACE;
             }
-          case 28: break;
+          case 29: break;
           case 4: 
             { return BAD_CHARACTER;
             }
-          case 29: break;
+          case 30: break;
           case 5: 
             { yybegin(READING_LABEL); return LABEL_DEFINITION_OPERATOR;
             }
-          case 30: break;
+          case 31: break;
           case 6: 
             { memorizeAndBegin(READING_ONE_CHAR_SEQUENCE); return REDIRECT_TO_FILE_OPERATOR;
             }
-          case 31: break;
+          case 32: break;
           case 7: 
             { openedParentheses++; return LEFT_PARENTHESES;
             }
-          case 32: break;
+          case 33: break;
           case 8: 
             { backtrackUntilMatchingParentheses(); return CHAR_SEQUENCE;
             }
-          case 33: break;
+          case 34: break;
           case 9: 
             { yybegin(YYINITIAL); return COMMAND_JOIN_OPERATOR;
             }
-          case 34: break;
+          case 35: break;
           case 10: 
             { yybegin(YYINITIAL); return PIPE_OPERATOR;
             }
-          case 35: break;
+          case 36: break;
           case 11: 
             { backtrackUntilMatchingParenthesesOr(beginMemorizedAction);
 
         return CHAR_SEQUENCE;
             }
-          case 36: break;
+          case 37: break;
           case 12: 
             { yybegin(READING_COMMENT);
         return LABEL_NAME;
             }
-          case 37: break;
+          case 38: break;
           case 13: 
             { yypushback(1); yybegin(READING_COMMENT);
             }
-          case 38: break;
+          case 39: break;
           case 14: 
             { return AFTER_LABEL_NAME_CHARS;
             }
-          case 39: break;
+          case 40: break;
           case 15: 
             { openedParentheses--; yybegin(AFTER_MATCHED_PARENTHESES); return RIGHT_PARENTHESES;
             }
-          case 40: break;
+          case 41: break;
           case 16: 
             { backtrackUntilMatchingParentheses(); if (yylength() != 0) { return BAD_CHARACTER; }
             }
-          case 41: break;
+          case 42: break;
           case 17: 
             { yybegin(READING_EQUALITY_OPERATOR);
         return CHAR_SEQUENCE;
             }
-          case 42: break;
+          case 43: break;
           case 18: 
             { return LABEL_BASED_COMMENT;
             }
-          case 43: break;
+          case 44: break;
           case 19: 
             { yybegin(AFTER_IF_KEYWORD); return IF_KEYWORD;
             }
-          case 44: break;
+          case 45: break;
           case 20: 
             { yybegin(YYINITIAL); return COMMAND_CONJUNCTION_OPERATOR;
             }
-          case 45: break;
+          case 46: break;
           case 21: 
             { yybegin(YYINITIAL); return COMMAND_DISJUNCTION_OPERATOR;
             }
-          case 46: break;
+          case 47: break;
           case 22: 
             { memorizeAndBegin(YYINITIAL, READING_ONE_CHAR_SEQUENCE); return EQUALITY_OPERATOR;
             }
-          case 47: break;
+          case 48: break;
           case 23: 
             { return REDIRECT_TO_HANDLE_OPERATOR;
             }
-          case 48: break;
+          case 49: break;
           case 24: 
+            { return NOT_KEYWORD;
+            }
+          case 50: break;
+          case 25: 
             // lookahead expression with fixed base length
             zzMarkedPos = Character.offsetByCodePoints
                 (zzBufferL/*, zzStartRead, zzEndRead - zzStartRead*/, zzStartRead, 4);
             { yybegin(YYINITIAL); return ELSE_KEYWORD;
             }
-          case 49: break;
-          case 25: 
+          case 51: break;
+          case 26: 
             { memorizeAndBegin(YYINITIAL, READING_ONE_CHAR_SEQUENCE); return EXIST_KEYWORD;
             }
-          case 50: break;
+          case 52: break;
           default:
             zzScanError(ZZ_NO_MATCH);
           }

@@ -8,16 +8,17 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static org.intellij.batch.psi.BatchTypes.*;
+import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import org.intellij.batch.psi.*;
 
-public class BatchIfCommandImpl extends BatchCommandImpl implements BatchIfCommand {
+public class BatchIfNegatedConditionImpl extends ASTWrapperPsiElement implements BatchIfNegatedCondition {
 
-  public BatchIfCommandImpl(ASTNode node) {
+  public BatchIfNegatedConditionImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull BatchVisitor visitor) {
-    visitor.visitIfCommand(this);
+    visitor.visitIfNegatedCondition(this);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
@@ -27,20 +28,8 @@ public class BatchIfCommandImpl extends BatchCommandImpl implements BatchIfComma
 
   @Override
   @NotNull
-  public List<BatchCommand> getCommandList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, BatchCommand.class);
-  }
-
-  @Override
-  @Nullable
   public BatchIfCondition getIfCondition() {
-    return findChildByClass(BatchIfCondition.class);
-  }
-
-  @Override
-  @Nullable
-  public BatchIfNegatedCondition getIfNegatedCondition() {
-    return findChildByClass(BatchIfNegatedCondition.class);
+    return findNotNullChildByClass(BatchIfCondition.class);
   }
 
 }

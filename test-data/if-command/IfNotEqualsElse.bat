@@ -1,0 +1,1 @@
+if not str1 == str2 (cmd1 arg) else cmd2 arg

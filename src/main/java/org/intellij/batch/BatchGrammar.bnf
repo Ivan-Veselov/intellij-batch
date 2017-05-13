@@ -36,8 +36,9 @@ parenthesisedCommand ::= redirection* LEFT_PARENTHESES command+ RIGHT_PARENTHESE
 simpleCommand ::= redirection* COMMAND_NAME (CHAR_SEQUENCE | redirection)* { extends = command }
 redirection ::= REDIRECT_TO_HANDLE_OPERATOR | (REDIRECT_TO_FILE_OPERATOR CHAR_SEQUENCE)
 
-ifCommand ::= IF_KEYWORD ifCondition command [ELSE_KEYWORD command] { extends = command }
+ifCommand ::= IF_KEYWORD (ifCondition | ifNegatedCondition) command [ELSE_KEYWORD command] { extends = command }
 ifCondition ::= existCondition | equalityCondition
+ifNegatedCondition ::= NOT_KEYWORD ifCondition
 existCondition ::= EXIST_KEYWORD CHAR_SEQUENCE
 equalityCondition ::= CHAR_SEQUENCE EQUALITY_OPERATOR CHAR_SEQUENCE
 

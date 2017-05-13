@@ -1,0 +1,1 @@
+if not str1 == str2 command

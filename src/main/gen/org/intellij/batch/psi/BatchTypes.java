@@ -15,6 +15,7 @@ public interface BatchTypes {
   IElementType EXIST_CONDITION = new BatchElementType("EXIST_CONDITION");
   IElementType IF_COMMAND = new BatchElementType("IF_COMMAND");
   IElementType IF_CONDITION = new BatchElementType("IF_CONDITION");
+  IElementType IF_NEGATED_CONDITION = new BatchElementType("IF_NEGATED_CONDITION");
   IElementType JOINED_COMMAND = new BatchElementType("JOINED_COMMAND");
   IElementType LABEL_DEFINITION = new BatchElementType("LABEL_DEFINITION");
   IElementType PARENTHESISED_COMMAND = new BatchElementType("PARENTHESISED_COMMAND");
@@ -38,6 +39,7 @@ public interface BatchTypes {
   IElementType LABEL_DEFINITION_OPERATOR = new BatchTokenType("LABEL_DEFINITION_OPERATOR");
   IElementType LABEL_NAME = new BatchTokenType("LABEL_NAME");
   IElementType LEFT_PARENTHESES = new BatchTokenType("LEFT_PARENTHESES");
+  IElementType NOT_KEYWORD = new BatchTokenType("NOT_KEYWORD");
   IElementType PIPE_OPERATOR = new BatchTokenType("PIPE_OPERATOR");
   IElementType REDIRECT_TO_FILE_OPERATOR = new BatchTokenType("REDIRECT_TO_FILE_OPERATOR");
   IElementType REDIRECT_TO_HANDLE_OPERATOR = new BatchTokenType("REDIRECT_TO_HANDLE_OPERATOR");
@@ -63,6 +65,9 @@ public interface BatchTypes {
       }
       else if (type == IF_CONDITION) {
         return new BatchIfConditionImpl(node);
+      }
+      else if (type == IF_NEGATED_CONDITION) {
+        return new BatchIfNegatedConditionImpl(node);
       }
       else if (type == JOINED_COMMAND) {
         return new BatchJoinedCommandImpl(node);
