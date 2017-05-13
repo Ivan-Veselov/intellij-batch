@@ -1,0 +1,2 @@
+Batch File
+  PsiElement(BatchTokenType.LABEL_BASED_COMMENT)(':: comment')

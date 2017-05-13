@@ -1,4 +1,0 @@
-Batch File
-  BatchSingleLineCommentImpl(SINGLE_LINE_COMMENT)
-    PsiElement(BatchTokenType.LABEL_DEFINITION_OPERATOR)(':')
-    PsiElement(BatchTokenType.COMMENT_CONTENT)(': comment')

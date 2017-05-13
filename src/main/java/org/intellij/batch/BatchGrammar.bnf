@@ -15,7 +15,7 @@
   // psiImplUtilClass="org.intellij.batch.psi.impl.BatchPsiImplUtil"
 }
 
-batchFile ::= (command | labelDefinition | singleLineComment)*
+batchFile ::= (command | labelDefinition | LABEL_BASED_COMMENT)*
 
 command ::= joinedCommand
           | disjointCommand
@@ -41,9 +41,7 @@ ifCondition ::= existCondition | equalityCondition
 existCondition ::= EXIST_KEYWORD CHAR_SEQUENCE
 equalityCondition ::= CHAR_SEQUENCE EQUALITY_OPERATOR CHAR_SEQUENCE
 
-labelDefinition ::= LABEL_DEFINITION_OPERATOR LABEL_NAME [COMMENT_CONTENT]
-
-singleLineComment ::= LABEL_DEFINITION_OPERATOR [COMMENT_CONTENT]
+labelDefinition ::= LABEL_DEFINITION_OPERATOR LABEL_NAME [AFTER_LABEL_NAME_CHARS]
 
 tokens ::=
 EOL_OPERATOR // possibly there is no need in this token

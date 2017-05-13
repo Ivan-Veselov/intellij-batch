@@ -21,20 +21,20 @@ public interface BatchTypes {
   IElementType PIPED_COMMAND = new BatchElementType("PIPED_COMMAND");
   IElementType REDIRECTION = new BatchElementType("REDIRECTION");
   IElementType SIMPLE_COMMAND = new BatchElementType("SIMPLE_COMMAND");
-  IElementType SINGLE_LINE_COMMENT = new BatchElementType("SINGLE_LINE_COMMENT");
   IElementType TOKENS = new BatchElementType("TOKENS");
 
+  IElementType AFTER_LABEL_NAME_CHARS = new BatchTokenType("AFTER_LABEL_NAME_CHARS");
   IElementType CHAR_SEQUENCE = new BatchTokenType("CHAR_SEQUENCE");
   IElementType COMMAND_CONJUNCTION_OPERATOR = new BatchTokenType("COMMAND_CONJUNCTION_OPERATOR");
   IElementType COMMAND_DISJUNCTION_OPERATOR = new BatchTokenType("COMMAND_DISJUNCTION_OPERATOR");
   IElementType COMMAND_JOIN_OPERATOR = new BatchTokenType("COMMAND_JOIN_OPERATOR");
   IElementType COMMAND_NAME = new BatchTokenType("COMMAND_NAME");
-  IElementType COMMENT_CONTENT = new BatchTokenType("COMMENT_CONTENT");
   IElementType ELSE_KEYWORD = new BatchTokenType("ELSE_KEYWORD");
   IElementType EOL_OPERATOR = new BatchTokenType("EOL_OPERATOR");
   IElementType EQUALITY_OPERATOR = new BatchTokenType("EQUALITY_OPERATOR");
   IElementType EXIST_KEYWORD = new BatchTokenType("EXIST_KEYWORD");
   IElementType IF_KEYWORD = new BatchTokenType("IF_KEYWORD");
+  IElementType LABEL_BASED_COMMENT = new BatchTokenType("LABEL_BASED_COMMENT");
   IElementType LABEL_DEFINITION_OPERATOR = new BatchTokenType("LABEL_DEFINITION_OPERATOR");
   IElementType LABEL_NAME = new BatchTokenType("LABEL_NAME");
   IElementType LEFT_PARENTHESES = new BatchTokenType("LEFT_PARENTHESES");
@@ -81,9 +81,6 @@ public interface BatchTypes {
       }
       else if (type == SIMPLE_COMMAND) {
         return new BatchSimpleCommandImpl(node);
-      }
-      else if (type == SINGLE_LINE_COMMENT) {
-        return new BatchSingleLineCommentImpl(node);
       }
       else if (type == TOKENS) {
         return new BatchTokensImpl(node);

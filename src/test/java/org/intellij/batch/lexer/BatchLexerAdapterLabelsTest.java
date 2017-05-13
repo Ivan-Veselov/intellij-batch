@@ -108,55 +108,55 @@ public class BatchLexerAdapterLabelsTest extends BatchLexerAdapterTest {
                 token(LABEL_DEFINITION_OPERATOR, ":")
                 .token(LABEL_NAME, "label")
                 .token(WHITE_SPACE, " ")
-                .token(COMMENT_CONTENT, "comment"));
+                .token(AFTER_LABEL_NAME_CHARS, "comment"));
 
         doTest(":label  comment",
                 token(LABEL_DEFINITION_OPERATOR, ":")
                 .token(LABEL_NAME, "label")
                 .token(WHITE_SPACE, "  ")
-                .token(COMMENT_CONTENT, "comment"));
+                .token(AFTER_LABEL_NAME_CHARS, "comment"));
 
         doTest(":label\tcomment",
                 token(LABEL_DEFINITION_OPERATOR, ":")
                 .token(LABEL_NAME, "label")
                 .token(WHITE_SPACE, "\t")
-                .token(COMMENT_CONTENT, "comment"));
+                .token(AFTER_LABEL_NAME_CHARS, "comment"));
 
         doTest(":label comment ",
                 token(LABEL_DEFINITION_OPERATOR, ":")
                 .token(LABEL_NAME, "label")
                 .token(WHITE_SPACE, " ")
-                .token(COMMENT_CONTENT, "comment "));
+                .token(AFTER_LABEL_NAME_CHARS, "comment "));
 
         doTest(":label:comment",
                 token(LABEL_DEFINITION_OPERATOR, ":")
                 .token(LABEL_NAME, "label")
-                .token(COMMENT_CONTENT, ":comment"));
+                .token(AFTER_LABEL_NAME_CHARS, ":comment"));
 
         doTest(":label<comment",
                 token(LABEL_DEFINITION_OPERATOR, ":")
                 .token(LABEL_NAME, "label")
-                .token(COMMENT_CONTENT, "<comment"));
+                .token(AFTER_LABEL_NAME_CHARS, "<comment"));
 
         doTest(":label>comment",
                 token(LABEL_DEFINITION_OPERATOR, ":")
                 .token(LABEL_NAME, "label")
-                .token(COMMENT_CONTENT, ">comment"));
+                .token(AFTER_LABEL_NAME_CHARS, ">comment"));
 
         doTest(":label&comment",
                 token(LABEL_DEFINITION_OPERATOR, ":")
                 .token(LABEL_NAME, "label")
-                .token(COMMENT_CONTENT, "&comment"));
+                .token(AFTER_LABEL_NAME_CHARS, "&comment"));
 
         doTest(":label|comment",
                 token(LABEL_DEFINITION_OPERATOR, ":")
                 .token(LABEL_NAME, "label")
-                .token(COMMENT_CONTENT, "|comment"));
+                .token(AFTER_LABEL_NAME_CHARS, "|comment"));
 
         doTest(":label^comment",
                 token(LABEL_DEFINITION_OPERATOR, ":")
                 .token(LABEL_NAME, "label")
-                .token(COMMENT_CONTENT, "^comment"));
+                .token(AFTER_LABEL_NAME_CHARS, "^comment"));
     }
 
     public void testConsecutiveLabelDefinitionWithComments() throws Exception {
@@ -164,12 +164,12 @@ public class BatchLexerAdapterLabelsTest extends BatchLexerAdapterTest {
                 token(LABEL_DEFINITION_OPERATOR, ":")
                 .token(LABEL_NAME, "label1")
                 .token(WHITE_SPACE, " ")
-                .token(COMMENT_CONTENT, "comment1")
+                .token(AFTER_LABEL_NAME_CHARS, "comment1")
                 .token(EOL_OPERATOR, "\\n")
                 .token(LABEL_DEFINITION_OPERATOR, ":")
                 .token(LABEL_NAME, "label2")
                 .token(WHITE_SPACE, " ")
-                .token(COMMENT_CONTENT, "comment2"));
+                .token(AFTER_LABEL_NAME_CHARS, "comment2"));
     }
 
     public void testDirtyLabelDefinition() throws Exception {
@@ -178,7 +178,7 @@ public class BatchLexerAdapterLabelsTest extends BatchLexerAdapterTest {
                 .token(LABEL_DEFINITION_OPERATOR, ":")
                 .token(WHITE_SPACE, "  ")
                 .token(LABEL_NAME, "(cmd1)")
-                .token(COMMENT_CONTENT, "&cmd2 ")
+                .token(AFTER_LABEL_NAME_CHARS, "&cmd2 ")
                 .token(EOL_OPERATOR, "\\n")
                 .token(WHITE_SPACE, "  ")
                 .token(LABEL_DEFINITION_OPERATOR, ":")
@@ -199,61 +199,43 @@ public class BatchLexerAdapterLabelsTest extends BatchLexerAdapterTest {
                 .token(LABEL_DEFINITION_OPERATOR, ":"));
     }
 
-    public void testLabelDefinitionOnlyComment() throws Exception {
+    public void testLabelBasedComment() throws Exception {
         doTest("::comment",
-                token(LABEL_DEFINITION_OPERATOR, ":")
-                .token(COMMENT_CONTENT, ":comment"));
+                token(LABEL_BASED_COMMENT, "::comment"));
 
         doTest(":<comment",
-                token(LABEL_DEFINITION_OPERATOR, ":")
-                .token(COMMENT_CONTENT, "<comment"));
+                token(LABEL_BASED_COMMENT, ":<comment"));
 
         doTest(":>comment",
-                token(LABEL_DEFINITION_OPERATOR, ":")
-                .token(COMMENT_CONTENT, ">comment"));
+                token(LABEL_BASED_COMMENT, ":>comment"));
 
         doTest(":&comment",
-                token(LABEL_DEFINITION_OPERATOR, ":")
-                .token(COMMENT_CONTENT, "&comment"));
+                token(LABEL_BASED_COMMENT, ":&comment"));
 
         doTest(":|comment",
-                token(LABEL_DEFINITION_OPERATOR, ":")
-                .token(COMMENT_CONTENT, "|comment"));
+                token(LABEL_BASED_COMMENT, ":|comment"));
 
         doTest(":^comment",
-                token(LABEL_DEFINITION_OPERATOR, ":")
-                .token(COMMENT_CONTENT, "^comment"));
+                token(LABEL_BASED_COMMENT, ":^comment"));
     }
 
-    public void testLabelDefinitionOnlyCommentWithIndent() throws Exception {
+    public void testLabelBasedCommentWithIndent() throws Exception {
         doTest(": :comment",
-                token(LABEL_DEFINITION_OPERATOR, ":")
-                .token(WHITE_SPACE, " ")
-                .token(COMMENT_CONTENT, ":comment"));
+                token(LABEL_BASED_COMMENT, ": :comment"));
 
         doTest(": <comment",
-                token(LABEL_DEFINITION_OPERATOR, ":")
-                .token(WHITE_SPACE, " ")
-                .token(COMMENT_CONTENT, "<comment"));
+                token(LABEL_BASED_COMMENT, ": <comment"));
 
         doTest(": >comment",
-                token(LABEL_DEFINITION_OPERATOR, ":")
-                .token(WHITE_SPACE, " ")
-                .token(COMMENT_CONTENT, ">comment"));
+                token(LABEL_BASED_COMMENT, ": >comment"));
 
         doTest(": &comment",
-                token(LABEL_DEFINITION_OPERATOR, ":")
-                .token(WHITE_SPACE, " ")
-                .token(COMMENT_CONTENT, "&comment"));
+                token(LABEL_BASED_COMMENT, ": &comment"));
 
         doTest(": |comment",
-                token(LABEL_DEFINITION_OPERATOR, ":")
-                .token(WHITE_SPACE, " ")
-                .token(COMMENT_CONTENT, "|comment"));
+                token(LABEL_BASED_COMMENT, ": |comment"));
 
         doTest(": ^comment",
-                token(LABEL_DEFINITION_OPERATOR, ":")
-                .token(WHITE_SPACE, " ")
-                .token(COMMENT_CONTENT, "^comment"));
+                token(LABEL_BASED_COMMENT, ": ^comment"));
     }
 }

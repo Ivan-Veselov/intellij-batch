@@ -41,9 +41,6 @@ public class BatchParser implements PsiParser, LightPsiParser {
     else if (t == REDIRECTION) {
       r = redirection(b, 0);
     }
-    else if (t == SINGLE_LINE_COMMENT) {
-      r = singleLineComment(b, 0);
-    }
     else if (t == TOKENS) {
       r = tokens(b, 0);
     }
@@ -63,7 +60,7 @@ public class BatchParser implements PsiParser, LightPsiParser {
   };
 
   /* ********************************************************** */
-  // (command | labelDefinition | singleLineComment)*
+  // (command | labelDefinition | LABEL_BASED_COMMENT)*
   static boolean batchFile(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "batchFile")) return false;
     int c = current_position_(b);
@@ -75,14 +72,14 @@ public class BatchParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // command | labelDefinition | singleLineComment
+  // command | labelDefinition | LABEL_BASED_COMMENT
   private static boolean batchFile_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "batchFile_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = command(b, l + 1, -1);
     if (!r) r = labelDefinition(b, l + 1);
-    if (!r) r = singleLineComment(b, l + 1);
+    if (!r) r = consumeToken(b, LABEL_BASED_COMMENT);
     exit_section_(b, m, null, r);
     return r;
   }
@@ -125,7 +122,7 @@ public class BatchParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // LABEL_DEFINITION_OPERATOR LABEL_NAME [COMMENT_CONTENT]
+  // LABEL_DEFINITION_OPERATOR LABEL_NAME [AFTER_LABEL_NAME_CHARS]
   public static boolean labelDefinition(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "labelDefinition")) return false;
     if (!nextTokenIs(b, LABEL_DEFINITION_OPERATOR)) return false;
@@ -137,10 +134,10 @@ public class BatchParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // [COMMENT_CONTENT]
+  // [AFTER_LABEL_NAME_CHARS]
   private static boolean labelDefinition_2(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "labelDefinition_2")) return false;
-    consumeToken(b, COMMENT_CONTENT);
+    consumeToken(b, AFTER_LABEL_NAME_CHARS);
     return true;
   }
 
@@ -165,26 +162,6 @@ public class BatchParser implements PsiParser, LightPsiParser {
     r = consumeTokens(b, 0, REDIRECT_TO_FILE_OPERATOR, CHAR_SEQUENCE);
     exit_section_(b, m, null, r);
     return r;
-  }
-
-  /* ********************************************************** */
-  // LABEL_DEFINITION_OPERATOR [COMMENT_CONTENT]
-  public static boolean singleLineComment(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "singleLineComment")) return false;
-    if (!nextTokenIs(b, LABEL_DEFINITION_OPERATOR)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, LABEL_DEFINITION_OPERATOR);
-    r = r && singleLineComment_1(b, l + 1);
-    exit_section_(b, m, SINGLE_LINE_COMMENT, r);
-    return r;
-  }
-
-  // [COMMENT_CONTENT]
-  private static boolean singleLineComment_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "singleLineComment_1")) return false;
-    consumeToken(b, COMMENT_CONTENT);
-    return true;
   }
 
   /* ********************************************************** */

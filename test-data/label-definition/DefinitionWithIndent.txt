@@ -1,0 +1,5 @@
+Batch File
+  BatchLabelDefinitionImpl(LABEL_DEFINITION)
+    PsiElement(BatchTokenType.LABEL_DEFINITION_OPERATOR)(':')
+    PsiWhiteSpace(' ')
+    PsiElement(BatchTokenType.LABEL_NAME)('label')

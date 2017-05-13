@@ -10,6 +10,14 @@ public class BatchParserLabelDefinitionTest extends BatchParserTest {
         doTest();
     }
 
+    public void testDefinitionWithIndent() throws Exception {
+        doTest();
+    }
+
+    public void testDefinitionWithAdditionalChars() throws Exception {
+        doTest();
+    }
+
     public void testConsecutiveDefinitions() throws Exception {
         doTest();
     }

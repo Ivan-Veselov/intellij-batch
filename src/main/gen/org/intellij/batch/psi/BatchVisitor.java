@@ -59,10 +59,6 @@ public class BatchVisitor extends PsiElementVisitor {
     visitCommand(o);
   }
 
-  public void visitSingleLineComment(@NotNull BatchSingleLineComment o) {
-    visitPsiElement(o);
-  }
-
   public void visitTokens(@NotNull BatchTokens o) {
     visitPsiElement(o);
   }

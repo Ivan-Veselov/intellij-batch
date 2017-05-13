@@ -131,6 +131,9 @@ LabelNameCharacter = {LabelNameFirstCharacter} | {SymbolicDelimiter}
 SequenceCharacter = {LabelNameCharacter} | {Colon}
 NonWhitespaceLineCharacter = {SequenceCharacter} | {SpecialCharacter}
 
+// Set difference {NonWhitespaceLineCharacter} \ {LabelNameFirstCharacter}
+NorWhitespaceNorLabelNameFirstCharacter = {Colon} | {SpecialCharacter} | {SymbolicDelimiter}
+
 RedirectSymbol = > | < | >>
 RedirectToFileOperator = {Digit}? {RedirectSymbol}
 RedirectToHandleOperator = {Digit}? {RedirectSymbol} & {Digit}
@@ -181,6 +184,10 @@ elseKeyword = else
     }
 
     {LabelDefinitionOperator} { yybegin(READING_LABEL); return LABEL_DEFINITION_OPERATOR; }
+
+    {LabelDefinitionOperator} {Whitespace}* {NorWhitespaceNorLabelNameFirstCharacter} {LineCharacter}* {
+        return LABEL_BASED_COMMENT;
+    }
 }
 
 <READING_CMD_ARGS> {
@@ -203,7 +210,7 @@ elseKeyword = else
 }
 
 <READING_COMMENT> {
-    {NonWhitespaceLineCharacter} {LineCharacter}* { return COMMENT_CONTENT; }
+    {NonWhitespaceLineCharacter} {LineCharacter}* { return AFTER_LABEL_NAME_CHARS; }
 }
 
 <MATCH_PARENTHESES> {
