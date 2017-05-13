@@ -122,13 +122,14 @@ Parentheses = [()]
 Colon = :
 Digit = [0-9]
 
-// Set difference {LineCharacter} \ ({SpecialCharacter} | {Parentheses} | {Colon} | {Whitespace})
+// Set difference {LineCharacter} \ ({SpecialCharacter} | {Parentheses} | {Colon} | {Delimiter})
 // Actually this set should also contain a ')' character
 CommandNameCharacter = !(!{LineCharacter} | {SpecialCharacter} | {Parentheses} | {Colon} | {Delimiter})
 
 LabelNameFirstCharacter = {CommandNameCharacter} | {Parentheses}
 LabelNameCharacter = {LabelNameFirstCharacter} | {SymbolicDelimiter}
 SequenceCharacter = {LabelNameCharacter} | {Colon}
+NonWhitespaceLineCharacter = {SequenceCharacter} | {SpecialCharacter}
 
 RedirectSymbol = > | < | >>
 RedirectToFileOperator = {Digit}? {RedirectSymbol}
@@ -150,7 +151,6 @@ elseKeyword = else
 %state MATCH_PARENTHESES
 %state AFTER_MATCHED_PARENTHESES
 %state AFTER_IF_KEYWORD
-%state SKIP_WHITESPACES
 %state READING_EQUALITY_OPERATOR
 
 %%
@@ -197,13 +197,13 @@ elseKeyword = else
 
 <READING_LABEL> {
     {LabelNameFirstCharacter} {LabelNameCharacter}* {
-        memorizeAndBegin(READING_COMMENT, SKIP_WHITESPACES);
+        yybegin(READING_COMMENT);
         return LABEL_NAME;
     }
 }
 
 <READING_COMMENT> {
-    {LineCharacter}* { return COMMENT_CONTENT; }
+    {NonWhitespaceLineCharacter} {LineCharacter}* { return COMMENT_CONTENT; }
 }
 
 <MATCH_PARENTHESES> {
@@ -223,12 +223,6 @@ elseKeyword = else
         yybegin(READING_EQUALITY_OPERATOR);
         return CHAR_SEQUENCE;
     }
-}
-
-<SKIP_WHITESPACES> {
-    {Whitespace}+ { beginMemorized(); return WHITE_SPACE; }
-
-    [^] { yypushback(1); beginMemorized(); }
 }
 
 <READING_EQUALITY_OPERATOR> {
@@ -260,7 +254,8 @@ elseKeyword = else
  READING_LABEL,
  READING_EQUALITY_OPERATOR,
  AFTER_MATCHED_PARENTHESES,
- AFTER_IF_KEYWORD> {
+ AFTER_IF_KEYWORD,
+ READING_COMMENT> {
     {Whitespace}+ { return WHITE_SPACE; }
 }
 
