@@ -37,10 +37,11 @@ simpleCommand ::= redirection* COMMAND_NAME (CHAR_SEQUENCE | redirection)* { ext
 redirection ::= REDIRECT_TO_HANDLE_OPERATOR | (REDIRECT_TO_FILE_OPERATOR CHAR_SEQUENCE)
 
 ifCommand ::= IF_KEYWORD (ifCondition | ifNegatedCondition) command [ELSE_KEYWORD command] { extends = command }
-ifCondition ::= existCondition | equalityCondition
+ifCondition ::= existCondition | equalityCondition | errorlevelCondition // TODO: make private
 ifNegatedCondition ::= NOT_KEYWORD ifCondition
 existCondition ::= EXIST_KEYWORD CHAR_SEQUENCE
 equalityCondition ::= CHAR_SEQUENCE EQUALITY_OPERATOR CHAR_SEQUENCE
+errorlevelCondition ::= ERRORLEVEL_KEYWORD DECIMAL_NUMBER
 
 labelDefinition ::= LABEL_DEFINITION_OPERATOR LABEL_NAME [AFTER_LABEL_NAME_CHARS]
 

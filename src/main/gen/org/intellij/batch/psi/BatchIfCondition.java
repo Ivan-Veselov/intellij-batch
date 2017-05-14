@@ -11,6 +11,9 @@ public interface BatchIfCondition extends PsiElement {
   BatchEqualityCondition getEqualityCondition();
 
   @Nullable
+  BatchErrorlevelCondition getErrorlevelCondition();
+
+  @Nullable
   BatchExistCondition getExistCondition();
 
 }

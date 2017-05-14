@@ -29,6 +29,9 @@ public class BatchParser implements PsiParser, LightPsiParser {
     else if (t == EQUALITY_CONDITION) {
       r = equalityCondition(b, 0);
     }
+    else if (t == ERRORLEVEL_CONDITION) {
+      r = errorlevelCondition(b, 0);
+    }
     else if (t == EXIST_CONDITION) {
       r = existCondition(b, 0);
     }
@@ -100,6 +103,18 @@ public class BatchParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // ERRORLEVEL_KEYWORD DECIMAL_NUMBER
+  public static boolean errorlevelCondition(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "errorlevelCondition")) return false;
+    if (!nextTokenIs(b, ERRORLEVEL_KEYWORD)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeTokens(b, 0, ERRORLEVEL_KEYWORD, DECIMAL_NUMBER);
+    exit_section_(b, m, ERRORLEVEL_CONDITION, r);
+    return r;
+  }
+
+  /* ********************************************************** */
   // EXIST_KEYWORD CHAR_SEQUENCE
   public static boolean existCondition(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "existCondition")) return false;
@@ -112,14 +127,14 @@ public class BatchParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // existCondition | equalityCondition
+  // existCondition | equalityCondition | errorlevelCondition
   public static boolean ifCondition(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ifCondition")) return false;
-    if (!nextTokenIs(b, "<if condition>", CHAR_SEQUENCE, EXIST_KEYWORD)) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, IF_CONDITION, "<if condition>");
     r = existCondition(b, l + 1);
     if (!r) r = equalityCondition(b, l + 1);
+    if (!r) r = errorlevelCondition(b, l + 1);
     exit_section_(b, l, m, r, false, null);
     return r;
   }

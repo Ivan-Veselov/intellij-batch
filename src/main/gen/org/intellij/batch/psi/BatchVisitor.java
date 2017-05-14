@@ -23,6 +23,10 @@ public class BatchVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitErrorlevelCondition(@NotNull BatchErrorlevelCondition o) {
+    visitPsiElement(o);
+  }
+
   public void visitExistCondition(@NotNull BatchExistCondition o) {
     visitPsiElement(o);
   }

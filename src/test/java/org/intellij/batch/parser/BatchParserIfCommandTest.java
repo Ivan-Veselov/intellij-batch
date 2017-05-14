@@ -10,6 +10,10 @@ public class BatchParserIfCommandTest extends BatchParserTest {
         doTest();
     }
 
+    public void testSimpleIfErrorlevel() throws Exception {
+        doTest();
+    }
+
     public void testSimpleIfEquals() throws Exception {
         doTest();
     }
@@ -22,11 +26,19 @@ public class BatchParserIfCommandTest extends BatchParserTest {
         doTest();
     }
 
+    public void testIfNotErrorlevel() throws Exception {
+        doTest();
+    }
+
     public void testIfNotEquals() throws Exception {
         doTest();
     }
 
     public void testIfExistElse() throws Exception {
+        doTest();
+    }
+
+    public void testIfErrorlevelElse() throws Exception {
         doTest();
     }
 
@@ -38,11 +50,19 @@ public class BatchParserIfCommandTest extends BatchParserTest {
         doTest();
     }
 
+    public void testIfNotErrorlevelElse() throws Exception {
+        doTest();
+    }
+
     public void testIfNotEqualsElse() throws Exception {
         doTest();
     }
 
     public void testIfExistElseOnMultipleLines() throws Exception {
+        doTest();
+    }
+
+    public void testIfErrorlevelElseOnMultipleLines() throws Exception {
         doTest();
     }
 

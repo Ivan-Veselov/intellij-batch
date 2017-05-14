@@ -123,6 +123,8 @@ Parentheses = [()]
 Colon = :
 Digit = [0-9]
 
+DecimalNumber = (-)?{Digit}+
+
 // Set difference {LineCharacter} \ ({SpecialCharacter} | {Parentheses} | {Colon} | {Delimiter})
 // Actually this set should also contain a ')' character
 CommandNameCharacter = !(!{LineCharacter} | {SpecialCharacter} | {Parentheses} | {Colon} | {Delimiter})
@@ -151,9 +153,11 @@ ifKeyword = if
 notKeyword = not
 existKeyword = exist
 elseKeyword = else
+errorlevelKeyword = errorlevel
 
 %state READING_CMD_ARGS
 %state READING_ONE_CHAR_SEQUENCE
+%state READING_ONE_DECIMAL_NUMBER
 %state READING_LABEL
 %state READING_COMMENT
 %state MATCH_PARENTHESES
@@ -206,6 +210,10 @@ elseKeyword = else
     }
 }
 
+<READING_ONE_DECIMAL_NUMBER> {
+    {DecimalNumber} { beginMemorized(); return DECIMAL_NUMBER; }
+}
+
 <READING_LABEL> {
     {LabelNameFirstCharacter} {LabelNameCharacter}* {
         yybegin(READING_COMMENT);
@@ -229,6 +237,8 @@ elseKeyword = else
 
 <AFTER_IF_KEYWORD> {
     {existKeyword} { memorizeAndBegin(YYINITIAL, READING_ONE_CHAR_SEQUENCE); return EXIST_KEYWORD; }
+
+    {errorlevelKeyword} { memorizeAndBegin(YYINITIAL, READING_ONE_DECIMAL_NUMBER); return ERRORLEVEL_KEYWORD; }
 
     {notKeyword} { return NOT_KEYWORD; }
 
@@ -268,7 +278,8 @@ elseKeyword = else
  READING_EQUALITY_OPERATOR,
  AFTER_MATCHED_PARENTHESES,
  AFTER_IF_KEYWORD,
- READING_COMMENT> {
+ READING_COMMENT,
+ READING_ONE_DECIMAL_NUMBER> {
     {Whitespace}+ { return WHITE_SPACE; }
 }
 
@@ -281,6 +292,7 @@ elseKeyword = else
 
 /* Low priority rules */
 
+// TODO: remove?
 <READING_LABEL> {
     [^] { yypushback(1); yybegin(READING_COMMENT); }
 }

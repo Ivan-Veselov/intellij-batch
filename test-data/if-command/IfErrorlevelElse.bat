@@ -1,0 +1,1 @@
+if errorlevel 10 (cmd1 arg) else cmd2 arg

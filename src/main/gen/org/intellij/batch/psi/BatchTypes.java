@@ -12,6 +12,7 @@ public interface BatchTypes {
   IElementType CONJOINT_COMMAND = new BatchElementType("CONJOINT_COMMAND");
   IElementType DISJOINT_COMMAND = new BatchElementType("DISJOINT_COMMAND");
   IElementType EQUALITY_CONDITION = new BatchElementType("EQUALITY_CONDITION");
+  IElementType ERRORLEVEL_CONDITION = new BatchElementType("ERRORLEVEL_CONDITION");
   IElementType EXIST_CONDITION = new BatchElementType("EXIST_CONDITION");
   IElementType IF_COMMAND = new BatchElementType("IF_COMMAND");
   IElementType IF_CONDITION = new BatchElementType("IF_CONDITION");
@@ -30,9 +31,11 @@ public interface BatchTypes {
   IElementType COMMAND_DISJUNCTION_OPERATOR = new BatchTokenType("COMMAND_DISJUNCTION_OPERATOR");
   IElementType COMMAND_JOIN_OPERATOR = new BatchTokenType("COMMAND_JOIN_OPERATOR");
   IElementType COMMAND_NAME = new BatchTokenType("COMMAND_NAME");
+  IElementType DECIMAL_NUMBER = new BatchTokenType("DECIMAL_NUMBER");
   IElementType ELSE_KEYWORD = new BatchTokenType("ELSE_KEYWORD");
   IElementType EOL_OPERATOR = new BatchTokenType("EOL_OPERATOR");
   IElementType EQUALITY_OPERATOR = new BatchTokenType("EQUALITY_OPERATOR");
+  IElementType ERRORLEVEL_KEYWORD = new BatchTokenType("ERRORLEVEL_KEYWORD");
   IElementType EXIST_KEYWORD = new BatchTokenType("EXIST_KEYWORD");
   IElementType IF_KEYWORD = new BatchTokenType("IF_KEYWORD");
   IElementType LABEL_BASED_COMMENT = new BatchTokenType("LABEL_BASED_COMMENT");
@@ -56,6 +59,9 @@ public interface BatchTypes {
       }
       else if (type == EQUALITY_CONDITION) {
         return new BatchEqualityConditionImpl(node);
+      }
+      else if (type == ERRORLEVEL_CONDITION) {
+        return new BatchErrorlevelConditionImpl(node);
       }
       else if (type == EXIST_CONDITION) {
         return new BatchExistConditionImpl(node);

@@ -11,37 +11,19 @@ import static org.intellij.batch.psi.BatchTypes.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import org.intellij.batch.psi.*;
 
-public class BatchIfConditionImpl extends ASTWrapperPsiElement implements BatchIfCondition {
+public class BatchErrorlevelConditionImpl extends ASTWrapperPsiElement implements BatchErrorlevelCondition {
 
-  public BatchIfConditionImpl(ASTNode node) {
+  public BatchErrorlevelConditionImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull BatchVisitor visitor) {
-    visitor.visitIfCondition(this);
+    visitor.visitErrorlevelCondition(this);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof BatchVisitor) accept((BatchVisitor)visitor);
     else super.accept(visitor);
-  }
-
-  @Override
-  @Nullable
-  public BatchEqualityCondition getEqualityCondition() {
-    return findChildByClass(BatchEqualityCondition.class);
-  }
-
-  @Override
-  @Nullable
-  public BatchErrorlevelCondition getErrorlevelCondition() {
-    return findChildByClass(BatchErrorlevelCondition.class);
-  }
-
-  @Override
-  @Nullable
-  public BatchExistCondition getExistCondition() {
-    return findChildByClass(BatchExistCondition.class);
   }
 
 }

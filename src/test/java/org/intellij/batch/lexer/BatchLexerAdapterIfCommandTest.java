@@ -58,6 +58,39 @@ public class BatchLexerAdapterIfCommandTest extends BatchLexerAdapterTest {
                 .token(WHITE_SPACE, " ")
                 .token(CHAR_SEQUENCE, "arg"));
 
+        doTest("if errorlevel 10 command arg",
+                token(IF_KEYWORD, "if")
+                .token(WHITE_SPACE, " ")
+                .token(ERRORLEVEL_KEYWORD, "errorlevel")
+                .token(WHITE_SPACE, " ")
+                .token(DECIMAL_NUMBER, "10")
+                .token(WHITE_SPACE, " ")
+                .token(COMMAND_NAME, "command")
+                .token(WHITE_SPACE, " ")
+                .token(CHAR_SEQUENCE, "arg"));
+
+        doTest("if ERRORLEVEL 10 command arg",
+                token(IF_KEYWORD, "if")
+                .token(WHITE_SPACE, " ")
+                .token(ERRORLEVEL_KEYWORD, "ERRORLEVEL")
+                .token(WHITE_SPACE, " ")
+                .token(DECIMAL_NUMBER, "10")
+                .token(WHITE_SPACE, " ")
+                .token(COMMAND_NAME, "command")
+                .token(WHITE_SPACE, " ")
+                .token(CHAR_SEQUENCE, "arg"));
+
+        doTest("if ErRoRlEvEl 10 command arg",
+                token(IF_KEYWORD, "if")
+                .token(WHITE_SPACE, " ")
+                .token(ERRORLEVEL_KEYWORD, "ErRoRlEvEl")
+                .token(WHITE_SPACE, " ")
+                .token(DECIMAL_NUMBER, "10")
+                .token(WHITE_SPACE, " ")
+                .token(COMMAND_NAME, "command")
+                .token(WHITE_SPACE, " ")
+                .token(CHAR_SEQUENCE, "arg"));
+
         doTest("if str1 == str2 command arg",
                 token(IF_KEYWORD, "if")
                 .token(WHITE_SPACE, " ")
@@ -79,6 +112,19 @@ public class BatchLexerAdapterIfCommandTest extends BatchLexerAdapterTest {
                 .token(CHAR_SEQUENCE, "str1")
                 .token(EQUALITY_OPERATOR, "==")
                 .token(CHAR_SEQUENCE, "str2")
+                .token(WHITE_SPACE, " ")
+                .token(COMMAND_NAME, "command")
+                .token(WHITE_SPACE, " ")
+                .token(CHAR_SEQUENCE, "arg"));
+    }
+
+    public void testIfErrorlevelWithNegativeArgument() throws Exception {
+        doTest("if errorlevel -10 command arg",
+                token(IF_KEYWORD, "if")
+                .token(WHITE_SPACE, " ")
+                .token(ERRORLEVEL_KEYWORD, "errorlevel")
+                .token(WHITE_SPACE, " ")
+                .token(DECIMAL_NUMBER, "-10")
                 .token(WHITE_SPACE, " ")
                 .token(COMMAND_NAME, "command")
                 .token(WHITE_SPACE, " ")
@@ -123,6 +169,23 @@ public class BatchLexerAdapterIfCommandTest extends BatchLexerAdapterTest {
                 .token(COMMAND_NAME, "command")
                 .token(WHITE_SPACE, " ")
                 .token(CHAR_SEQUENCE, "arg"));
+
+        doTest("if errorlevel 10 if errorlevel 10 command arg",
+                token(IF_KEYWORD, "if")
+                .token(WHITE_SPACE, " ")
+                .token(ERRORLEVEL_KEYWORD, "errorlevel")
+                .token(WHITE_SPACE, " ")
+                .token(DECIMAL_NUMBER, "10")
+                .token(WHITE_SPACE, " ")
+                .token(IF_KEYWORD, "if")
+                .token(WHITE_SPACE, " ")
+                .token(ERRORLEVEL_KEYWORD, "errorlevel")
+                .token(WHITE_SPACE, " ")
+                .token(DECIMAL_NUMBER, "10")
+                .token(WHITE_SPACE, " ")
+                .token(COMMAND_NAME, "command")
+                .token(WHITE_SPACE, " ")
+                .token(CHAR_SEQUENCE, "arg"));
     }
 
     public void testIfElse() throws Exception {
@@ -157,6 +220,21 @@ public class BatchLexerAdapterIfCommandTest extends BatchLexerAdapterTest {
                 .token(ELSE_KEYWORD, "else")
                 .token(WHITE_SPACE, " ")
                 .token(COMMAND_NAME, "command"));
+
+        doTest("if errorlevel 10 (command) else command",
+                token(IF_KEYWORD, "if")
+                .token(WHITE_SPACE, " ")
+                .token(ERRORLEVEL_KEYWORD, "errorlevel")
+                .token(WHITE_SPACE, " ")
+                .token(DECIMAL_NUMBER, "10")
+                .token(WHITE_SPACE, " ")
+                .token(LEFT_PARENTHESES, "(")
+                .token(COMMAND_NAME, "command")
+                .token(RIGHT_PARENTHESES, ")")
+                .token(WHITE_SPACE, " ")
+                .token(ELSE_KEYWORD, "else")
+                .token(WHITE_SPACE, " ")
+                .token(COMMAND_NAME, "command"));
     }
 
     public void testIfNot() throws Exception {
@@ -181,6 +259,17 @@ public class BatchLexerAdapterIfCommandTest extends BatchLexerAdapterTest {
                 .token(EQUALITY_OPERATOR, "==")
                 .token(WHITE_SPACE, " ")
                 .token(CHAR_SEQUENCE, "str2")
+                .token(WHITE_SPACE, " ")
+                .token(COMMAND_NAME, "command"));
+
+        doTest("if not errorlevel 10 command",
+                token(IF_KEYWORD, "if")
+                .token(WHITE_SPACE, " ")
+                .token(NOT_KEYWORD, "not")
+                .token(WHITE_SPACE, " ")
+                .token(ERRORLEVEL_KEYWORD, "errorlevel")
+                .token(WHITE_SPACE, " ")
+                .token(DECIMAL_NUMBER, "10")
                 .token(WHITE_SPACE, " ")
                 .token(COMMAND_NAME, "command"));
     }
@@ -221,6 +310,23 @@ public class BatchLexerAdapterIfCommandTest extends BatchLexerAdapterTest {
                 .token(ELSE_KEYWORD, "else")
                 .token(WHITE_SPACE, " ")
                 .token(COMMAND_NAME, "command"));
+
+        doTest("if not errorlevel 10 (command) else command",
+                token(IF_KEYWORD, "if")
+                .token(WHITE_SPACE, " ")
+                .token(NOT_KEYWORD, "not")
+                .token(WHITE_SPACE, " ")
+                .token(ERRORLEVEL_KEYWORD, "errorlevel")
+                .token(WHITE_SPACE, " ")
+                .token(DECIMAL_NUMBER, "10")
+                .token(WHITE_SPACE, " ")
+                .token(LEFT_PARENTHESES, "(")
+                .token(COMMAND_NAME, "command")
+                .token(RIGHT_PARENTHESES, ")")
+                .token(WHITE_SPACE, " ")
+                .token(ELSE_KEYWORD, "else")
+                .token(WHITE_SPACE, " ")
+                .token(COMMAND_NAME, "command"));
     }
 
     public void testElseRightAfterParentheses() throws Exception {
@@ -230,6 +336,20 @@ public class BatchLexerAdapterIfCommandTest extends BatchLexerAdapterTest {
                 .token(EXIST_KEYWORD, "exist")
                 .token(WHITE_SPACE, " ")
                 .token(CHAR_SEQUENCE, "f")
+                .token(WHITE_SPACE, " ")
+                .token(LEFT_PARENTHESES, "(")
+                .token(COMMAND_NAME, "command")
+                .token(RIGHT_PARENTHESES, ")")
+                .token(ELSE_KEYWORD, "else")
+                .token(WHITE_SPACE, " ")
+                .token(COMMAND_NAME, "command"));
+
+        doTest("if errorlevel 10 (command)else command",
+                token(IF_KEYWORD, "if")
+                .token(WHITE_SPACE, " ")
+                .token(ERRORLEVEL_KEYWORD, "errorlevel")
+                .token(WHITE_SPACE, " ")
+                .token(DECIMAL_NUMBER, "10")
                 .token(WHITE_SPACE, " ")
                 .token(LEFT_PARENTHESES, "(")
                 .token(COMMAND_NAME, "command")
@@ -262,6 +382,23 @@ public class BatchLexerAdapterIfCommandTest extends BatchLexerAdapterTest {
                 .token(EXIST_KEYWORD, "exist")
                 .token(WHITE_SPACE, " ")
                 .token(CHAR_SEQUENCE, "f")
+                .token(WHITE_SPACE, " ")
+                .token(COMMAND_NAME, "command")
+                .token(PIPE_OPERATOR, "|")
+                .token(LEFT_PARENTHESES, "(")
+                .token(COMMAND_NAME, "command")
+                .token(RIGHT_PARENTHESES, ")")
+                .token(WHITE_SPACE, " ")
+                .token(ELSE_KEYWORD, "else")
+                .token(WHITE_SPACE, " ")
+                .token(COMMAND_NAME, "command"));
+
+        doTest("if errorlevel 10 command|(command) else command",
+                token(IF_KEYWORD, "if")
+                .token(WHITE_SPACE, " ")
+                .token(ERRORLEVEL_KEYWORD, "errorlevel")
+                .token(WHITE_SPACE, " ")
+                .token(DECIMAL_NUMBER, "10")
                 .token(WHITE_SPACE, " ")
                 .token(COMMAND_NAME, "command")
                 .token(PIPE_OPERATOR, "|")
@@ -334,6 +471,57 @@ public class BatchLexerAdapterIfCommandTest extends BatchLexerAdapterTest {
                 .token(EXIST_KEYWORD, "exist")
                 .token(WHITE_SPACE, " ")
                 .token(CHAR_SEQUENCE, "f")
+                .token(WHITE_SPACE, " ")
+                .token(COMMAND_NAME, "command")
+                .token(COMMAND_CONJUNCTION_OPERATOR, "&&")
+                .token(LEFT_PARENTHESES, "(")
+                .token(COMMAND_NAME, "command")
+                .token(RIGHT_PARENTHESES, ")")
+                .token(WHITE_SPACE, " ")
+                .token(ELSE_KEYWORD, "else")
+                .token(WHITE_SPACE, " ")
+                .token(COMMAND_NAME, "command"));
+
+        doTest("if errorlevel 10 command&(command) else command",
+                token(IF_KEYWORD, "if")
+                .token(WHITE_SPACE, " ")
+                .token(ERRORLEVEL_KEYWORD, "errorlevel")
+                .token(WHITE_SPACE, " ")
+                .token(DECIMAL_NUMBER, "10")
+                .token(WHITE_SPACE, " ")
+                .token(COMMAND_NAME, "command")
+                .token(COMMAND_JOIN_OPERATOR, "&")
+                .token(LEFT_PARENTHESES, "(")
+                .token(COMMAND_NAME, "command")
+                .token(RIGHT_PARENTHESES, ")")
+                .token(WHITE_SPACE, " ")
+                .token(ELSE_KEYWORD, "else")
+                .token(WHITE_SPACE, " ")
+                .token(COMMAND_NAME, "command"));
+
+        doTest("if errorlevel 10 command||(command) else command",
+                token(IF_KEYWORD, "if")
+                .token(WHITE_SPACE, " ")
+                .token(ERRORLEVEL_KEYWORD, "errorlevel")
+                .token(WHITE_SPACE, " ")
+                .token(DECIMAL_NUMBER, "10")
+                .token(WHITE_SPACE, " ")
+                .token(COMMAND_NAME, "command")
+                .token(COMMAND_DISJUNCTION_OPERATOR, "||")
+                .token(LEFT_PARENTHESES, "(")
+                .token(COMMAND_NAME, "command")
+                .token(RIGHT_PARENTHESES, ")")
+                .token(WHITE_SPACE, " ")
+                .token(ELSE_KEYWORD, "else")
+                .token(WHITE_SPACE, " ")
+                .token(COMMAND_NAME, "command"));
+
+        doTest("if errorlevel 10 command&&(command) else command",
+                token(IF_KEYWORD, "if")
+                .token(WHITE_SPACE, " ")
+                .token(ERRORLEVEL_KEYWORD, "errorlevel")
+                .token(WHITE_SPACE, " ")
+                .token(DECIMAL_NUMBER, "10")
                 .token(WHITE_SPACE, " ")
                 .token(COMMAND_NAME, "command")
                 .token(COMMAND_CONJUNCTION_OPERATOR, "&&")
@@ -421,6 +609,23 @@ public class BatchLexerAdapterIfCommandTest extends BatchLexerAdapterTest {
                 .token(WHITE_SPACE, " ")
                 .token(COMMAND_NAME, "command"));
 
+        doTest("if errorlevel 10 (\ncommand\n) else command",
+                token(IF_KEYWORD, "if")
+                .token(WHITE_SPACE, " ")
+                .token(ERRORLEVEL_KEYWORD, "errorlevel")
+                .token(WHITE_SPACE, " ")
+                .token(DECIMAL_NUMBER, "10")
+                .token(WHITE_SPACE, " ")
+                .token(LEFT_PARENTHESES, "(")
+                .token(EOL_OPERATOR, "\\n")
+                .token(COMMAND_NAME, "command")
+                .token(EOL_OPERATOR, "\\n")
+                .token(RIGHT_PARENTHESES, ")")
+                .token(WHITE_SPACE, " ")
+                .token(ELSE_KEYWORD, "else")
+                .token(WHITE_SPACE, " ")
+                .token(COMMAND_NAME, "command"));
+
         doTest("if str1 == str2 (\ncommand\n) else command",
                 token(IF_KEYWORD, "if")
                 .token(WHITE_SPACE, " ")
@@ -448,6 +653,19 @@ public class BatchLexerAdapterIfCommandTest extends BatchLexerAdapterTest {
                 .token(EXIST_KEYWORD, "exist")
                 .token(WHITE_SPACE, " ")
                 .token(CHAR_SEQUENCE, "f")
+                .token(WHITE_SPACE, " ")
+                .token(COMMAND_NAME, "command")
+                .token(WHITE_SPACE, " ")
+                .token(CHAR_SEQUENCE, "else")
+                .token(WHITE_SPACE, " ")
+                .token(CHAR_SEQUENCE, "command"));
+
+        doTest("if errorlevel 10 command else command",
+                token(IF_KEYWORD, "if")
+                .token(WHITE_SPACE, " ")
+                .token(ERRORLEVEL_KEYWORD, "errorlevel")
+                .token(WHITE_SPACE, " ")
+                .token(DECIMAL_NUMBER, "10")
                 .token(WHITE_SPACE, " ")
                 .token(COMMAND_NAME, "command")
                 .token(WHITE_SPACE, " ")
