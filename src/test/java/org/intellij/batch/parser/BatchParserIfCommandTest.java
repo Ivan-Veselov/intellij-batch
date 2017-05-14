@@ -14,6 +14,10 @@ public class BatchParserIfCommandTest extends BatchParserTest {
         doTest();
     }
 
+    public void testIfEqualsWithoutDelimiters() throws Exception {
+        doTest();
+    }
+
     public void testIfNotExist() throws Exception {
         doTest();
     }

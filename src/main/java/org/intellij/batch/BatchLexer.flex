@@ -127,6 +127,8 @@ Digit = [0-9]
 // Actually this set should also contain a ')' character
 CommandNameCharacter = !(!{LineCharacter} | {SpecialCharacter} | {Parentheses} | {Colon} | {Delimiter})
 
+ComparableCharacter = {CommandNameCharacter} | {Parentheses} | {Colon}
+
 // Set difference {NonWhitespaceLineCharacter} \ {SpecialCharacter}
 SequenceCharacter = !(!{NonWhitespaceLineCharacter} | {SpecialCharacter})
 
@@ -168,9 +170,8 @@ elseKeyword = else
  * symbols.
  *
  * TODO: if str1 == str2 is parsed not good enough.
- * Rules are simple as much as possible, but it must work for simple case when both arguments are split from equality
- * operator with whitespaces and are strings which consist of letters. Proper treatment of special characters is not
- * guaranteed. Arguments are tokenized as strings.
+ * Equals sign inside compared strings is forbidden. Proper treatment of special characters is not guaranteed.
+ * Arguments are tokenized as strings.
  */
 
 <YYINITIAL> {
@@ -231,7 +232,7 @@ elseKeyword = else
 
     {notKeyword} { return NOT_KEYWORD; }
 
-    {SequenceCharacter}+ {
+    {ComparableCharacter}+ {
         yybegin(READING_EQUALITY_OPERATOR);
         return CHAR_SEQUENCE;
     }

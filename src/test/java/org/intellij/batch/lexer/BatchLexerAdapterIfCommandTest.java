@@ -72,6 +72,19 @@ public class BatchLexerAdapterIfCommandTest extends BatchLexerAdapterTest {
                 .token(CHAR_SEQUENCE, "arg"));
     }
 
+    public void testIfEqualsWithoutDelimiters() throws Exception {
+        doTest("if str1==str2 command arg",
+                token(IF_KEYWORD, "if")
+                .token(WHITE_SPACE, " ")
+                .token(CHAR_SEQUENCE, "str1")
+                .token(EQUALITY_OPERATOR, "==")
+                .token(CHAR_SEQUENCE, "str2")
+                .token(WHITE_SPACE, " ")
+                .token(COMMAND_NAME, "command")
+                .token(WHITE_SPACE, " ")
+                .token(CHAR_SEQUENCE, "arg"));
+    }
+
     public void testNestedIfs() throws Exception {
         doTest("if exist f if exist f command arg",
                 token(IF_KEYWORD, "if")
