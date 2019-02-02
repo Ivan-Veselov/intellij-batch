@@ -6,6 +6,8 @@ buildscript {
 
 plugins {
     id "org.jetbrains.intellij" version "0.2.5"
+    id 'jacoco'
+    id 'com.github.kt3k.coveralls' version '2.8.2'
 }
 
 group 'org.intellij.batch'
@@ -16,6 +18,13 @@ apply plugin: 'java'
 intellij {
     version 'IC-2016.1'
     pluginName 'intellij-batch'
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled = true // coveralls plugin depends on xml format report
+        html.enabled = true
+    }
 }
 
 sourceCompatibility = 1.6
